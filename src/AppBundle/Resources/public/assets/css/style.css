@@ -1,0 +1,81 @@
+.login-content {
+	background-color: #222222 !important;
+}
+
+#header {
+	min-height: 46px !important;
+	background-color: #222222 !important;
+}
+
+.h-inner {
+	padding: 6px 0 !important;
+}
+
+#sidebar {
+	width: 240px !important;
+}
+
+.sidebar {
+	top:46px !important;
+	height: calc(100% - 46px) !important;
+}
+
+#main {
+	padding-top: 70px !important;
+}
+
+.avatar {
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	border:2px solid #FFF;
+	width: 34px;
+	height: 34px;
+	margin-right: 5px;
+}
+
+.him-font {
+	font-size: 16px;
+	line-height: 36px;
+}
+
+.him-icon {
+	font-size: 20px !important;
+}
+
+.hi-menu > li {
+	min-width: 35px !important;
+}
+
+/*
+* === Media - Overriding the Media object ===
+*/
+
+@media (min-width: 1280px) {
+	#content:not(.content-alt) {
+		padding-left: 266px !important;
+	}
+}
+
+
+/*
+* === User Interface ===
+*/
+
+/*
+* --- Input Fields ---
+*/
+
+.fg-line[data-ibl=orange]:after {
+	background: #FF333A !important;
+}
+
+
+/*
+* --- Buttons ---
+*/
+
+.btn-orange {
+	color: #fff;
+	background-color: #FF333A;
+}

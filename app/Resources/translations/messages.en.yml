@@ -1,0 +1,28 @@
+message:
+    wait: Please wait...
+
+title:
+    homepage_admin: CManager Admin
+
+label:
+    email: Email
+    password:
+        first: Password
+        second: Repeat password
+
+button:
+    register: Register
+    forgot_password: Forgot password
+
+placeholder:
+    course: Choose one course
+
+link:
+    home: Home
+    dashboad: Dashboard
+    reports: Reports
+    support: Support
+    contact: Contact
+    account: Account
+
+copyright: Copyright &copy; 2015 Material Admin

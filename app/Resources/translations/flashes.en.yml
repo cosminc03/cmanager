@@ -1,0 +1,14 @@
+success:
+    delete_common: successfully deleted!
+    course:
+        create: Course successfully created!
+        edit: Course successfully edited!
+        delete:
+            from_edit: Course successfully deleted!
+            from_data_table: Course with ID
+    announcement:
+        create: Announcement successfully created!
+        edit: Announcement successfully edited!
+        delete:
+            from_edit: Announcement successfully deleted!
+            from_data_table: Announcement with ID
