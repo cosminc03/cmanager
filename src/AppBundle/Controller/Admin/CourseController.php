@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Course admin controller.
  *
- * @Route(/admin/course)
+ * @Route("/admin/course")
  */
 class CourseController extends Controller
 {

@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Announcement admin controller.
  *
- * @Route(/admin/announcement)
+ * @Route("/admin/announcement")
  */
 class AnnouncementController extends Controller
 {
@@ -24,7 +24,6 @@ class AnnouncementController extends Controller
      *
      * @Route("/list", name="app_admin_announcement_list")
      * @Method("GET")
-     * @Secure(roles="ROLE_SUPER_ADMIN")
      *
      * @return Response
      */
