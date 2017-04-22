@@ -26,6 +26,7 @@
 
             <link href="{{ asset('assets/admin/css/app_1.min.css') }}" rel="stylesheet">
             <link href="{{ asset('assets/admin/css/app_2.min.css') }}" rel="stylesheet">
+            <link href="{{ asset('bundles/app/assets/css/style.css') }}" rel="stylesheet"/>
         {% endblock %}
         {% block icon %}
             <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -37,7 +38,7 @@
         {% include 'AppBundle:Admin/Layout:header.html.twig' %}
 
         <section id="main">
-            {# knp_menu_render('admin_app', {'template': 'AppBundle:Admin/Layout:sidebar.html.twig'}) #}
+            {% include 'AppBundle:Admin/Layout:sidebar.html.twig' %}
 
             <section id="content">
                 <div class="container">
@@ -65,6 +66,8 @@
     {% block javascripts %}
         <!-- Javascript Libraries -->
         <script src="{{ asset('assets/admin/vendors/bower_components/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+        <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
         <script src="{{ asset('assets/admin/vendors/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
         <script src="{{ asset('assets/admin/vendors/bower_components/bootstrap-select/dist/js/bootstrap-select.js') }}"></script>
@@ -87,6 +90,13 @@
         <script src="{{ asset('assets/admin/vendors/fileinput/fileinput.min.js') }}"></script>
         <script src="{{ asset('assets/admin/vendors/input-mask/input-mask.min.js') }}"></script>
         <script src="{{ asset('assets/admin/js/app.min.js') }}"></script>
+        <script type="text/javascript">
+            var currentUserId = "{{ app.user.id }}";
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+            $('.date-picker').datetimepicker({format : "DD-MM-YYYY"});
+        </script>
     {% endblock %}
     </body>
 </html>

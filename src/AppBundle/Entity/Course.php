@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Course
@@ -41,12 +42,14 @@ class Course
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
     /**
      * @var User
+     *
+     * @Serializer\Exclude()
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="courses")
      * @ORM\JoinColumn(name="user_id", nullable=false)
@@ -56,12 +59,16 @@ class Course
     /**
      * @var \DateTime
      *
+     * @Serializer\Exclude()
+     *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     private $createdAt;
 
     /**
      * @var \DateTime|null
+     *
+     * @Serializer\Exclude()
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
@@ -70,6 +77,8 @@ class Course
     /**
      * @var ArrayCollection|Module[]
      *
+     * @Serializer\Exclude()
+     *
      * @ORM\OneToMany(targetEntity="Module", mappedBy="course")
      */
     private $modules;
@@ -77,12 +86,14 @@ class Course
     /**
      * @var string
      *
-     * @ORM\Column(name="link_to_grades", type="string", length=255)
+     * @ORM\Column(name="link_to_grades", type="string", length=255, nullable=true)
      */
     private $linkToGrades;
 
     /**
      * @var ArrayCollection|User[]
+     *
+     * @Serializer\Exclude()
      *
      * @ORM\ManyToMany(targetEntity="User", inversedBy="labs")
      * @ORM\JoinTable(
@@ -99,6 +110,8 @@ class Course
 
     /**
      * @var ArrayCollection|Announcement[]
+     *
+     * @Serializer\Exclude()
      *
      * @ORM\OneToMany(targetEntity="Announcement", mappedBy="course")
      */
@@ -390,5 +403,57 @@ class Course
     public function getAnnouncements()
     {
         return $this->announcements;
+    }
+
+    /**
+     * Returns createdAt.
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("createdAt")
+     *
+     * @return string
+     */
+    public function getCreatedAtFormatted()
+    {
+        return $this->createdAt ? $this->createdAt->format('d/m/Y') : null;
+    }
+
+    /**
+     * Returns updatedAt.
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("updatedAt")
+     *
+     * @return string
+     */
+    public function getUpdatedAtFormatted()
+    {
+        return $this->updatedAt ? $this->updatedAt->format('d/m/Y') : null;
+    }
+
+    /**
+     * Returns the User id.
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("author")
+     *
+     * @return string
+     */
+    public function getAuthorId()
+    {
+        return $this->author ? $this->author->getId() : null;
+    }
+
+    /**
+     * Returns the User username.
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("authorUserName")
+     *
+     * @return string
+     */
+    public function getCreatedByUserName()
+    {
+        return $this->author ? $this->author->getUsername() : null;
     }
 }
