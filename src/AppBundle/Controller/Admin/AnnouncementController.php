@@ -4,9 +4,9 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Announcement;
 use AppBundle\Form\Announcement\CreateType;
+use AppBundle\Controller\BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @Route("/admin/announcement")
  */
-class AnnouncementController extends Controller
+class AnnouncementController extends BaseController
 {
     /**
      * Lists all Announcement entities.
@@ -45,6 +45,25 @@ class AnnouncementController extends Controller
     }
 
     /**
+     * Lists all Announcement entities filtered and paginated.
+     *
+     * @Route("/list/filtered", options={"expose"=true}, name="app_admin_announcement_list_filtered")
+     * @Method("POST")
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function listByPageAction(Request $request)
+    {
+        $requestParams = $request->request->all();
+        $dataTableService = $this->get('app.service.data_table');
+        $response = $dataTableService->paginateByColumn(Announcement::class, 'title', $requestParams);
+
+        return $this->createApiResponse($response);
+    }
+
+    /**
      * Creates a new Announcement entity.
      *
      * @Route("/create", name="app_admin_announcement_create")
@@ -56,10 +75,13 @@ class AnnouncementController extends Controller
      */
     public function createAction(Request $request)
     {
-        $form = $this->createForm(CreateType::class);
+        $announcement = new Announcement();
+        $form = $this->createForm(CreateType::class, $announcement);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $announcement->setCreatedBy($this->getUser());
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($form->getData());
             $em->flush();
@@ -75,7 +97,12 @@ class AnnouncementController extends Controller
                 )
             ;
 
-            return $this->redirectToRoute('app_admin_announcement_show');
+            return $this->redirectToRoute(
+                'app_admin_announcement_show',
+                [
+                    'id' => $announcement->getId(),
+                ])
+            ;
         }
 
         return $this->render(
@@ -120,7 +147,12 @@ class AnnouncementController extends Controller
                 )
             ;
 
-            return $this->redirectToRoute('app_admin_announcement_show');
+            return $this->redirectToRoute(
+                'app_admin_announcement_show',
+                [
+                    'id' => $announcement->getId(),
+                ])
+                ;
         }
 
         return $this->render(

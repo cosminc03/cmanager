@@ -3,19 +3,63 @@ message:
 
 title:
     homepage_admin: CManager Admin
+    home: Home
+    announcement:
+        list: Announcement
+        create: Create new announcement
+        edit: Edit announcement
+    course:
+        list: Course
+        create: Create new course
+        edit: Edit course
+
+subtitle:
+    announcement: List of announcements
+    course: List of courses
 
 label:
     email: Email
     password:
         first: Password
         second: Repeat password
+    label: Label
+    title: Title
+    content: Content
+    course: Course
+    user: User
+    link_to_grades: Link to grades
+    abbreviation: Abbreviation
+
+table_header_cell:
+    id: Id
+    title: Title
+    content: Content
+    course: Course
+    author: Author
+    abbreviation: Abbreviation
+    link_to_grades: Link to grades
+    created_at: Created at
+    updated_at: Updated at
 
 button:
     register: Register
     forgot_password: Forgot password
+    select_file: Select File
+    create: Create
+    edit: Edit
+    save_changes: Save changes
+    delete: Delete
+    change: Change
+    back_to_list: Back to list
+
+add:
+    announcement: Add new announcement
+    course: Add new course
 
 placeholder:
     course: Choose one course
+    user: Choose one user
+    actions: Actions
 
 link:
     home: Home

@@ -3,19 +3,20 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class DefaultController extends Controller
+/**
+ * Default admin controller.
+ *
+ * @Route("/admin")
+ */
+class DefaultController extends BaseController
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/home", name="app_admin_default_homepage")
      */
     public function adminAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', array(
-            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ));
+        return $this->render('AppBundle:Admin:home.html.twig');
     }
 }

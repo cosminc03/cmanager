@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Controller\BaseController;
 use AppBundle\Entity\Course;
 use AppBundle\Form\Course\CreateType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,14 +17,13 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @Route("/admin/course")
  */
-class CourseController extends Controller
+class CourseController extends BaseController
 {
     /**
      * Lists all Course entities.
      *
      * @Route("/list", name="app_admin_course_list")
      * @Method("GET")
-     * @Secure(roles="ROLE_SUPER_ADMIN")
      *
      * @return Response
      */
@@ -46,6 +45,25 @@ class CourseController extends Controller
     }
 
     /**
+     * Lists all Course entities filtered and paginated.
+     *
+     * @Route("/list/filtered", options={"expose"=true}, name="app_admin_course_list_filtered")
+     * @Method("POST")
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function listByPageAction(Request $request)
+    {
+        $requestParams = $request->request->all();
+        $dataTableService = $this->get('app.service.data_table');
+        $response = $dataTableService->paginateByColumn(Course::class, 'title', $requestParams);
+
+        return $this->createApiResponse($response);
+    }
+
+    /**
      * Creates a new Course entity.
      *
      * @Route("/create", name="app_admin_course_create")
@@ -57,7 +75,8 @@ class CourseController extends Controller
      */
     public function createAction(Request $request)
     {
-        $form = $this->createForm(CreateType::class);
+        $course = new Course();
+        $form = $this->createForm(CreateType::class, $course);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -76,7 +95,12 @@ class CourseController extends Controller
                 )
             ;
 
-            return $this->redirectToRoute('app_admin_course_show');
+            return $this->redirectToRoute(
+                'app_admin_course_show',
+                [
+                    'id' => $course->getId(),
+                ])
+            ;
         }
 
         return $this->render(
@@ -121,7 +145,12 @@ class CourseController extends Controller
                 )
             ;
 
-            return $this->redirectToRoute('app_admin_course_show');
+            return $this->redirectToRoute(
+                'app_admin_course_show',
+                [
+                    'id' => $course->getId(),
+                ])
+            ;
         }
 
         return $this->render(
