@@ -1,0 +1,88 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<!DOCTYPE html>
+    <!--[if IE 9 ]><html class="ie9"><![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Material Admin</title>
+
+        {% block stylesheets %}
+            <!-- Vendor CSS -->
+            <link href="{{ asset('assets/admin/vendors/bower_components/animate.css/animate.min.css') }}" rel="stylesheet">
+            <link href="{{ asset('assets/admin/vendors/bower_components/material-design-iconic-font/dist/css/material-design-iconic-font.min.css') }}" rel="stylesheet">
+
+            <!-- CSS -->
+            <link href="{{ asset('assets/admin/css/app_1.min.css') }}" rel="stylesheet">
+            <link href="{{ asset('assets/admin/css/app_2.min.css') }}" rel="stylesheet">
+            <link href="{{ asset('bundles/app/assets/css/style.css') }}" rel="stylesheet"/>
+        {% endblock %}
+    </head>
+
+    <body>
+        <div class="login-content">
+            <!-- Login -->
+            <div class="lc-block toggled" id="l-login">
+                <div class="lcb-form">
+                    {% if error %}
+                        <div class="c-red">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+                    <form action="{{ path("fos_user_security_check") }}" method="post">
+                        {% if csrf_token %}
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                        {% endif %}
+
+                        <div class="input-group m-b-20">
+                            <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                            <div class="fg-line" data-ibl="orange">
+                                <input type="text" id="username" name="_username" class="form-control fg-line-orange" value="{{ last_username }}" required="required" placeholder="{{ 'security.login.username'|trans }}">
+                            </div>
+                        </div>
+
+                        <div class="input-group m-b-20">
+                            <span class="input-group-addon"><i class="zmdi zmdi-male"></i></span>
+                            <div class="fg-line" data-ibl="orange">
+                                <input type="password" id="password" name="_password" required="required" class="form-control" placeholder="{{ 'security.login.password'|trans }}">
+                            </div>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="">
+                                <i class="input-helper"></i>
+                                Keep me signed in
+                            </label>
+                        </div>
+
+                        <button type="submit" id="_submit" name="_submit" class="btn btn-login btn-orange btn-float">
+                            <i class="zmdi zmdi-arrow-forward"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="lcb-navigation">
+                    <a href="" data-ma-action="login-switch" data-ma-block="#l-register"><i class="zmdi zmdi-plus"></i> <span>Register</span></a>
+                    <a href="" data-ma-action="login-switch" data-ma-block="#l-forget-password"><i>?</i> <span>Forgot Password</span></a>
+                </div>
+            </div>
+        </div>
+
+        {% include 'AppBundle:Admin/Layout:older_ie_version.html.twig' %}
+
+        {% block javascripts %}
+            <!-- Javascript Libraries -->
+            <script src="{{ asset('assets/admin/vendors/bower_components/jquery/dist/jquery.min.js') }}"></script>
+            <script src="{{ asset('assets/admin/vendors/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+
+            <script src="{{ asset('assets/admin/vendors/bower_components/Waves/dist/waves.min.js') }}"></script>
+
+            <!-- Placeholder for IE9 -->
+            <!--[if IE 9 ]>
+            <script src="{{ asset('assets/admin/vendors/bower_components/jquery-placeholder/jquery.placeholder.min.js') }}"></script>
+            <![endif]-->
+
+            <script src="{{ asset('assets/admin/js/app.min.js') }}"></script>
+        {% endblock %}
+    </body>
+</html>
