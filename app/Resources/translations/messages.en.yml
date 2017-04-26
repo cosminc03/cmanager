@@ -2,10 +2,18 @@ message:
     wait: Please wait...
     yes: Yes
     no: No
+    infobucket: InfoBucket
+    login:
+        title: Open source platform for faculty
+        description: InfoBucket is an online platform made for faculties offering an well structured management for students and teachers where they can add courses and provides a various range of other features. Thereby it is desired to establish a simple and fast communication between students and teachers.
+    sigin_in: Sign In
+    forgot_password: Forgot your passsword?
+    already_have_account: Already have account and password?
 
 title:
     homepage_admin: CManager Admin
     home: Home
+    reset_password: Reset Password
     announcement:
         list: Announcement
         create: Create new announcement
@@ -72,6 +80,7 @@ table_header_cell:
 button:
     register: Register
     forgot_password: Forgot password
+    reset_password: Reset password
     select_file: Select File
     create: Create
     edit: Edit
@@ -79,6 +88,7 @@ button:
     delete: Delete
     change: Change
     back_to_list: Back to list
+    submit: Submit
 
 add:
     announcement: Add new announcement
@@ -97,6 +107,7 @@ link:
     support: Support
     contact: Contact
     account: Account
+    help: Help
 
 remove:
     avatar: Remove avatar
