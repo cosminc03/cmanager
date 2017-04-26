@@ -1,5 +1,7 @@
 message:
     wait: Please wait...
+    yes: Yes
+    no: No
 
 title:
     homepage_admin: CManager Admin
@@ -12,23 +14,41 @@ title:
         list: Course
         create: Create new course
         edit: Edit course
+    user:
+        list: User
+        create: Create new user
+        edit: Edit user
 
 subtitle:
     announcement: List of announcements
     course: List of courses
+    user: List of users
 
 label:
     email: Email
     password:
         first: Password
         second: Repeat password
+    role:
+        user: ROLE_USER
+        admin: ROLE_ADMIN
+        superadmin: ROLE_SUPER_ADMIN
+        student: ROLE_STUDENT
+        teacher: ROLE_TEACHER
     label: Label
     title: Title
     content: Content
     course: Course
     user: User
+    date_of_birth: Date of birth
+    avatar: Avatar
     link_to_grades: Link to grades
     abbreviation: Abbreviation
+    first_name: First name
+    last_name: Last name
+    roles: Roles
+    enabled: Enabled
+    phone: Phone
 
 table_header_cell:
     id: Id
@@ -38,6 +58,14 @@ table_header_cell:
     author: Author
     abbreviation: Abbreviation
     link_to_grades: Link to grades
+    username: Username
+    first_name: First name
+    last_name: Last name
+    email: Email
+    phone: Phone
+    date_of_birth: Date of birth
+    roles: Roles
+    enabled: Enabled
     created_at: Created at
     updated_at: Updated at
 
@@ -55,6 +83,7 @@ button:
 add:
     announcement: Add new announcement
     course: Add new course
+    user: Add new user
 
 placeholder:
     course: Choose one course
@@ -68,5 +97,8 @@ link:
     support: Support
     contact: Contact
     account: Account
+
+remove:
+    avatar: Remove avatar
 
 copyright: Copyright &copy; 2015 Material Admin

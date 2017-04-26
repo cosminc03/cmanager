@@ -5,16 +5,21 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * User
  *
  * @ORM\Table(name="fos_user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @Vich\Uploadable
  */
 class User extends BaseUser
 {
     const ROLE_ADMIN = 'ROLE_ADMIN';
+    const GRAVATAR_BASE_URL = 'https://www.gravatar.com/avatar/';
 
     /**
      * @var int
@@ -40,18 +45,17 @@ class User extends BaseUser
     protected $lastName;
 
     /**
+     * @var string
+     * @ORM\Column(name="phone", type="string", length=128, nullable=true)
+     */
+    private $phone;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_of_birth", type="date", nullable=true)
      */
     private $dateOfBirth;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
-     */
-    private $avatar;
 
     /**
      * @var ArrayCollection|Course[]
@@ -63,12 +67,16 @@ class User extends BaseUser
     /**
      * @var ArrayCollection|Course[]
      *
+     * @Serializer\Exclude()
+     *
      * @ORM\ManyToMany(targetEntity="Course", mappedBy="assistants")
      */
     private $labs;
 
     /**
      * @var ArrayCollection|Module[]
+     *
+     * @Serializer\Exclude()
      *
      * @ORM\OneToMany(targetEntity="Module", mappedBy="author")
      */
@@ -77,6 +85,8 @@ class User extends BaseUser
     /**
      * @var ArrayCollection|Announcement[]
      *
+     * @Serializer\Exclude()
+     *
      * @ORM\OneToMany(targetEntity="Announcement", mappedBy="course")
      */
     private $announcements;
@@ -84,14 +94,52 @@ class User extends BaseUser
     /**
      * @var ArrayCollection|Post[]
      *
+     * @Serializer\Exclude()
+     *
      * @ORM\OneToMany(targetEntity="Post", mappedBy="createdBy")
      */
     private $posts;
+
+    /**
+     * @Vich\UploadableField(mapping="user_avatars", fileNameProperty="avatar")
+     * @Serializer\Exclude()
+     *
+     * @var File
+     */
+    private $avatarFile;
+
+    /**
+     * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
+     *
+     * @Serializer\Exclude()
+     *
+     * @var string
+     */
+    private $avatar;
+
+    /**
+     * @var \DateTime
+     *
+     * @Serializer\Exclude()
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @Serializer\Exclude()
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
     public function __construct()
     {
         parent::__construct();
 
+        $this->createdAt = new \DateTime();
         $this->courses = new ArrayCollection();
         $this->labs = new ArrayCollection();
         $this->modules = new ArrayCollection();
@@ -121,6 +169,34 @@ class User extends BaseUser
     public function getAvatar()
     {
         return $this->avatar;
+    }
+
+    /**
+     * Set avatarFile.
+     *
+     * @param File|null $image
+     *
+     * @return User
+     */
+    public function setAvatarFile(File $image = null)
+    {
+        $this->avatarFile = $image;
+
+        if ($image) {
+            $this->updatedAt = new \DateTime();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get avatarFile.
+     *
+     * @return File
+     */
+    public function getAvatarFile()
+    {
+        return $this->avatarFile;
     }
 
     /**
@@ -361,5 +437,70 @@ class User extends BaseUser
     public function getLastName()
     {
         return $this->lastName;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param string $phone
+     * @return User
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string 
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Returns createdAt.
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("createdAt")
+     *
+     * @return string
+     */
+    public function getCreatedAtFormatted()
+    {
+        return $this->createdAt ? $this->createdAt->format('d/m/Y') : null;
+    }
+
+    /**
+     * Returns updatedAt.
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("updatedAt")
+     *
+     * @return string
+     */
+    public function getUpdatedAtFormatted()
+    {
+        return $this->updatedAt ? $this->updatedAt->format('d/m/Y') : null;
+    }
+
+    /**
+     * Get gravatar url.
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("gravatar")
+     *
+     * @return string
+     */
+    public function getGravatar()
+    {
+        $email = md5(strtolower(trim($this->getEmail())));
+        $gravatarUrl = sprintf('%s%s?d=identicon', self::GRAVATAR_BASE_URL, $email);
+
+        return $gravatarUrl;
     }
 }

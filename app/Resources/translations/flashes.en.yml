@@ -12,3 +12,9 @@ success:
         delete:
             from_edit: Announcement successfully deleted!
             from_data_table: Announcement with ID
+    user:
+        create: User successfully created!
+        edit: User successfully edited!
+        delete:
+            from_edit: User successfully deleted!
+            from_data_table: User with ID
