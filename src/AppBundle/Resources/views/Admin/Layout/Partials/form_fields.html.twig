@@ -110,16 +110,57 @@
 {%- block file_widget -%}
     <div class="col-sm-8 col-md-offset-2">
         <div class="fileinput fileinput-new" data-provides="fileinput">
-            <span class="btn bgm-teal btn-file m-r-10">
-                {% if not data %}
-                    <span class="fileinput-new">{{ 'button.select_file'|trans({}, 'messages') }}</span>
-                {% else %}
-                    <span class="fileinput-exists">{{ 'button.change'|trans({}, 'messages') }}</span>
-                {% endif %}
-                <input {{ block('widget_attributes') }} type="file">
-            </span>
-            <span class="fileinput-filename">{{ data }}</span>
-            <a href="#" class="close fileinput-exists" data-dismiss="fileinput">&times;</a>
+            <div>
+                <label class="fg-label m-r-10" for="{{ name }}">
+                    {% if label is not none %}
+                        {{ label }}
+                    {% else %}
+                        {{ 'label.avatar'|trans({}, 'messages') }}
+                    {% endif %}
+                </label>
+                <span class="btn bgm-teal btn-file m-r-10">
+                    {% if not data %}
+                        <span class="fileinput-new">{{ 'button.select_file'|trans({}, 'messages') }}</span>
+                    {% else %}
+                        <span class="fileinput-exists">{{ 'button.change'|trans({}, 'messages') }}</span>
+                    {% endif %}
+                    <input {{ block('widget_attributes') }} type="file">
+                </span>
+            </div>
+            <div style="position: relative; margin-top: 10px;">
+                <span class="fileinput-filename">{{ data }}</span>
+                <a href="#" class="close fileinput-exists" style="right: -30px;" data-dismiss="fileinput">&times;</a>
+            </div>
         </div>
     </div>
 {%- endblock file_widget -%}
+
+{% block vich_image_widget %}
+    {% spaceless %}
+        <div class="vich-image m-t-15">
+            {{ form_widget(form.file) }}
+
+            <div class="clear-both">
+                {% if form.delete is defined %}
+                    {{ form_widget(
+                    form.delete,
+                    {
+                        'attr': {
+                        'class': 'form-control input-sm',
+                    },
+                        'label': 'remove.avatar'|trans
+                    }
+                    ) }}
+                {% endif %}
+            </div>
+
+            {% if download_uri %}
+                <div id="avatar" class="col-sm-8 col-md-offset-2" style="background-image: url('{{ download_uri }}')"></div>
+            {% endif %}
+
+            {% if show_download_link and download_uri is defined and download_uri%}
+                <a href="{{ download_uri }}" class="test2">{{ 'download'|trans({}, 'VichUploaderBundle') }}</a>
+            {% endif %}
+        </div>
+    {% endspaceless %}
+{% endblock %}

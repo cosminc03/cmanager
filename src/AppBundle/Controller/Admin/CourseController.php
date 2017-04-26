@@ -81,7 +81,7 @@ class CourseController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($form->getData());
+            $em->persist($course);
             $em->flush();
 
             $this

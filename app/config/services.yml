@@ -15,3 +15,6 @@ services:
             - "@jms_serializer"
             - "@fos_js_routing.encoder"
             - "@fos_js_routing.normalizer"
+
+    app.service.user:
+        class: AppBundle\Services\UserService

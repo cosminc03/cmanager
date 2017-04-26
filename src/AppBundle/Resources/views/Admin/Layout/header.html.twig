@@ -18,14 +18,14 @@
             <ul class="hi-menu">
                 <li>
                     <a href="#">
-                        <img class="him-icon avatar" src="img/profile-pics/1.jpg">
+                        {% if app.user.avatar %}
+                            {% set avatar = '/uploads/avatars/' ~ app.user.avatar %}
+                        {% else %}
+                            {% set avatar = app.user.gravatar %}
+                        {% endif %}
+                        <img class="him-icon avatar" src="{{ avatar }}">
                     </a>
                 </li>
-                <!--
-                    <li>
-                        <a href="#"><i class="zmdi him-icon zmdi-account"></i></a>
-                    </li>
-                -->
                 <li class="hidden-xs">
                     <a href="#">
                         <span class="him-font">{{ app.user.firstName }} {{ app.user.lastName }}</span>

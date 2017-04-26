@@ -12,3 +12,4 @@
 /composer.phar
 .idea
 /web/assets/admin/vendors/bower_components/
+/web/uploads

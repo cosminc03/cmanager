@@ -40,7 +40,7 @@ class CreateType extends AbstractType
             ->add('course', EntityType::class, [
                 'required' => false,
                 'class' => Course::class,
-                'choice_label' => 'name',
+                'choice_label' => 'title',
                 'placeholder' => 'placeholder.course',
                 'translation_domain' => 'messages',
             ])

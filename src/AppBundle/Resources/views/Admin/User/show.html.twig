@@ -1,0 +1,93 @@
+{% extends 'AppBundle:Admin/Layout:base.html.twig' %}
+
+{% trans_default_domain 'messages' %}
+
+{% block body_content %}
+    <div class="row">
+        <div class="col-sm-8 col-md-offset-2">
+            <div class="card">
+                <div class="card-header bgm-teal">
+                    <h2>{{ 'title.user.list'|trans }}<small>{{ user.username|default('-') }}</small></h2>
+                    <ul class="actions">
+                        <li class="dropdown">
+                            <a href="" data-toggle="dropdown">
+                                <i class="zmdi zmdi-more-vert c-white"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a href="{{ path('app_admin_user_create') }}">{{ 'add.user'|trans }}</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_admin_user_edit', {'id': user.id}) }}">{{ 'button.edit'|trans }}</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_admin_user_list') }}">{{ 'button.back_to_list'|trans }}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body m-t-10 card-padding">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <tbody>
+                            <tr>
+                                <th>{{ 'table_header_cell.id'|trans }}</th>
+                                <td>{{ user.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'table_header_cell.username'|trans }}</th>
+                                <td>{{ user.username|default('-') }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'table_header_cell.email'|trans }}</th>
+                                <td>{{ user.email|default('-') }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'table_header_cell.first_name'|trans }}</th>
+                                <td>{{ user.firstName|default('-') }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'table_header_cell.last_name'|trans }}</th>
+                                <td>{{ user.lastName|default('-') }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'table_header_cell.phone'|trans }}</th>
+                                <td>{{ user.phone|default('-') }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'table_header_cell.date_of_birth'|trans }}</th>
+                                <td>
+                                    {% if user.dateOfBirth %}
+                                        {{ user.dateOfBirth|date('d/m/Y') }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'table_header_cell.enabled'|trans }}</th>
+                                <td>
+                                    {% if user.isEnabled %}
+                                        <span class="c-green">{{ 'message.yes'|trans }}</span>
+                                    {% else %}
+                                        <span class="c-red">{{ 'message.no'|trans }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'table_header_cell.roles'|trans }}</th>
+                                <td>
+                                    {% for role in user.roles %}
+                                        <p>{{ role }}</p>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

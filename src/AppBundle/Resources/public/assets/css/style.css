@@ -1,3 +1,7 @@
+.clear-both {
+	clear: both;
+}
+
 .login-content {
 	background-color: #222222 !important;
 }
@@ -61,6 +65,21 @@
 /*
 * === User Interface ===
 */
+
+#avatar {
+	/* make a square container */
+	width: 150px;
+	height: 150px;
+
+	/* fill the container, preserving aspect ratio, and cropping to fit */
+	background-size: cover;
+
+	/* center the image vertically and horizontally */
+	background-position: center;
+
+	/* round the edges to a circle with border radius 1/2 container size */
+	border-radius: 50%;
+}
 
 /*
 * --- Input Fields ---
