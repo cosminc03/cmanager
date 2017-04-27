@@ -2,13 +2,8 @@
 	clear: both;
 }
 
-.login-content {
-	background-color: #222222 !important;
-}
-
 #header {
 	min-height: 46px !important;
-	background-color: #222222 !important;
 }
 
 .h-inner {
@@ -85,16 +80,7 @@
 * --- Input Fields ---
 */
 
-.fg-line[data-ibl=orange]:after {
-	background: #FF333A !important;
-}
-
 
 /*
 * --- Buttons ---
 */
-
-.btn-orange {
-	color: #fff;
-	background-color: #FF333A;
-}
