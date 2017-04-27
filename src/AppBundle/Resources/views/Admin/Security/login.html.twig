@@ -16,7 +16,7 @@
             <!-- CSS -->
             <link href="{{ asset('assets/admin/css/app_1.min.css') }}" rel="stylesheet">
             <link href="{{ asset('assets/admin/css/app_2.min.css') }}" rel="stylesheet">
-            <link href="{{ asset('bundles/app/assets/css/style.css') }}" rel="stylesheet"/>
+            <link href="{{ asset('bundles/app/assets/css/admin_style.css') }}" rel="stylesheet"/>
         {% endblock %}
     </head>
 
@@ -28,7 +28,7 @@
                     {% if error %}
                         <div class="c-red">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
-                    <form action="{{ path("fos_user_security_check") }}" method="post">
+                    <form action="{{ path("app_admin_security_check") }}" method="post">
                         {% if csrf_token %}
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
                         {% endif %}
@@ -55,7 +55,7 @@
                             </label>
                         </div>
 
-                        <button type="submit" id="_submit" name="_submit" class="btn btn-login btn-orange btn-float">
+                        <button type="submit" id="_submit" name="_submit" class="btn btn-login btn-success btn-float">
                             <i class="zmdi zmdi-arrow-forward"></i>
                         </button>
                     </form>

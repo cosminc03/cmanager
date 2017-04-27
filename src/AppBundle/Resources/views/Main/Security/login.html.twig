@@ -23,13 +23,21 @@
                     </div>
 
                     <div class="card-body card-padding">
-                        <form method="post" role="form" class="p-t-25" novalidate>
+                        {% if error %}
+                            <div class="c-red p-t-10">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+
+                        <form action="{{ path("app_main_security_check") }}" method="post" role="form" class="p-t-20" novalidate>
+                            {% if csrf_token %}
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                            {% endif %}
+
                             <div class="form-group input-group fg-float">
                                 <span class="input-group-addon">
                                     <i class="zmdi zmdi-email"></i>
                                 </span>
                                 <div class="fg-line">
-                                    <input type="email" class="form-control input-sm" id="Email">
+                                    <input type="text" id="username" name="_username" class="form-control input-sm" value="{{ last_username }}">
                                     <label class="fg-label">{{ 'label.email'|trans }}</label>
                                 </div>
                                 <span class="text-danger"></span>
@@ -40,22 +48,22 @@
                                     <i class="zmdi zmdi-key"></i>
                                 </span>
                                 <div class="fg-line">
-                                    <input type="password" class="form-control input-sm" id="Password">
-                                    <label class="fg-label">{{ 'label.password.first'|trans }}</label>
+                                    <input type="password" id="password" name="_password" class="form-control input-sm">
+                                    <label for="password" class="fg-label">{{ 'label.password.first'|trans }}</label>
                                 </div>
                                 <span class="text-danger"></span>
                             </div>
 
                             <div class="text-danger"></div>
 
-                            <button type="submit" class="btn btn-primary btn-block bgm-green m-t-10 waves-effect">
+                            <button type="submit" id="_submit" name="_submit" class="btn btn-primary btn-block bgm-green m-t-10 waves-effect">
                                 {{ 'button.submit'|trans }}
                             </button>
                         </form>
                     </div>
                 </div>
                 <div>
-                    <a href="{{ path('app_forgot_password') }}">
+                    <a href="">
                         {{ 'message.forgot_password'|trans }}
                     </a>
                 </div>
