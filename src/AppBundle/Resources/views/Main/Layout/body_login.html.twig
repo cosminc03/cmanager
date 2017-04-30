@@ -1,0 +1,17 @@
+{% extends 'AppBundle:Main/Layout:base.html.twig' %}
+
+{% block body_main %}
+    {% include 'AppBundle:Main/Layout:header.html.twig' %}
+
+    <section id="main">
+        <div class="container">
+            <div class="wrapper">
+                <div class="card custom-card" id="profile-main">
+                    {% block body_content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'AppBundle:Main/Layout:footer.html.twig' %}
+{% endblock %}
