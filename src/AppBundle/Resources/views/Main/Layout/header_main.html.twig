@@ -1,0 +1,62 @@
+<header id="header-alt" class="clearfix" data-ma-theme="lightblue">
+    <ul class="h-inner clearfix">
+        <li class="dropdown">
+            <div class="line-wrap m-l-0 m-t-20 m-r-10 hoverable" data-toggle="dropdown" aria-expanded="false">
+                <div class="line top bck-color-black"></div>
+                <div class="line center bck-color-black"></div>
+                <div class="line bottom bck-color-black"></div>
+            </div>
+            <ul class="dropdown-menu dropdown-menu-nav dm-icon">
+                <li>
+                    <a href>Courses</a>
+                </li>
+                <li>
+                    <a href>Professors</a>
+                </li>
+                <li>
+                    <a href>Announcements</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="hi-logo">
+            <a href="">
+                <div id="brand">
+                    <img src="{{ asset('assets/images/logo.png') }}" id="logo" />
+                    <div>
+                        <span id="info">Info</span>
+                        <span id="bucket">Bucket</span>
+                    </div>
+                </div>
+            </a>
+        </li>
+
+        <li class="pull-right p-t-10">
+            <ul class="hi-menu">
+                <li>
+                    <a data-toggle="dropdown" href="">
+                        <i class="him-icon zmdi zmdi-notifications"></i>
+                        <i class="him-counts blue-bkg">9</i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="no-bkg">
+                        <img class="him-icon avatar" src="{{ asset('bundles/app/assets/images/avatar.jpg') }}">
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a data-toggle="dropdown" href=""><i class="him-icon zmdi zmdi-more-vert"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-nav dm-icon pull-right">
+                        <li>
+                            <a href="">Profile</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="{{ path('app_main_security_logout') }}">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</header>

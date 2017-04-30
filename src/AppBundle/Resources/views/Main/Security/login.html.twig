@@ -1,6 +1,11 @@
-{% extends 'AppBundle:Main/Layout:base.html.twig' %}
+{% extends 'AppBundle:Main/Layout:body_login.html.twig' %}
 
 {% trans_default_domain 'messages' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('bundles/app/assets/css/sign_in.css') }}" rel="stylesheet">
+{% endblock %}
 
 {% block body_content %}
     <div id="login-page" class="content">

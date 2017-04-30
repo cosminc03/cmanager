@@ -1,47 +1,69 @@
-#header-custom {
-    width: 100%;
-    height: 51px;
-    position: fixed;
-    z-index: 11;
-    border-bottom:1px solid #e5e5e5;
-    background: #ffffff;
+body {
+    color: rgba(0, 0, 0, 0.85) !important;
+    background-color: rgba(0, 0, 0, 0) !important;
+    font-size: 14px;
+}
+body a:hover {
+    cursor: pointer;
 }
 
-#header-custom > div{
-    display: inline-block;
+header {
+    background-color: #fafafa !important;
 }
 
-#sign-up {
-    padding:0 120px 15px 0;
+header > ul {
+    padding:7px 0 !important;
 }
 
-#sign-up a, #sign-up button {
-    font-size: 16px;
+header a {
+    color: rgba(0, 0, 0, 0.85) !important;
+}
+
+.clearfix::after {
+    clear: both;
+}
+
+#main {
+    padding-top: 50px !important;
+}
+
+#header-alt {
+    padding:0 10px 0 35px;
+    box-shadow: none;
+    border-bottom: 1px solid #e5e5e5;
+}
+#header-alt:before {
+    background: initial;
+}
+
+.nav-wrapper {
+    margin-top: 50px;
+    padding: 0 10px 0 35px;
+    background: rgba(0, 0, 0, .04);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .3);
+}
+
+.nav-links li a {
+    color: rgba(0, 0, 0, 0.55) !important;
+    text-transform: initial !important;
+}
+.nav-links li a:hover {
+    color: rgba(0, 0, 0, 0.95) !important;
+    box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.15);
+}
+
+.nav-links li.active a {
+    color: #000 !important;
     font-weight: 600;
-    color: #333;
-    text-transform: none!important;
 }
 
-#sign-up .btn-link {
-    color: #FFFFFF;
-}
-
-#sign-up .btn-link:hover{
-    text-decoration:underline;
-}
-
-#sign-up a:hover {
-    text-decoration: underline;
-}
-
-#sign-up>li>a {
-    padding-top: 7px!important;
-    padding-bottom: 7px!important;
+.nav-links>ul>li.active>a {
+    box-shadow: inset 0 -2px 0 0 #1f78d1;
 }
 
 #brand {
     position: relative;
-    padding: 3px 0 0 120px;
+    padding: 3px 0 0 10px;
     display: inline-block;
 }
 #brand > div {
@@ -49,7 +71,8 @@
     font-size: 22px;
     width: 110px;
     top: 10px;
-    left: 170px;
+    left: 65px;
+    text-transform: initial !important;
 }
 
 #logo {
@@ -66,101 +89,213 @@
     margin-left: -7px;
 }
 
-#sign-in-card {
-    border:1px solid #e5e5e5;
-    border-radius: 3px;
+.blue-bkg {
+    background: #1f78d1 !important;
+    color: white !important;
 }
 
-#sign-in-card > .card-header {
-    border-bottom:2px solid #4a8bee;
+.hi-menu>li>a.no-bkg:hover {
+    background-color:initial;
 }
 
-.custom-card {
-    box-shadow: 0 2px 5px #e5e5e5;
+.dropdown-menu-nav {
+    top:40px !important;
 }
 
-.table-prof-courses tr td:first-child {
-    width:20px;
+.avatar {
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border:2px solid #FFF;
+    width: 36px;
+    height: 36px;
 }
 
-.table-prof-courses a {
-    color: #5e5e5e!important;
-}
 
-.table-prof-courses a:hover {
-    color: #333;
-}
 
-#footer {
-    padding-left:0 !important;
-    padding-top:15px !important;
-    border-top:1px solid #e5e5e5;
-    height: 65px !important;
-}
-
-.footer-link {
-    color:#3777b0 !important;
-}
-
-/**************** profile ****************/
-
-.user-header {
-    margin-bottom: 25px;
+.cover-block {
+    text-align: center;
     position: relative;
+    border-bottom: 1px solid #eaeaea;
 }
 
-.user-header > h2 {
-    font-size: 20px;
-    margin: 0;
-    font-weight: 400;
-    text-transform: uppercase
+.cover-block.user-cover-block {
+    padding: 24px 0 0;
 }
 
-.user-header > h2 > small {
+.cover-controls {
+    position: absolute !important;
+    top: 10px;
+    right: 10px;
+}
+
+.user-profile.profile-header {
+    margin:0 auto;
+}
+
+.avatar-holder {
+    width: 90px;
+    margin: 0 auto 10px;
+}
+
+.profile-avatar {
+    float: none;
+    margin: 0 auto;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.cover-title {
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 23px;
+}
+
+.cover-desc {
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.middle-dot-divider::after {
+    content: "\00B7";
+    padding: 0 6px;
+    font-weight: bold;
+}
+
+.s90 {
+    width: 90px !important;
+    height: 90px !important;
+}
+
+.s160 {
+    width: 160px;
+    height: 160px;
+}
+
+hr {
+    margin: 16px 0;
+    border-top:1px solid #e1e1e1;
+}
+
+.append-bottom-default {
+    margin-bottom:16px;
+}
+
+.avatar-general {
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+    .avatar-image {
+        float: left;
+        margin-bottom: 0;
+    }
+}
+
+.text-transform-initial {
+    text-transform: initial;
+}
+
+
+.help-block {
     display: block;
-    text-transform: none;
-    margin-top: 8px;
-    margin-bottom: 20px;
-    color: #9E9E9E;
-    line-height: 140%;
+    margin-top:5px;
+    color: rgba(64, 64, 64, 0.85);
 }
 
-/**************** generic classes ****************/
-
-.inline-block {
-    display: inline-block!important;
+.bck-color-black {
+    background-color: rgba(0, 0, 0, 1) !important;
 }
 
-.m-t-38 {
-    margin-top: 38px;
+.hoverable {
+    cursor: pointer;
 }
 
-.m-r-40 {
-    margin-right: 40px;
+.option-description {
+    color: #54565b;
 }
 
-/**************** font weight ****************/
-
-.fw-100 {
-    font-weight: 100!important;
+/* CSS for course list page */
+.nav-controls {
+    padding:11px 0;
 }
 
-.fw-200 {
-    font-weight: 200!important;
+.course-list {
+    margin:5px 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+.course-list>li {
+    padding:10px 0;
+    border-bottom:1px solid #eee;
+    margin: 0;
 }
 
-.fw-300 {
-    font-weight: 300!important;
+.course-list a {
+    color: rgba(0, 0, 0, 0.85);
 }
 
-.fw-400 {
-    font-weight: 400!important;
+.course-row {
+    display: flex;
+    align-items: center;
 }
 
-.fw-500 {
-    font-weight: 500!important;
+.course-list .avatar-container {
+    align-self: flex-start;
+    flex: 0 0 auto;
 }
 
-.fw-600 {
-    font-weight: 600!important;
+.course-list .avatar-container>a {
+    width: 100%;
+}
+
+.s40 {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.avatar-container {
+    float: left;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+}
+
+.avatar-container .avatar {
+    float: left;
+    border-radius: 0;
+    border: none;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    align-self: center;
+}
+
+.course-list .course-details {
+    min-width: 0;
+}
+
+.course-details a:hover {
+    text-decoration: underline;
+}
+
+.course-details h4 {
+    font-weight: 600;
+}
+
+.course-details-description p{
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;max-width: 100%;
+    margin-bottom: 0;
+}
+
+.course-list .controls {
+    flex: 0 0 auto;
+    margin-left:auto;
 }

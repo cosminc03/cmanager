@@ -15,34 +15,27 @@
             <link href="{{ asset('assets/admin/vendors/bower_components/sweetalert/dist/sweetalert.css') }}" rel="stylesheet">
             <link href="{{ asset('assets/admin/vendors/bower_components/material-design-iconic-font/dist/css/material-design-iconic-font.min.css') }}" rel="stylesheet">
             <link href="{{ asset('assets/admin/vendors/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css') }}" rel="stylesheet">
+            <link href="{{ asset('assets/admin/vendors/bower_components/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet">
+            <link href="{{ asset('assets/admin/vendors/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+            <link href="{{ asset('assets/admin/vendors/bower_components/chosen/chosen.css') }}" rel="stylesheet">
 
             <!-- CSS -->
             <link href="{{ asset('assets/admin/css/app_1.min.css') }}" rel="stylesheet">
             <link href="{{ asset('assets/admin/css/app_2.min.css') }}" rel="stylesheet">
-            <link href="{{ asset('bundles/app/assets/css/main_style.css') }}" rel="stylesheet">
         {% endblock %}
     </head>
 
     <body class="bgm-white">
     {% block body %}
-        {% include 'AppBundle:Main/Layout:header.html.twig' %}
-
-        <section id="main">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="card custom-card" id="profile-main">
-                        {% block body_content %}{% endblock %}
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        {% include 'AppBundle:Main/Layout:footer.html.twig' %}
+        {% block body_main %}{% endblock %}
 
         {% block javascripts %}
             <script src="{{ asset('assets/admin/vendors/bower_components/jquery/dist/jquery.min.js') }}"></script>
             <script src="{{ asset('assets/admin/vendors/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('assets/admin/vendors/bower_components/moment/min/moment.min.js') }}"></script>
+            <script src="{{ asset('assets/admin/vendors/bower_components/bootstrap-select/dist/js/bootstrap-select.js') }}"></script>
             <script src="{{ asset('assets/admin/vendors/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+            <script src="{{ asset('assets/admin/vendors/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
             <script src="{{ asset('assets/admin/vendors/bower_components/Waves/dist/waves.min.js') }}"></script>
             <script src="{{ asset('assets/admin/vendors/bootstrap-growl/bootstrap-growl.min.js') }}"></script>
             <script src="{{ asset('assets/admin/vendors/bower_components/sweetalert/dist/sweetalert.min.js') }}"></script>

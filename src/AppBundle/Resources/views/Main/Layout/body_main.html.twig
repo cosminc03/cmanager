@@ -1,0 +1,22 @@
+{% extends 'AppBundle:Main/Layout:base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('bundles/app/assets/css/main_style.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body_main %}
+    {% include 'AppBundle:Main/Layout:header_main.html.twig' %}
+
+    {% block nav %}
+        {% include 'AppBundle:Main/Layout:nav.tml.twig' %}
+    {% endblock %}
+
+    <section id="main">
+        <section id="content" class="content-alt">
+            <div class="container">
+                {% block body_content %}{% endblock %}
+            </div>
+        </section>
+    </section>
+{% endblock %}
