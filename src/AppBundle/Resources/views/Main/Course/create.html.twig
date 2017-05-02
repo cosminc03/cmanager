@@ -1,13 +1,177 @@
 {% extends 'AppBundle:Main/Layout:body_main.html.twig' %}
 
+{% trans_default_domain 'messages' %}
+
 {% block body_content %}
     <div class="row m-t-10">
         <div class="col-lg-3 profile-settings-sidebar">
-            <h3>New course</h3>
-            <p>Create your course by filling out the inputs from the form</p>
+            <h3>{{ 'heading.new_course'|trans }}</h3>
+            <p>{{ 'paragraph.new_course'|trans }}</p>
         </div>
         <div class="col-lg-9">
-            <form>
+            {{ form_start(
+                form,
+                {
+                    'method': 'POST',
+                    'action': path('app_main_courses_create'),
+                    'attr': {
+                        'novalidate': 'novalidate',
+                    },
+                }
+            ) }}
+                <div class="form-group">
+                    {{ form_label(
+                        form.title,
+                        'Course name',
+                        {
+                            'label_attr' : {'class': 'f-17'}
+                        }
+                    ) }}
+                    <div class="fg-line">
+                        {{ form_widget(
+                            form.title,
+                            {
+                                'attr' : {
+                                    'class': 'form-control input-lg'
+                                },
+                            }
+                        ) }}
+                    </div>
+                    <span class="help-block">Enter name, so people know the full name of the course.</span>
+                </div>
+
+                <div class="form-group m-t-10">
+                    {{ form_label(
+                        form.abbreviation,
+                        'Course abbreviation',
+                        {
+                            'label_attr' : {
+                                'class': 'f-17'
+                            }
+                        }
+                    ) }}
+                    <div class="fg-line">
+                        {{ form_widget(
+                            form.abbreviation,
+                            {
+                                'attr' : {
+                                    'class': 'form-control input-lg'
+                                },
+                            }
+                        ) }}
+                    </div>
+                    <span class="help-block">Enter course abbrevition.</span>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(
+                        form.description,
+                        'Course description(optional)',
+                        {
+                            'label_attr' : {
+                                'class': 'f-17'
+                            }
+                        }
+                    ) }}
+                    <div class="fg-line">
+                        {{ form_widget(
+                            form.description,
+                            {
+                                'attr' : {
+                                    'class': 'form-control input-lg',
+                                    'rows': '5',
+                                    'placeholder': 'Description'
+                                },
+                            }
+                        ) }}
+                    </div>
+                    <span class="help-block">Enter course description.</span>
+                </div>
+
+                <div class="form-group col-sm-6 m-t-5">
+                    <p class="f-500 m-b-15 c-black f-17">Type</p>
+
+                    {{ form_widget(
+                        form.type,
+                        {
+                            'attr' : {
+                                'class': 'selectpicker input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+
+                <div class="form-group col-sm-6 m-t-5">
+                    <p class="f-500 m-b-15 c-black f-17">Evaluation</p>
+
+                    {{ form_widget(
+                        form.evaluation,
+                        {
+                            'attr' : {
+                                'class': 'selectpicker input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+
+                <div class="form-group col-sm-6 m-t-10">
+                    {{ form_label(
+                        form.courseHours,
+                        'Course Hours',
+                        {
+                            'label_attr' : {
+                                'class': 'f-17'
+                            }
+                        }
+                    ) }}
+                    <div class="fg-line">
+                        {{ form_widget(
+                            form.courseHours,
+                            {
+                                'attr' : {
+                                    'class': 'form-control input-lg'
+                                },
+                            }
+                        ) }}
+                    </div>
+                    <span class="help-block">Enter number of weekly course hours.</span>
+                </div>
+
+                <div class="form-group col-sm-6 m-t-10">
+                    {{ form_label(
+                        form.seminarHours,
+                        'Seminar Hours',
+                        {
+                            'label_attr' : {
+                                'class': 'f-17'
+                            }
+                        }
+                    ) }}
+                    <div class="fg-line">
+                        {{ form_widget(
+                            form.seminarHours,
+                            {
+                                'attr' : {
+                                    'class': 'form-control input-lg'
+                                },
+                            }
+                        ) }}
+                    </div>
+                    <span class="help-block">Enter number of weekly seminar hours.</span>
+                </div>
+
+                <div>
+                    <button class="btn bgm-green waves-effect text-transform-initial f-16" type="submit">Create course</button>
+
+                </div>
+
+                {{ form_rest(form) }}
+                <span class="hidden">{{ form_row(form._token) }}</span>
+            {{ form_end(form, {'render_rest': false}) }}
+            <a href="{{ path('app_main_courses_list') }}">
+                <button class="btn waves-effect text-transform-initial f-16 pull-right">Cancel</button>
+            </a>
+            {#<form>
                 <div class="form-group">
                     <label for="exampleInputEmail1" class="f-17">Course name</label>
                     <div class="fg-line">
@@ -24,11 +188,56 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="exampleInputEmail1" class="f-17">Project description(optional)</label>
+                    <label for="exampleInputEmail1" class="f-17">Course description(optional)</label>
                     <div class="fg-line">
                         <textarea class="form-control" rows="5" placeholder="Description"></textarea>
                     </div>
-                    <span class="help-block">Enter your last name.</span>
+                    <span class="help-block">Enter course description.</span>
+                </div>
+
+                <div class="form-group col-sm-6 m-t-5">
+                    <p class="f-500 m-b-15 c-black f-17">Type</p>
+
+                    <select class="selectpicker">
+                        <option>Mandatory</option>
+                        <option>Optional</option>
+                    </select>
+                </div>
+                <div class="form-group col-sm-6 m-t-5">
+                    <p class="f-500 m-b-15 c-black f-17">Evaluation</p>
+
+                    <select class="selectpicker">
+                        <option>Exam</option>
+                        <option>Ongoing</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-sm-6 m-t-10">
+                    <label for="exampleInputEmail1" class="f-17">Course Hours</label>
+                    <div class="fg-line">
+                        <input type="email" class="form-control input-lg" id="exampleInputEmail1">
+                    </div>
+                    <span class="help-block">Enter number of weekly course hours.</span>
+                </div>
+
+                <div class="form-group col-sm-6 m-t-10">
+                    <label for="exampleInputEmail1" class="f-17">Seminar Hours</label>
+                    <div class="fg-line">
+                        <input type="email" class="form-control input-lg" id="exampleInputEmail1">
+                    </div>
+                    <span class="help-block">Enter number of weekly seminar hours.</span>
+                </div>
+
+                <div class="form-group col-sm-12 m-t-10">
+                    <p class="f-500 c-black m-b-20 f-17">Course content</p>
+
+                    <div class="html-editor"></div>
+                </div>
+
+                <div class="form-group col-sm-12 m-t-10">
+                    <p class="f-500 c-black m-b-20 f-17">Course bibliography</p>
+
+                    <div class="html-editor"></div>
                 </div>
 
                 <div class="form-group">
@@ -67,7 +276,7 @@
                     <button class="btn bgm-green waves-effect text-transform-initial f-16">Create course</button>
                     <button class="btn waves-effect text-transform-initial f-16 pull-right">Cancel</button>
                 </div>
-            </form>
+            </form>#}
         </div>
     </div>
 {% endblock %}

@@ -3,8 +3,11 @@
 namespace AppBundle\Controller\Main;
 
 use AppBundle\Controller\BaseController;
+use AppBundle\Entity\Course;
+use AppBundle\Form\Course\Main\CreateType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -33,10 +36,63 @@ class CourseController extends BaseController
      * @Route("/create", name="app_main_courses_create")
      * @Method({"GET", "POST"})
      *
+     * @param Request $request
+     *
      * @return Response
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
-        return $this->render('AppBundle:Main/Course:create.html.twig');
+        $course = new Course();
+        $form = $this->createForm(CreateType::class, $course);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            dump($form);die;
+            $course->setAuthor($this->getUser());
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($course);
+            $em->flush();
+
+            $this
+                ->get('session')
+                ->getFlashBag()
+                ->set(
+                    'success',
+                    $this
+                        ->get('translator')
+                        ->trans('success.course.create', [], 'flashes')
+                )
+            ;
+
+            return $this->redirectToRoute(
+                'app_main_courses_show',
+                [
+                    'id' => $course->getId(),
+                ])
+                ;
+        }
+
+        return $this->render(
+            'AppBundle:Main/Course:create.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * List all Course entities.
+     *
+     * @Route("/{id}/show", name="app_main_courses_show")
+     * @Method("GET")
+     *
+     * @param Course $course
+     *
+     * @return Response
+     */
+    public function showAction(Course $course)
+    {
+        return $this->render('AppBundle:Main/Course:list.html.twig');
     }
 }
