@@ -32,6 +32,12 @@ subtitle:
     course: List of courses
     user: List of users
 
+heading:
+    new_course: New course
+
+paragraph:
+    new_course: Create your course by filling out the inputs from the form
+
 label:
     email: Email
     password:
@@ -108,6 +114,14 @@ link:
     contact: Contact
     account: Account
     help: Help
+
+type:
+    optional: Optional
+    mandatory: Mandatory
+
+evaluation:
+    ongoing: Ongoing evaluation
+    exam: Exam evaluation
 
 remove:
     avatar: Remove avatar

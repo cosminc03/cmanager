@@ -16,6 +16,12 @@ use JMS\Serializer\Annotation as Serializer;
  */
 class Course
 {
+    const TYPE_OPTIONAL = 'type.optional';
+    const TYPE_MANDATORY = 'type.mandatory';
+
+    const EVALUATION_ONGOING = 'evaluation.ongoing';
+    const EVALUATION_EXAM = 'evaluation.exam';
+
     /**
      * @var int
      *
@@ -55,6 +61,48 @@ class Course
      * @ORM\JoinColumn(name="user_id", nullable=false)
      */
     private $author;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=100, nullable=true)
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="evaluation", type="string", length=100, nullable=true)
+     */
+    private $evaluation;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="course_hours", type="integer", nullable=true)
+     */
+    private $courseHours;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="seminar_hours", type="integer", nullable=true)
+     */
+    private $seminarHours;
+
+    /**
+     * @var string
+
+     * @ORM\Column(name="content", type="text", nullable=true)
+     */
+    private $content;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="bibliography", type="text", nullable=true)
+     */
+    private $bibliography;
 
     /**
      * @var \DateTime
@@ -455,5 +503,143 @@ class Course
     public function getCreatedByUserName()
     {
         return $this->author ? $this->author->getUsername() : null;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return Course
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set evaluation
+     *
+     * @param string $evaluation
+     * @return Course
+     */
+    public function setEvaluation($evaluation)
+    {
+        $this->evaluation = $evaluation;
+
+        return $this;
+    }
+
+    /**
+     * Get evaluation
+     *
+     * @return string 
+     */
+    public function getEvaluation()
+    {
+        return $this->evaluation;
+    }
+
+    /**
+     * Set courseHours
+     *
+     * @param integer $courseHours
+     * @return Course
+     */
+    public function setCourseHours($courseHours)
+    {
+        $this->courseHours = $courseHours;
+
+        return $this;
+    }
+
+    /**
+     * Get courseHours
+     *
+     * @return integer 
+     */
+    public function getCourseHours()
+    {
+        return $this->courseHours;
+    }
+
+    /**
+     * Set seminarHours
+     *
+     * @param integer $seminarHours
+     * @return Course
+     */
+    public function setSeminarHours($seminarHours)
+    {
+        $this->seminarHours = $seminarHours;
+
+        return $this;
+    }
+
+    /**
+     * Get seminarHours
+     *
+     * @return integer 
+     */
+    public function getSeminarHours()
+    {
+        return $this->seminarHours;
+    }
+
+    /**
+     * Set content
+     *
+     * @param string $content
+     * @return Course
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return string 
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * Set bibliography
+     *
+     * @param string $bibliography
+     * @return Course
+     */
+    public function setBibliography($bibliography)
+    {
+        $this->bibliography = $bibliography;
+
+        return $this;
+    }
+
+    /**
+     * Get bibliography
+     *
+     * @return string 
+     */
+    public function getBibliography()
+    {
+        return $this->bibliography;
     }
 }
