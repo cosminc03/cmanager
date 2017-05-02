@@ -57,22 +57,22 @@ class CreateType extends AbstractType
             ->add('courseHours', TextType::class, [
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Course Hours should not be blank',
+                        'message' => 'not_blank.course_hours',
                     ]),
                     new Regex([
-                        'pattern' => '^[+]?\d+([.]\d+)?$',
-                        'message' => 'Course hours are not valid',
+                        'pattern' => '/^([1-9]+\d*)$/',
+                        'message' => 'regex.course_hours',
                     ])
                 ]
             ])
             ->add('seminarHours', TextType::class, [
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Seminar Hours should not be blank',
+                        'message' => 'not_blank.seminar_hours',
                     ]),
                     new Regex([
-                        'pattern' => '^[+]?\d+([.]\d+)?$',
-                        'message' => 'Seminar hours are not valid',
+                        'pattern' => '/^([1-9]+\d*)$/',
+                        'message' => 'regex.seminar_hours',
                     ])
                 ]
             ])

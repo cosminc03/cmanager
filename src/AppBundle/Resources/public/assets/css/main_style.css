@@ -299,3 +299,12 @@ hr {
     flex: 0 0 auto;
     margin-left:auto;
 }
+
+.m-t-r-35 {
+    margin-top:-35px;
+}
+
+.help-block>ul {
+    padding: 0px !important;
+    list-style: none;
+}
