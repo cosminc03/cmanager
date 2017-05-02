@@ -20,3 +20,5 @@ parameters:
 
     jms_serializer.camel_case_naming_strategy.class: JMS\Serializer\Naming\IdenticalPropertyNamingStrategy
 
+    app.user.uri_prefix: /uploads/avatars
+    app.user.avatars_path: '%kernel.root_dir%/../web/uploads/avatars'
