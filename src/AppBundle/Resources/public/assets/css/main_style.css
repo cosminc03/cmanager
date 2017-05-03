@@ -19,6 +19,10 @@ header a {
     color: rgba(0, 0, 0, 0.85) !important;
 }
 
+h3 h4 {
+    color: rgba(0,0,0,0.85);
+}
+
 .clearfix::after {
     clear: both;
 }
@@ -307,4 +311,12 @@ hr {
 .help-block>ul {
     padding: 0px !important;
     list-style: none;
+}
+
+.slead{
+    color: rgba(0,0,0,0.85);
+    font-size: 14px;
+    margin-bottom: 12px;
+    font-weight: normal;
+    line-height: 24px
 }

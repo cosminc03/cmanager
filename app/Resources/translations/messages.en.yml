@@ -71,8 +71,8 @@ label:
         evaluation: Evaluation
         hours: Course Hours
         seminar_hours: Seminar Hours
-        content: Course content
-        bibliography: Course bibliograhy
+        content: Course content(optional)
+        bibliography: Course bibliograhy(optional)
 
 help_block:
     course:
@@ -145,8 +145,8 @@ type:
     mandatory: Mandatory
 
 evaluation:
-    ongoing: Ongoing evaluation
-    exam: Exam evaluation
+    ongoing: Ongoing
+    exam: Exam
 
 remove:
     avatar: Remove avatar

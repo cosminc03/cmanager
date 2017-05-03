@@ -27,7 +27,21 @@ class CourseController extends BaseController
      */
     public function listAction()
     {
-        return $this->render('AppBundle:Main/Course:list.html.twig');
+        $em = $this->getDoctrine()->getManager();
+
+        $courses = $em
+            ->getRepository(Course::class)
+            ->findBy([
+                'author' => $this->getUser(),
+            ])
+        ;
+
+        return $this->render(
+            'AppBundle:Main/Course:list.html.twig',
+            [
+                'courses' => $courses,
+            ]
+        );
     }
 
     /**
@@ -47,7 +61,6 @@ class CourseController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            dump($form);die;
             $course->setAuthor($this->getUser());
 
             $em = $this->getDoctrine()->getManager();
@@ -65,12 +78,7 @@ class CourseController extends BaseController
                 )
             ;
 
-            return $this->redirectToRoute(
-                'app_main_courses_show',
-                [
-                    'id' => $course->getId(),
-                ])
-                ;
+            return $this->redirectToRoute('app_main_courses_list');
         }
 
         return $this->render(

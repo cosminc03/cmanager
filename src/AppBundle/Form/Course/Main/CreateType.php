@@ -3,6 +3,7 @@
 namespace AppBundle\Form\Course\Main;
 
 use AppBundle\Entity\Course;
+use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -37,12 +38,19 @@ class CreateType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('description', TextareaType::class)
+            ->add('description', TextareaType::class, [
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'not_blank.description',
+                    ]),
+                ],
+            ])
             ->add('type', ChoiceType::class, [
                 'multiple' => false,
                 'choices' => [
-                    'type.optional' => 'type.optional',
                     'type.mandatory' => 'type.mandatory',
+                    'type.optional' => 'type.optional',
                 ],
                 'choice_translation_domain' => 'messages',
             ])
@@ -76,8 +84,152 @@ class CreateType extends AbstractType
                     ])
                 ]
             ])
-            ->add('content', TextareaType::class)
-            ->add('bibliography', TextareaType::class)
+            ->add('content', CKEditorType::class, [
+                'config' => [
+                    'toolbar' => [
+                        [
+                            'name' => 'basic_styles',
+                            'items' => [
+                                'Bold',
+                                'Italic',
+                                'Underline',
+                                'Strike',
+                                'Subscript',
+                                'Superscript',
+                                '-',
+                                'RemoveFormat',
+                            ],
+                        ],
+                        [
+                            'name' => 'clipboard',
+                            'items' => [
+                                'Cut',
+                                'Copy',
+                                'Paste',
+                                'PasteText',
+                                'PasteFromWord',
+                                '-',
+                                'Undo',
+                                'Redo',
+                            ],
+                        ],
+                        [
+                            'name' => 'links',
+                            'items' => [
+                                'Link',
+                                'Unlink',
+                                'Anchor',
+                            ],
+                        ],
+                        [
+                            'name' => 'paragraph',
+                            'items' => [
+                                'NumberedList',
+                                'BulletedList',
+                                '-',
+                                'Outdent',
+                                'Indent',
+                                '-',
+                                'Blockquote',
+                                'CreateDiv',
+                                '-',
+                                'JustifyLeft',
+                                'JustifyCenter',
+                                'JustifyRight',
+                                'JustifyBlock',
+                                '-',
+                                'BidiLtr',
+                                'BidiRtl',
+                            ],
+                        ],
+                        [
+                            'name' => 'styles',
+                            'items' => [
+                                'Styles',
+                                'Format',
+                                'Font',
+                                'FontSize',
+                                'TextColor',
+                                'BGColor',
+                            ],
+                        ],
+                    ],
+                    'uiColor' => '#ffffff',
+                ],
+            ])
+            ->add('bibliography', CKEditorType::class, [
+                'config' => [
+                    'toolbar' => [
+                        [
+                            'name' => 'basic_styles',
+                            'items' => [
+                                'Bold',
+                                'Italic',
+                                'Underline',
+                                'Strike',
+                                'Subscript',
+                                'Superscript',
+                                '-',
+                                'RemoveFormat',
+                            ],
+                        ],
+                        [
+                            'name' => 'clipboard',
+                            'items' => [
+                                'Cut',
+                                'Copy',
+                                'Paste',
+                                'PasteText',
+                                'PasteFromWord',
+                                '-',
+                                'Undo',
+                                'Redo',
+                            ],
+                        ],
+                        [
+                            'name' => 'links',
+                            'items' => [
+                                'Link',
+                                'Unlink',
+                                'Anchor',
+                            ],
+                        ],
+                        [
+                            'name' => 'paragraph',
+                            'items' => [
+                                'NumberedList',
+                                'BulletedList',
+                                '-',
+                                'Outdent',
+                                'Indent',
+                                '-',
+                                'Blockquote',
+                                'CreateDiv',
+                                '-',
+                                'JustifyLeft',
+                                'JustifyCenter',
+                                'JustifyRight',
+                                'JustifyBlock',
+                                '-',
+                                'BidiLtr',
+                                'BidiRtl',
+                            ],
+                        ],
+                        [
+                            'name' => 'styles',
+                            'items' => [
+                                'Styles',
+                                'Format',
+                                'Font',
+                                'FontSize',
+                                'TextColor',
+                                'BGColor',
+                            ],
+                        ],
+                    ],
+                    'uiColor' => '#ffffff',
+                ],
+            ])
         ;
     }
 

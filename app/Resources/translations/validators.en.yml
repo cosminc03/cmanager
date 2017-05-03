@@ -6,12 +6,16 @@ not_blank:
     last_name: Last name should not be blank
     email: The email field should not be blank
     abbreviation: The abbreviation field should not be blank
+    description: The description field should not be blank
     user: The user field should not be blank
     course_hours: Course hours field should not be blank
     seminar_hours: Seminar hours field should not be blank
 
 invalid:
     email: Invalid email provided
+
+unique:
+    title: The title is already taken. Type another title.
 
 regex:
     course_hours: Cours hours should contain positive numbers.

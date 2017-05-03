@@ -2,6 +2,8 @@
 
 {% trans_default_domain 'messages' %}
 
+{% block nav %}{% endblock %}
+
 {% block body_content %}
     <div class="row m-t-10">
         <div class="col-lg-3 profile-settings-sidebar">
@@ -79,6 +81,9 @@
                             }
                         }
                     ) }}
+                    {% if form_errors(form.description) %}
+                        <small class="help-block c-red">{{ form_errors(form.description) }}</small>
+                    {% endif %}
                     <div class="fg-line">
                         {{ form_widget(
                             form.description,
@@ -238,4 +243,9 @@
             </a>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/admin/vendors/bower_components/ckeditor/ckeditor.js') }}"></script>
 {% endblock %}
