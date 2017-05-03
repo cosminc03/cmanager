@@ -2,6 +2,8 @@
 
 {% trans_default_domain 'messages' %}
 
+{% block nav %}{% endblock %}
+
 {% block body_content %}
     <div class="row m-t-10">
         <div class="col-lg-3 profile-settings-sidebar">
@@ -22,11 +24,14 @@
                 <div class="form-group">
                     {{ form_label(
                         form.title,
-                        'Course name',
+                        'label.course.title'|trans,
                         {
                             'label_attr' : {'class': 'f-17'}
                         }
                     ) }}
+                    {% if form_errors(form.title) %}
+                        <small class="help-block c-red">{{ form_errors(form.title) }}</small>
+                    {% endif %}
                     <div class="fg-line">
                         {{ form_widget(
                             form.title,
@@ -37,19 +42,22 @@
                             }
                         ) }}
                     </div>
-                    <span class="help-block">Enter name, so people know the full name of the course.</span>
+                    <span class="help-block">{{ 'help_block.course.title'|trans }}</span>
                 </div>
 
                 <div class="form-group m-t-10">
                     {{ form_label(
                         form.abbreviation,
-                        'Course abbreviation',
+                        'label.course.abbreviation'|trans,
                         {
                             'label_attr' : {
                                 'class': 'f-17'
                             }
                         }
                     ) }}
+                    {% if form_errors(form.abbreviation) %}
+                        <small class="help-block c-red">{{ form_errors(form.abbreviation) }}</small>
+                    {% endif %}
                     <div class="fg-line">
                         {{ form_widget(
                             form.abbreviation,
@@ -60,19 +68,22 @@
                             }
                         ) }}
                     </div>
-                    <span class="help-block">Enter course abbrevition.</span>
+                    <span class="help-block">{{ 'help_block.course.abbreviation'|trans }}</span>
                 </div>
 
                 <div class="form-group">
                     {{ form_label(
                         form.description,
-                        'Course description(optional)',
+                        'label.course.description'|trans,
                         {
                             'label_attr' : {
                                 'class': 'f-17'
                             }
                         }
                     ) }}
+                    {% if form_errors(form.description) %}
+                        <small class="help-block c-red">{{ form_errors(form.description) }}</small>
+                    {% endif %}
                     <div class="fg-line">
                         {{ form_widget(
                             form.description,
@@ -80,16 +91,16 @@
                                 'attr' : {
                                     'class': 'form-control input-lg',
                                     'rows': '5',
-                                    'placeholder': 'Description'
+                                    'placeholder': 'placeholder.description'|trans
                                 },
                             }
                         ) }}
                     </div>
-                    <span class="help-block">Enter course description.</span>
+                    <span class="help-block">{{ 'help_block.course.description'|trans }}</span>
                 </div>
 
                 <div class="form-group col-sm-6 m-t-5">
-                    <p class="f-500 m-b-15 c-black f-17">Type</p>
+                    <p class="f-500 m-b-15 c-black f-17">{{ 'label.course.type'|trans }}</p>
 
                     {{ form_widget(
                         form.type,
@@ -102,7 +113,7 @@
                 </div>
 
                 <div class="form-group col-sm-6 m-t-5">
-                    <p class="f-500 m-b-15 c-black f-17">Evaluation</p>
+                    <p class="f-500 m-b-15 c-black f-17">{{ 'label.course.evaluation'|trans }}</p>
 
                     {{ form_widget(
                         form.evaluation,
@@ -117,13 +128,16 @@
                 <div class="form-group col-sm-6 m-t-10">
                     {{ form_label(
                         form.courseHours,
-                        'Course Hours',
+                        'label.course.hours'|trans,
                         {
                             'label_attr' : {
                                 'class': 'f-17'
                             }
                         }
                     ) }}
+                    {% if form_errors(form.courseHours) %}
+                        <small class="help-block c-red">{{ form_errors(form.courseHours) }}</small>
+                    {% endif %}
                     <div class="fg-line">
                         {{ form_widget(
                             form.courseHours,
@@ -134,19 +148,22 @@
                             }
                         ) }}
                     </div>
-                    <span class="help-block">Enter number of weekly course hours.</span>
+                    <span class="help-block">{{ 'help_block.course.hours'|trans }}</span>
                 </div>
 
                 <div class="form-group col-sm-6 m-t-10">
                     {{ form_label(
                         form.seminarHours,
-                        'Seminar Hours',
+                        'label.course.seminar_hours'|trans,
                         {
                             'label_attr' : {
                                 'class': 'f-17'
                             }
                         }
                     ) }}
+                    {% if form_errors(form.seminarHours) %}
+                        <small class="help-block c-red">{{ form_errors(form.seminarHours) }}</small>
+                    {% endif %}
                     <div class="fg-line">
                         {{ form_widget(
                             form.seminarHours,
@@ -157,126 +174,78 @@
                             }
                         ) }}
                     </div>
-                    <span class="help-block">Enter number of weekly seminar hours.</span>
+                    <span class="help-block">{{ 'help_block.course.seminar_hours'|trans }}</span>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(
+                        form.content,
+                        'label.course.content'|trans,
+                        {
+                            'label_attr' : {
+                                'class': 'f-17'
+                            }
+                        }
+                    ) }}
+                    <div class="fg-line">
+                        {{ form_widget(
+                            form.content,
+                            {
+                                'attr' : {
+                                    'class': 'form-control input-lg',
+                                    'rows': '5',
+                                    'placeholder': 'placeholder.content'|trans
+                                },
+                            }
+                        ) }}
+                    </div>
+                    <span class="help-block">{{ 'help_block.course.content'|trans }}</span>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(
+                        form.bibliography,
+                        'label.course.bibliography'|trans,
+                        {
+                            'label_attr' : {
+                                'class': 'f-17'
+                            }
+                        }
+                    ) }}
+                    <div class="fg-line">
+                        {{ form_widget(
+                            form.bibliography,
+                            {
+                                'attr' : {
+                                    'class': 'form-control input-lg',
+                                    'rows': '5',
+                                    'placeholder': 'placeholder.bibliography'|trans
+                                },
+                            }
+                        ) }}
+                    </div>
+                    <span class="help-block">{{ 'help_block.course.bibliography'|trans }}</span>
                 </div>
 
                 <div>
-                    <button class="btn bgm-green waves-effect text-transform-initial f-16" type="submit">Create course</button>
-
+                    <button class="btn bgm-green waves-effect text-transform-initial f-16" type="submit">
+                        {{ 'button.create_course'|trans }}
+                    </button>
                 </div>
 
-                {{ form_rest(form) }}
                 <span class="hidden">{{ form_row(form._token) }}</span>
             {{ form_end(form, {'render_rest': false}) }}
+
             <a href="{{ path('app_main_courses_list') }}">
-                <button class="btn waves-effect text-transform-initial f-16 pull-right">Cancel</button>
+                <button class="btn waves-effect text-transform-initial f-16 pull-right m-t-r-35">
+                    {{ 'button.cancel'|trans }}
+                </button>
             </a>
-            {#<form>
-                <div class="form-group">
-                    <label for="exampleInputEmail1" class="f-17">Course name</label>
-                    <div class="fg-line">
-                        <input type="email" class="form-control input-lg" id="exampleInputEmail1">
-                    </div>
-                    <span class="help-block">Enter name, so people know the full name of the course.</span>
-                </div>
-                <div class="form-group m-t-10">
-                    <label for="exampleInputEmail1" class="f-17">Course abbreviation</label>
-                    <div class="fg-line">
-                        <input type="email" class="form-control input-lg" id="exampleInputEmail1">
-                    </div>
-                    <span class="help-block">Enter course abbrevition.</span>
-                </div>
-
-                <div class="form-group">
-                    <label for="exampleInputEmail1" class="f-17">Course description(optional)</label>
-                    <div class="fg-line">
-                        <textarea class="form-control" rows="5" placeholder="Description"></textarea>
-                    </div>
-                    <span class="help-block">Enter course description.</span>
-                </div>
-
-                <div class="form-group col-sm-6 m-t-5">
-                    <p class="f-500 m-b-15 c-black f-17">Type</p>
-
-                    <select class="selectpicker">
-                        <option>Mandatory</option>
-                        <option>Optional</option>
-                    </select>
-                </div>
-                <div class="form-group col-sm-6 m-t-5">
-                    <p class="f-500 m-b-15 c-black f-17">Evaluation</p>
-
-                    <select class="selectpicker">
-                        <option>Exam</option>
-                        <option>Ongoing</option>
-                    </select>
-                </div>
-
-                <div class="form-group col-sm-6 m-t-10">
-                    <label for="exampleInputEmail1" class="f-17">Course Hours</label>
-                    <div class="fg-line">
-                        <input type="email" class="form-control input-lg" id="exampleInputEmail1">
-                    </div>
-                    <span class="help-block">Enter number of weekly course hours.</span>
-                </div>
-
-                <div class="form-group col-sm-6 m-t-10">
-                    <label for="exampleInputEmail1" class="f-17">Seminar Hours</label>
-                    <div class="fg-line">
-                        <input type="email" class="form-control input-lg" id="exampleInputEmail1">
-                    </div>
-                    <span class="help-block">Enter number of weekly seminar hours.</span>
-                </div>
-
-                <div class="form-group col-sm-12 m-t-10">
-                    <p class="f-500 c-black m-b-20 f-17">Course content</p>
-
-                    <div class="html-editor"></div>
-                </div>
-
-                <div class="form-group col-sm-12 m-t-10">
-                    <p class="f-500 c-black m-b-20 f-17">Course bibliography</p>
-
-                    <div class="html-editor"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="exampleInputEmail1" class="f-17">Visibility Level</label>
-                    <div class="radio m-b-15">
-                        <label>
-                            <input type="radio" name="sample" value="">
-                            <i class="input-helper"></i>
-                            <i class="zmdi zmdi-lock m-r-5"></i>
-                            Private
-                            <div class="option-description">Course access must be granted explicity to each user.</div>
-                        </label>
-                    </div>
-
-                    <div class="radio m-b-15">
-                        <label>
-                            <input type="radio" name="sample" value="">
-                            <i class="input-helper"></i>
-                            <i class="zmdi zmdi-shield-security m-r-5"></i>
-                            Only for selected year
-                            <div class="option-description">The course can be accessed by students from year of study</div>
-                        </label>
-                    </div>
-
-                    <div class="radio m-b-15">
-                        <label>
-                            <input type="radio" name="sample" value="">
-                            <i class="input-helper"></i>
-                            <i class="zmdi zmdi-globe m-r-5"></i>
-                            Public
-                            <div class="option-description">The course can be accessed without any restriction</div>
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <button class="btn bgm-green waves-effect text-transform-initial f-16">Create course</button>
-                    <button class="btn waves-effect text-transform-initial f-16 pull-right">Cancel</button>
-                </div>
-            </form>#}
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/admin/vendors/bower_components/ckeditor/ckeditor.js') }}"></script>
 {% endblock %}

@@ -1,9 +1,7 @@
 {% extends 'AppBundle:Main/Layout:body_main.html.twig' %}
 
-{% block nav %}{% endblock %}
-
 {% block body_content %}
-    <div class="row">
+    <div class="row m-t-r-35">
         <div class="nav-controls">
             <div class="col-sm-2">
                 <div class="fg-line">
@@ -34,33 +32,74 @@
             </a>
         </div>
     </div>
-    <div class="row">
-        <div class="course-list-holder">
-            <ul class="course-list">
-                <li class="course-row">
-                    <div class="avatar-container s40">
-                        <a href="#">
-                            <img class="avatar project-avatar s40" src="{{ asset('bundles/app/assets/images/avatar.jpg') }}"/>
-                        </a>
-                    </div>
-                    <div class="course-details">
-                        <h4 class="m-t-0 m-b-0">
-                            <a>GitLab.org / GitLab Community Edition</a>
-                        </h4>
-                        <div class="course-details-description m-t-5">
-                            <p dir="auto">
-                                Version Control on your Server. See <a href="https://gitlab.com/gitlab-org/gitlab-ce">https://gitlab.com/gitlab-org/gitlab-ce</a>  and the README for more information
-                            </p>
-                        </div>
-                    </div>
-                    <div class="controls">
+
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="row">
+            <div id="general-alert" class="alert alert-success m-t-15">
+                <strong>{{ flash_message }}</strong>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% if not courses|length > 0 %}
+        <div class="row">
+            <h3>You don't have courses yet.</h3>
+            <small>Add one course and you will find here your personal courses.</small>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="course-list-holder">
+                <ul class="course-list">
+                    {% for course in courses %}
+                        <li class="course-row">
+                            <div class="avatar-container s40">
+                                <a href="#">
+                                    <img class="avatar project-avatar s40" src="{{ asset('bundles/app/assets/images/avatar.jpg') }}"/>
+                                </a>
+                            </div>
+                            <div class="course-details">
+                                <h4 class="m-t-0 m-b-0">
+                                    <a>{{ course.abbreviation|upper }}/{{ course.title }}</a>
+                                </h4>
+                                <div class="course-details-description m-t-5">
+                                    <p dir="auto">
+                                        {{ course.description }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="controls">
                         <span class="m-l-10">
                             <i class="zmdi zmdi-star"></i>
                             3,032
                         </span>
-                    </div>
-                </li>
-            </ul>
+                            </div>
+                        </li>
+                    {% endfor %}
+                    {#<li class="course-row">
+                        <div class="avatar-container s40">
+                            <a href="#">
+                                <img class="avatar project-avatar s40" src="{{ asset('bundles/app/assets/images/avatar.jpg') }}"/>
+                            </a>
+                        </div>
+                        <div class="course-details">
+                            <h4 class="m-t-0 m-b-0">
+                                <a>GitLab.org / GitLab Community Edition</a>
+                            </h4>
+                            <div class="course-details-description m-t-5">
+                                <p dir="auto">
+                                    Version Control on your Server. See <a href="https://gitlab.com/gitlab-org/gitlab-ce">https://gitlab.com/gitlab-org/gitlab-ce</a>  and the README for more information
+                                </p>
+                            </div>
+                        </div>
+                        <div class="controls">
+                            <span class="m-l-10">
+                                <i class="zmdi zmdi-star"></i>
+                                3,032
+                            </span>
+                        </div>
+                    </li>#}
+                </ul>
+            </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}

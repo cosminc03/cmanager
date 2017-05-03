@@ -3,6 +3,7 @@
 namespace AppBundle\Form\Course\Main;
 
 use AppBundle\Entity\Course;
+use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -37,12 +38,19 @@ class CreateType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('description', TextareaType::class)
+            ->add('description', TextareaType::class, [
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'not_blank.description',
+                    ]),
+                ],
+            ])
             ->add('type', ChoiceType::class, [
                 'multiple' => false,
                 'choices' => [
-                    'type.optional' => 'type.optional',
                     'type.mandatory' => 'type.mandatory',
+                    'type.optional' => 'type.optional',
                 ],
                 'choice_translation_domain' => 'messages',
             ])
@@ -57,27 +65,171 @@ class CreateType extends AbstractType
             ->add('courseHours', TextType::class, [
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Course Hours should not be blank',
+                        'message' => 'not_blank.course_hours',
                     ]),
                     new Regex([
-                        'pattern' => '^[+]?\d+([.]\d+)?$',
-                        'message' => 'Course hours are not valid',
+                        'pattern' => '/^([1-9]+\d*)$/',
+                        'message' => 'regex.course_hours',
                     ])
                 ]
             ])
             ->add('seminarHours', TextType::class, [
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Seminar Hours should not be blank',
+                        'message' => 'not_blank.seminar_hours',
                     ]),
                     new Regex([
-                        'pattern' => '^[+]?\d+([.]\d+)?$',
-                        'message' => 'Seminar hours are not valid',
+                        'pattern' => '/^([1-9]+\d*)$/',
+                        'message' => 'regex.seminar_hours',
                     ])
                 ]
             ])
-            ->add('content', TextareaType::class)
-            ->add('bibliography', TextareaType::class)
+            ->add('content', CKEditorType::class, [
+                'config' => [
+                    'toolbar' => [
+                        [
+                            'name' => 'basic_styles',
+                            'items' => [
+                                'Bold',
+                                'Italic',
+                                'Underline',
+                                'Strike',
+                                'Subscript',
+                                'Superscript',
+                                '-',
+                                'RemoveFormat',
+                            ],
+                        ],
+                        [
+                            'name' => 'clipboard',
+                            'items' => [
+                                'Cut',
+                                'Copy',
+                                'Paste',
+                                'PasteText',
+                                'PasteFromWord',
+                                '-',
+                                'Undo',
+                                'Redo',
+                            ],
+                        ],
+                        [
+                            'name' => 'links',
+                            'items' => [
+                                'Link',
+                                'Unlink',
+                                'Anchor',
+                            ],
+                        ],
+                        [
+                            'name' => 'paragraph',
+                            'items' => [
+                                'NumberedList',
+                                'BulletedList',
+                                '-',
+                                'Outdent',
+                                'Indent',
+                                '-',
+                                'Blockquote',
+                                'CreateDiv',
+                                '-',
+                                'JustifyLeft',
+                                'JustifyCenter',
+                                'JustifyRight',
+                                'JustifyBlock',
+                                '-',
+                                'BidiLtr',
+                                'BidiRtl',
+                            ],
+                        ],
+                        [
+                            'name' => 'styles',
+                            'items' => [
+                                'Styles',
+                                'Format',
+                                'Font',
+                                'FontSize',
+                                'TextColor',
+                                'BGColor',
+                            ],
+                        ],
+                    ],
+                    'uiColor' => '#ffffff',
+                ],
+            ])
+            ->add('bibliography', CKEditorType::class, [
+                'config' => [
+                    'toolbar' => [
+                        [
+                            'name' => 'basic_styles',
+                            'items' => [
+                                'Bold',
+                                'Italic',
+                                'Underline',
+                                'Strike',
+                                'Subscript',
+                                'Superscript',
+                                '-',
+                                'RemoveFormat',
+                            ],
+                        ],
+                        [
+                            'name' => 'clipboard',
+                            'items' => [
+                                'Cut',
+                                'Copy',
+                                'Paste',
+                                'PasteText',
+                                'PasteFromWord',
+                                '-',
+                                'Undo',
+                                'Redo',
+                            ],
+                        ],
+                        [
+                            'name' => 'links',
+                            'items' => [
+                                'Link',
+                                'Unlink',
+                                'Anchor',
+                            ],
+                        ],
+                        [
+                            'name' => 'paragraph',
+                            'items' => [
+                                'NumberedList',
+                                'BulletedList',
+                                '-',
+                                'Outdent',
+                                'Indent',
+                                '-',
+                                'Blockquote',
+                                'CreateDiv',
+                                '-',
+                                'JustifyLeft',
+                                'JustifyCenter',
+                                'JustifyRight',
+                                'JustifyBlock',
+                                '-',
+                                'BidiLtr',
+                                'BidiRtl',
+                            ],
+                        ],
+                        [
+                            'name' => 'styles',
+                            'items' => [
+                                'Styles',
+                                'Format',
+                                'Font',
+                                'FontSize',
+                                'TextColor',
+                                'BGColor',
+                            ],
+                        ],
+                    ],
+                    'uiColor' => '#ffffff',
+                ],
+            ])
         ;
     }
 
