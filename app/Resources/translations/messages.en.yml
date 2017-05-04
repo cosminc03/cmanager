@@ -9,6 +9,7 @@ message:
     sigin_in: Sign In
     forgot_password: Forgot your passsword?
     already_have_account: Already have account and password?
+    removed_course: Removed course cannot be restored!Removed course cannot be restored!
 
 title:
     homepage_admin: CManager Admin
@@ -34,9 +35,18 @@ subtitle:
 
 heading:
     new_course: New course
+    edit_course: Edit course
+    remove_course: Remove course
+    associates_list: List of associates
 
 paragraph:
     new_course: Create your course by filling out the inputs from the form
+    edit_course: Update your course infos by filling out the inputs from the form
+    remove_course: Removing the course will delete all related resources including files, announecements etc.
+    search_user: Search for an user in order to add as an associate professor
+
+small:
+    no_associate: No professor associated to your course.
 
 label:
     email: Email
@@ -112,11 +122,14 @@ button:
     edit: Edit
     save_changes: Save changes
     delete: Delete
+    remove: Remove
     change: Change
     back_to_list: Back to list
     submit: Submit
     cancel: Cancel
     create_course: Create course
+    remove_course: Remove course
+    add_associate: Add associate
 
 add:
     announcement: Add new announcement
@@ -130,6 +143,9 @@ placeholder:
     description: Description
     content: Content
     bibliography: Bibliography
+
+option:
+    professor: Choose a professor...
 
 link:
     home: Home
@@ -147,6 +163,18 @@ type:
 evaluation:
     ongoing: Ongoing
     exam: Exam
+
+navigation:
+    your_courses: Your courses
+    starred_courses: Starred courses
+    explore_courses: Explore courses
+    infos: Infos
+    courses: Courses
+    seminar: Seminars
+    associate_proffesors: Associate professors
+    homework: Homework
+    announcements: Announcements
+    settings: Settings
 
 remove:
     avatar: Remove avatar

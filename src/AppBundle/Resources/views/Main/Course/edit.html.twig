@@ -1,0 +1,302 @@
+{% extends 'AppBundle:Main/Layout:body_main.html.twig' %}
+
+{% trans_default_domain 'messages' %}
+
+{% block body_content %}
+    <div class="row m-t-10">
+        <div class="col-lg-3 profile-settings-sidebar">
+            <h3>{{ 'heading.edit_course'|trans }}</h3>
+            <p>{{ 'paragraph.edit_course'|trans }}</p>
+        </div>
+        <div class="col-lg-9">
+            {{ form_start(
+                form,
+                {
+                    'method': 'POST',
+                    'action': path('app_main_courses_edit', {'id': course.id}),
+                        'attr': {
+                        'novalidate': 'novalidate',
+                    },
+                }
+            ) }}
+            <div class="form-group">
+                {{ form_label(
+                    form.title,
+                    'label.course.title'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.title) %}
+                    <small class="help-block c-red">{{ form_errors(form.title) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.title,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.course.title'|trans }}</span>
+            </div>
+
+            <div class="form-group m-t-10">
+                {{ form_label(
+                    form.abbreviation,
+                    'label.course.abbreviation'|trans,
+                    {
+                        'label_attr' : {
+                            'class': 'f-17'
+                        }
+                    }
+                ) }}
+                {% if form_errors(form.abbreviation) %}
+                    <small class="help-block c-red">{{ form_errors(form.abbreviation) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.abbreviation,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.course.abbreviation'|trans }}</span>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(
+                    form.description,
+                    'label.course.description'|trans,
+                    {
+                        'label_attr' : {
+                            'class': 'f-17'
+                        }
+                    }
+                ) }}
+                {% if form_errors(form.description) %}
+                    <small class="help-block c-red">{{ form_errors(form.description) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.description,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg',
+                                'rows': '5',
+                                'placeholder': 'placeholder.description'|trans
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.course.description'|trans }}</span>
+            </div>
+
+            <div class="form-group col-sm-6 m-t-5">
+                <p class="f-500 m-b-15 c-black f-17">{{ 'label.course.type'|trans }}</p>
+
+                {{ form_widget(
+                    form.type,
+                    {
+                        'attr' : {
+                            'class': 'selectpicker input-lg'
+                        },
+                    }
+                ) }}
+            </div>
+
+            <div class="form-group col-sm-6 m-t-5">
+                <p class="f-500 m-b-15 c-black f-17">{{ 'label.course.evaluation'|trans }}</p>
+
+                {{ form_widget(
+                    form.evaluation,
+                    {
+                        'attr' : {
+                            'class': 'selectpicker input-lg'
+                        },
+                    }
+                ) }}
+            </div>
+
+            <div class="form-group col-sm-6 m-t-10">
+                {{ form_label(
+                    form.courseHours,
+                    'label.course.hours'|trans,
+                    {
+                        'label_attr' : {
+                            'class': 'f-17'
+                        }
+                    }
+                ) }}
+                {% if form_errors(form.courseHours) %}
+                    <small class="help-block c-red">{{ form_errors(form.courseHours) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.courseHours,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.course.hours'|trans }}</span>
+            </div>
+
+            <div class="form-group col-sm-6 m-t-10">
+                {{ form_label(
+                    form.seminarHours,
+                    'label.course.seminar_hours'|trans,
+                    {
+                        'label_attr' : {
+                            'class': 'f-17'
+                        }
+                    }
+                ) }}
+                {% if form_errors(form.seminarHours) %}
+                    <small class="help-block c-red">{{ form_errors(form.seminarHours) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.seminarHours,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.course.seminar_hours'|trans }}</span>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(
+                    form.content,
+                    'label.course.content'|trans,
+                    {
+                        'label_attr' : {
+                            'class': 'f-17'
+                        }
+                    }
+                ) }}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.content,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg',
+                                'rows': '5',
+                                'placeholder': 'placeholder.content'|trans
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.course.content'|trans }}</span>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(
+                    form.bibliography,
+                    'label.course.bibliography'|trans,
+                    {
+                        'label_attr' : {
+                            'class': 'f-17'
+                        }
+                    }
+                ) }}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.bibliography,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg',
+                                'rows': '5',
+                                'placeholder': 'placeholder.bibliography'|trans
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.course.bibliography'|trans }}</span>
+            </div>
+
+            <div>
+                <button class="btn bgm-green waves-effect text-transform-initial f-16" type="submit">
+                    {{ 'button.save_changes'|trans }}
+                </button>
+            </div>
+
+            <span class="hidden">{{ form_row(form._token) }}</span>
+            {{ form_end(form, {'render_rest': false}) }}
+
+            <a href="{{ path('app_main_courses_show', {'id': course.id}) }}">
+                <button class="btn waves-effect text-transform-initial f-16 pull-right m-t-r-35">
+                    {{ 'button.cancel'|trans }}
+                </button>
+            </a>
+        </div>
+    </div>
+    <hr>
+    <div class="row m-t-10">
+        <div class="col-lg-3 profile-settings-sidebar">
+            <h3 class="c-red">{{ 'heading.remove_course'|trans }}</h3>
+            <p>{{ 'paragraph.remove_course'|trans }}</p>
+        </div>
+        <div class="col-lg-9">
+            <div class="f-500 f-17 m-t-10">{{ 'message.removed_course'|trans }}</div>
+            <button
+                class="btn bgm-red waves-effect m-t-10 text-transform-initial f-16"
+                id="sa-warning"
+                data-link-delete="app_main_courses_delete"
+                data-link-redirect="app_main_courses_list">
+                    {{ 'button.remove_course'|trans }}
+            </button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/admin/vendors/bower_components/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('assets/admin/vendors/bower_components/sweetalert/dist/sweetalert.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $('#sa-warning').click(function(){
+            var courseName = "{{ course.title }}",
+                courseId = {{ course.id }},
+                deleteLink = $('#sa-warning').attr('data-link-delete'),
+                redirectLink = $('#sa-warning').attr('data-link-redirect'),
+                routeParams = {};
+
+            swal({
+                title: "Are you sure?",
+                text: "You are going to delete course " + courseName + " and you will not be able to recover it!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete course!",
+                closeOnConfirm: false
+            }, function(){
+                routeParams['id'] = courseId;
+
+                $.ajax({
+                    url: Routing.generate(deleteLink, routeParams, true),
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.delete === 'success') {
+                            window.location.replace(Routing.generate(redirectLink, {}, true))
+                        } else {
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

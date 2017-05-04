@@ -1,0 +1,112 @@
+{% extends 'AppBundle:Main/Layout:body_main.html.twig' %}
+
+{% trans_default_domain 'messages' %}
+
+{% block body_content %}
+<div class="user-profile">
+    <div class="cover-block user-cover-block p-b-15">
+        <div class="cover-controls">
+            <ul class="actions">
+                <li class="m-r-10">
+                    <a href="{{ path('app_main_courses_edit', {'id': course.id}) }}">
+                        <i class="btn zmdi zmdi-edit" data-toggle="tooltip" data-placement="bottom" data-original-title="Edit"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <i class="btn zmdi zmdi-wifi-alt" data-toggle="tooltip" data-placement="bottom" data-original-title="Subscribe"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="profile-header">
+            <div class="avatar-holder">
+                <img class="profile-avatar s90" src="img/avatar.jpg"/>
+            </div>
+            <div class="user-info">
+                <div class="cover-title">{{ course.title }}</div>
+                <div class="cover-desc">
+                    <span class="middle-dot-divider">@{{ course.abbreviation }}</span>
+                    <span>Member since February 1, 2016</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="pm-body clearfix">
+
+    <div class="pmb-block p-t-15">
+        <div class="pmbb-header">
+            <h2><i class="zmdi zmdi-equalizer m-r-10"></i> Summary</h2>
+        </div>
+        <div class="pmbb-body p-l-30">
+            <div class="pmbb-view">{{ course.description }}</div>
+        </div>
+    </div>
+
+    <div class="pmb-block p-t-15">
+        <div class="pmbb-header">
+            <h2><i class="zmdi zmdi-book-image"></i> General Information</h2>
+        </div>
+        <div class="pmbb-body p-l-30">
+            <div class="pmbb-view">
+                <dl class="dl-horizontal">
+                    <dt>Title</dt>
+                    <dd>{{ course.title }}</dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Abbreviation</dt>
+                    <dd>{{ course.abbreviation }}</dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Type</dt>
+                    <dd>{{ course.type|trans }}</dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Evaluation</dt>
+                    <dd>{{ course.evaluation|trans }}</dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Course Hours</dt>
+                    <dd>{{ course.courseHours }}</dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Seminar Hours</dt>
+                    <dd>{{ course.seminarHours }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="pmb-block p-t-15">
+        <div class="pmbb-header">
+            <h2><i class="zmdi zmdi-folder"></i></i> Content</h2>
+        </div>
+        <div class="pmbb-body p-l-30">
+            <div class="pmbb-view">
+                {% if not course.content %}
+                    <h4 class="m-t-25">Please update <i>content</i> in order to have a better course profile</h4>
+                {% else %}
+                    {{ course.content|raw }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="pmb-block p-t-15">
+        <div class="pmbb-header">
+            <h2><i class="zmdi zmdi-format-list-bulleted"></i></i> Bibliography</h2>
+        </div>
+        <div class="pmbb-body p-l-30">
+            <div class="pmbb-view">
+                {% if not course.bibliography %}
+                    <h4 class="m-t-25">Please update <i>bibliography</i> in order to have a better course profile</h4>
+                {% else %}
+                    {{ course.bibliography|raw }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

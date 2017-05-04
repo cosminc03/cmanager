@@ -320,3 +320,7 @@ hr {
     font-weight: normal;
     line-height: 24px
 }
+
+#associate-professor-component {
+    display: none;
+}

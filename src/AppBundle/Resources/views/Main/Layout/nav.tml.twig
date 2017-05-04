@@ -1,9 +1,48 @@
+{% trans_default_domain 'messages' %}
+
 <div class="nav-wrapper clearfix">
     <nav class="ha-menu nav-links">
-        <ul>
-            <li class="active"><a href="index.html">Your courses</a></li>
-            <li><a href="">Starred courses</a></li>
-            <li><a href="">Explore courses</a></li>
-        </ul>
+        {% if app.request.get('_route') in ['app_main_courses_list', 'app_main_courses_starred', 'app_main_courses_explore'] %}
+            <ul>
+                <li {% if app.request.get('_route') == 'app_main_courses_list' %} class="active" {% endif %}>
+                    <a href="{{ path('app_main_courses_list') }}">
+                        {{ 'navigation.your_courses'|trans }}
+                    </a>
+                </li>
+                <li {% if app.request.get('_route') == 'app_main_courses_starred' %} class="active" {% endif %}>
+                    <a href="{{ path('app_main_courses_starred') }}">
+                        {{ 'navigation.starred_courses'|trans }}
+                    </a>
+                </li>
+                <li {% if app.request.get('_route') == 'app_main_courses_explore' %} class="active" {% endif %}>
+                    <a href="{{ path('app_main_courses_explore') }}">
+                        {{ 'navigation.explore_courses'|trans }}
+                    </a>
+                </li>
+            </ul>
+        {% else %}
+            <ul>
+                <li {% if app.request.get('_route') == 'app_main_courses_show' %} class="active" {% endif %}>
+                    <a href="{{ path('app_main_courses_show', {'id': course.id}) }}">
+                        {{ 'navigation.infos'|trans }}
+                    </a>
+                </li>
+                <li {% if app.request.get('_route') == 'app_main_courses_associate_professors' %} class="active" {% endif %}>
+                    <a href="{{ path('app_main_courses_associate_professors', {'id': course.id}) }}">
+                        {{ 'navigation.associate_proffesors'|trans }}
+                    </a>
+                </li>
+                <li {% if app.request.get('_route') == 'app_main_announcements_list_by_course' %} class="active" {% endif %}>
+                    <a href="#">
+                        {{ 'navigation.announcements'|trans }}
+                    </a>
+                </li>
+                <li {% if app.request.get('_route') == 'app_main_courses_edit' %} class="active" {% endif %}>
+                    <a href="{{ path('app_main_courses_edit', {'id': course.id}) }}">
+                        {{ 'navigation.settings'|trans }}
+                    </a>
+                </li>
+            </ul>
+        {% endif %}
     </nav>
 </div>
