@@ -324,3 +324,8 @@ hr {
 #associate-professor-component {
     display: none;
 }
+
+.add-module{
+    top:0 !important;
+    right: 0 !important;
+}

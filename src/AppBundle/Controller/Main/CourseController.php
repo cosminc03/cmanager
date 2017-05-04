@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Main;
 
 use AppBundle\Controller\BaseController;
 use AppBundle\Entity\Course;
+use AppBundle\Entity\Module;
 use AppBundle\Entity\User;
 use AppBundle\Form\Course\Main\CreateType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -202,7 +203,7 @@ class CourseController extends BaseController
     }
 
     /**
-     * List all Course entities.
+     * Display Course entity.
      *
      * @Route("/{id}/show", name="app_main_courses_show")
      * @Method("GET")
@@ -270,7 +271,7 @@ class CourseController extends BaseController
      *
      * @return JsonResponse
      */
-    public function addAssociateProfessor(Request $request, Course $course)
+    public function addAssociateProfessorAction(Request $request, Course $course)
     {
         $em = $this->getDoctrine()->getManager();
         $userId = $request->query->get('userId');
@@ -356,7 +357,7 @@ class CourseController extends BaseController
      *
      * @return Response
      */
-    public function associateProfessors(Course $course)
+    public function associateProfessorsAction(Course $course)
     {
         $professors = $this
             ->getDoctrine()
@@ -370,6 +371,57 @@ class CourseController extends BaseController
             [
                 'course' => $course,
                 'professors' => $professors,
+            ]
+        );
+    }
+
+    /**
+     * Get all course modules for a Course entity.
+     *
+     * @Route("/{id}/course-modules", options={"expose"=true}, name="app_main_courses_course_modules")
+     * @Method({"GET"})
+     *
+     * @param Course $course
+     *
+     * @return Response
+     */
+    public function courseModulesAction(Course $course)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $courseModules = $em
+            ->getRepository(Module::class)
+            ->findBy([
+                'course' => $course,
+                'isCourse' => true,
+            ])
+        ;
+
+        return $this->render(
+            'AppBundle:Main/Module:list_courses.html.twig',
+            [
+                'course' => $course,
+                'courseModules' => $courseModules,
+            ]
+        );
+    }
+
+    /**
+     * Get all seminar modules for a Course entity.
+     *
+     * @Route("/{id}/seminar-modules", options={"expose"=true}, name="app_main_courses_seminar_modules")
+     * @Method({"GET"})
+     *
+     * @param Course $course
+     *
+     * @return Response
+     */
+    public function seminarModulesAction(Course $course)
+    {
+        return $this->render(
+            'AppBundle:Main/Module:list_seminars.html.twig',
+            [
+                'course' => $course,
             ]
         );
     }
