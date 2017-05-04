@@ -440,6 +440,16 @@ class User extends BaseUser
     }
 
     /**
+     * Get full name
+     *
+     * @return string
+     */
+    public function getFullName()
+    {
+        return sprintf('%s %s', $this->getFirstName(), $this->getLastName());
+    }
+
+    /**
      * Set phone
      *
      * @param string $phone

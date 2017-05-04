@@ -1,0 +1,159 @@
+{% extends 'AppBundle:Main/Layout:body_main.html.twig' %}
+
+{% trans_default_domain 'messages' %}
+
+{% block body_content %}
+    <div class="row m-t-r-35">
+        <div class="nav-controls clearfix">
+            <p class="slead m-b-10">{{ 'paragraph.search_user'|trans }}</p>
+            <div class="col-sm-4">
+                <select class="chosen" id="assistants" data-placeholder="Choose a professor...">
+                    <option class="reset-selection">{{ 'option.professor'|trans }}</option>
+                    {% set index = 1 %}
+                    {% for professor in professors %}
+                        <option class="pick-assistant" id="{{ 'index' ~ index }}" value="{{ professor.id }}">{{ professor.fullName }}</option>
+                        {% set index = index + 1 %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div id="associate-professor-component"></div>
+    </div>
+    <div class="row">
+        <h3>{{ 'heading.associates_list'|trans }}</h3>
+        <div id="associate-professors">
+            {% if not course.assistants|length > 0 %}
+                <small>{{ 'small.no_associate'|trans }}</small>
+            {% else %}
+                <ul class="course-list">
+                    {% for assistant in course.assistants %}
+                        <li class="course-row">
+                            <div class="avatar-container s40">
+                                <a href="#">
+                                    <img class="avatar project-avatar s40" src="{{ asset('bundles/app/assets/images/avatar.jpg') }}"/>
+                                </a>
+                            </div>
+                            <div class="course-details">
+                                <h4 class="m-t-0 m-b-0">
+                                    <a href="#">
+                                        {{ assistant.fullName }}
+                                    </a>
+                                </h4>
+                                <div class="course-details-description m-t-5">
+                                    <p dir="auto">
+                                        {{ assistant.email }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="controls">
+                                <span class="m-l-10">
+                                    <button class="btn bgm-red waves-effect m-t-5 text-transform-initial f-15 remove-associate" data-id="{{ assistant.id }}">
+                                        {{ 'button.remove'|trans }}
+                                    </button>
+                                </span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        var itemId;
+
+        $(document).on('click', '.pick-assistant', function (){
+            var optionIndex =  $(this).attr('data-option-array-index');
+            var index = 'index' + optionIndex;
+            var routeParams = {};
+
+            itemId = $('#' + index).attr('value');
+
+
+            routeParams['id'] = itemId;
+            $.ajax({
+                url: Routing.generate(
+                    'app_main_users_associate_professor_component',
+                    routeParams,
+                    true
+                ),
+                type: 'get',
+                dataType: 'html',
+                success: function (data) {
+                    if (data) {
+                        $('#associate-professor-component').html(data);
+                        $('#associate-professor-component').fadeIn(500);
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '.add-associate', function (){
+            var routeParams = {};
+
+            $('#associate-professor-component').fadeOut(500);
+            $('.chosen-results li:first').trigger('click').addClass('result-selected');
+
+            routeParams['id'] = {{ course.id }};
+            $.ajax({
+                url: Routing.generate(
+                    'app_main_courses_add_associate_professor',
+                    routeParams,
+                    true
+                ),
+                data: {
+                    'userId' : itemId
+                },
+                type: 'get',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.added === 'success') {
+                        $.ajax({
+                            url: Routing.generate(
+                                'app_main_courses_associate_professors_list',
+                                routeParams,
+                                true
+                            ),
+                            type: 'get',
+                            dataType: 'html',
+                            success: function (data) {
+                                if (data) {
+                                    $('#associate-professors').html(data);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '.remove-associate', function() {
+            var userId =  $(this).attr('data-id'),
+                routeParams = {};
+
+            routeParams['id'] = {{ course.id }};
+
+            $.ajax({
+                url: Routing.generate(
+                    'app_main_courses_associate_professors_remove',
+                    routeParams,
+                    true
+                ),
+                data: {
+                    'userId' : userId
+                },
+                type: 'get',
+                dataType: 'html',
+                success: function (data) {
+                    if (data) {
+                        $('#associate-professors').html(data);
+                    }
+                }
+            });
+        })
+    </script>
+{% endblock %}

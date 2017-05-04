@@ -1,0 +1,26 @@
+{% trans_default_domain 'messages' %}
+
+<ul class="course-list">
+    <li class="course-row">
+        <div class="avatar-container s40">
+            <img class="avatar project-avatar s40" src="{{ asset('bundles/app/assets/images/avatar.jpg') }}"/>
+        </div>
+        <div class="course-details">
+            <h4 class="m-t-0 m-b-0">
+                {{ user.fullName }}
+            </h4>
+            <div class="course-details-description m-t-5">
+                <p dir="auto">
+                    {{ user.email }}
+                </p>
+            </div>
+        </div>
+        <div class="controls">
+            <span class="m-l-10">
+                <button class="btn bgm-green waves-effect m-t-5 text-transform-initial f-15 add-associate">
+                    {{ 'button.add_associate'|trans }}
+                </button>
+            </span>
+        </div>
+    </li>
+</ul>
