@@ -18,3 +18,8 @@ success:
         delete:
             from_edit: User successfully deleted!
             from_data_table: User with ID
+    course_module:
+        create: Course module successfully created!
+        edit: Course module successfully edited!
+        delete:
+            from_edit: Course module successfully deleted!

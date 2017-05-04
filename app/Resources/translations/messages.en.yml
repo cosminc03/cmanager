@@ -9,7 +9,8 @@ message:
     sigin_in: Sign In
     forgot_password: Forgot your passsword?
     already_have_account: Already have account and password?
-    removed_course: Removed course cannot be restored!Removed course cannot be restored!
+    removed_course: Removed course cannot be restored!
+    removed_course_module: Removed course module cannot be restored!
 
 title:
     homepage_admin: CManager Admin
@@ -38,15 +39,26 @@ heading:
     edit_course: Edit course
     remove_course: Remove course
     associates_list: List of associates
+    new_course_module: New course module
+    edit_course_module: Edit course module
+    remove_course_module: Remove course module
+    list_course_modules: List of course type modules
+    list_seminar_modules: List of seminart type modules
+    title: Title
+    content: Content
 
 paragraph:
     new_course: Create your course by filling out the inputs from the form
     edit_course: Update your course infos by filling out the inputs from the form
     remove_course: Removing the course will delete all related resources including files, announecements etc.
     search_user: Search for an user in order to add as an associate professor
+    new_course_module: Create new course module for new course topic.
+    edit_course_module: Update your course module infos by filling out the inputs from the form
+    remove_course_module: Removing the course module will delete all related resources
 
 small:
     no_associate: No professor associated to your course.
+    no_course_modules: No course modules associated to this course.
 
 label:
     email: Email
@@ -83,6 +95,12 @@ label:
         seminar_hours: Seminar Hours
         content: Course content(optional)
         bibliography: Course bibliograhy(optional)
+    seminar:
+        seminar: Seminar
+    course_module:
+        course: Course
+        title: Course module title
+        content: Course module content
 
 help_block:
     course:
@@ -93,6 +111,9 @@ help_block:
         seminar_hours: Enter number of weekly seminar hours.
         content: Enter course content.
         bibliography: Enter course bibliography.
+    course_module:
+        title: Enter title, so people know the full title of the course module.
+        content: Enter course module content.
 
 table_header_cell:
     id: Id
@@ -130,6 +151,15 @@ button:
     create_course: Create course
     remove_course: Remove course
     add_associate: Add associate
+    add_course_module: Add course module
+    edit_course_module: Edit course module
+    add_seminar_module: Add seminar module
+    edit_seminar_module: Edit seminar module
+    view_more: View more
+    download_attachment: Download attachment
+    create_course_module: Create course module
+    remove_course_module: Remove course module
+    create_seminar_module: Create seminar module
 
 add:
     announcement: Add new announcement
@@ -170,7 +200,7 @@ navigation:
     explore_courses: Explore courses
     infos: Infos
     courses: Courses
-    seminar: Seminars
+    seminars: Seminars
     associate_proffesors: Associate professors
     homework: Homework
     announcements: Announcements
