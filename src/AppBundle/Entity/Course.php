@@ -12,7 +12,8 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @ORM\Table(name="course")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CourseRepository")
- * @UniqueEntity(fields="title", message="Title field should not be blank")
+ * @UniqueEntity(fields="title", message="unique.title")
+ * @UniqueEntity(fields="abbreviation", message="unique.abbreviation")
  */
 class Course
 {
@@ -41,7 +42,7 @@ class Course
     /**
      * @var string
      *
-     * @ORM\Column(name="abbreviation", type="string", length=15)
+     * @ORM\Column(name="abbreviation", type="string", length=15, unique=true)
      */
     private $abbreviation;
 

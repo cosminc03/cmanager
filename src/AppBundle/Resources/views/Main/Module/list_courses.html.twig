@@ -47,11 +47,13 @@
                                         {{ 'button.view_more'|trans }}
                                     </button>
                                 </a>
-                                <a href="#">
-                                    <button class="btn bgm-orange waves-effect m-t-5 text-transform-initial f-15">
-                                        {{ 'button.download_attachment'|trans }}
-                                    </button>
-                                </a>
+                                {% if courseModule.attachmentName %}
+                                    <a href="{{ path('app_main_modules_download_attachment', {'id':courseModule.id}) }}">
+                                        <button class="btn bgm-orange waves-effect m-t-5 text-transform-initial f-15">
+                                            {{ 'button.download_attachment'|trans }}
+                                        </button>
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

@@ -4,12 +4,15 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Module
  *
  * @ORM\Table(name="module")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ModuleRepository")
+ * @Vich\Uploadable
  */
 class Module
 {
@@ -49,6 +52,27 @@ class Module
      * @ORM\Column(name="is_seminar", type="boolean", nullable=false, options={"default"=0})
      */
     private $isSeminar = false;
+
+    /**
+     * @Vich\UploadableField(mapping="course_resources", fileNameProperty="attachmentName")
+     *
+     * @var File
+     */
+    private $attachmentFile;
+
+    /**
+     * @ORM\Column(name="attachment_name", type="string", length=255, nullable=true)
+     *
+     * @var string
+     */
+    private $attachmentName;
+
+    /**
+     * @ORM\Column(name="attachment_original_name", type="string", length=255, nullable=true)
+     *
+     * @var string
+     */
+    private $attachmentOriginalName;
 
     /**
      * @var \DateTime
@@ -327,5 +351,71 @@ class Module
     public function getPosts()
     {
         return $this->posts;
+    }
+
+    /**
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $attachmentFile
+     *
+     * @return Module
+     */
+    public function setAttachmentFile(File $attachmentFile = null)
+    {
+        $this->attachmentFile = $attachmentFile;
+
+        if ($attachmentFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getAttachmentFile()
+    {
+        return $this->attachmentFile;
+    }
+
+    /**
+     * @param string $attachmentName
+     *
+     * @return Module
+     */
+    public function setAttachmentName($attachmentName)
+    {
+        $this->attachmentName = $attachmentName;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAttachmentName()
+    {
+        return $this->attachmentName;
+    }
+
+    /**
+     * @param string $attachmentOriginalName
+     *
+     * @return Module
+     */
+    public function setAttachmentOriginalName($attachmentOriginalName)
+    {
+        $this->attachmentOriginalName = $attachmentOriginalName;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAttachmentOriginalName()
+    {
+        return $this->attachmentOriginalName;
     }
 }

@@ -13,16 +13,18 @@
     <div class="row m-t-r-35">
         <div>
             <div class="panel-controls">
-                <a href="#">
-                    <button class="btn bgm-orange waves-effect m-t-5 text-transform-initial f-15">
-                        {{ 'button.download_attachment'|trans }}
-                    </button>
-                </a>
                 <a href="{{ path('app_main_modules_edit', {'id':module.id}) }}">
                     <button class="btn bgm-blue waves-effect m-t-5 text-transform-initial f-15">
                         {{ 'button.edit_course_module'|trans }}
                     </button>
                 </a>
+                {% if module.attachmentName %}
+                    <a href="{{ path('app_main_modules_download_attachment', {'id':module.id}) }}">
+                        <button class="btn bgm-orange waves-effect m-t-5 text-transform-initial f-15">
+                            {{ 'button.download_attachment'|trans }}
+                        </button>
+                    </a>
+                {% endif %}
             </div>
         </div>
         <div class="pmb-block p-t-15">

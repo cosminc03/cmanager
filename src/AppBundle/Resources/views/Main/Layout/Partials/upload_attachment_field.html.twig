@@ -1,0 +1,41 @@
+{%- block file_widget -%}
+    <div>
+        <div class="fileinput fileinput-new" data-provides="fileinput">
+            <div>
+                <span class="btn bgm-blue btn-file m-r-10">
+                    {% if not data %}
+                        <span class="fileinput-new">{{ 'button.select_file'|trans({}, 'messages') }}</span>
+                    {% else %}
+                        <span class="fileinput-exists">{{ 'button.change'|trans({}, 'messages') }}</span>
+                    {% endif %}
+                    <input {{ block('widget_attributes') }} type="file">
+                </span>
+            </div>
+            <div style="position: relative; margin-top: 10px;">
+                <span class="fileinput-filename">{{ data }}</span>
+                <a href="#" class="close fileinput-exists" style="right: -30px;" data-dismiss="fileinput">&times;</a>
+            </div>
+        </div>
+    </div>
+{%- endblock file_widget -%}
+
+{% block vich_file_widget %}
+    {% spaceless %}
+        <div class="vich-file">
+            {{ form_widget(form.file) }}
+            {% if form.delete is defined %}
+                <div>
+                    <label class="checkbox checkbox-inline m-r-10">
+                        {{ 'label.remove_attachment'|trans }}
+                        {{ form_widget(form.delete) }}
+                        <i class="input-helper"></i>
+                    </label>
+                </div>
+            {% endif %}
+
+            {% if download_uri is defined and download_uri %}
+                <a href="{{ download_uri }}">{{ 'download'|trans({}, 'VichUploaderBundle') }}</a>
+            {% endif %}
+        </div>
+    {% endspaceless %}
+{% endblock %}
