@@ -16,6 +16,7 @@ invalid:
 
 unique:
     title: The title is already taken. Type another title.
+    abbreviation: The abbreviation is already taken. Type another abbreviation.
 
 regex:
     course_hours: Cours hours should contain positive numbers.

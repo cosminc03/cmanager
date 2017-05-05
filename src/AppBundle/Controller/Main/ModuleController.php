@@ -9,10 +9,16 @@ use AppBundle\Form\Module\Main\CreateType;
 use AppBundle\Form\Module\Main\EditType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
 
 /**
  * Class ModuleController.
@@ -46,6 +52,12 @@ class ModuleController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $module->setAuthor($this->getUser());
+
+            if ($form->get('attachmentFile')->getData()) {
+                /** @var UploadedFile $attachment */
+                $attachment = $form->get('attachmentFile')->getData();
+                $module->setAttachmentOriginalName($attachment->getClientOriginalName());
+            }
 
             if ($courseId) {
                 $course = $em
@@ -108,6 +120,12 @@ class ModuleController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $module->setUpdatedAt(new \DateTime());
+
+            if ($form->get('attachmentFile')->getData()) {
+                /** @var UploadedFile $attachment */
+                $attachment = $form->get('attachmentFile')->getData();
+                $module->setAttachmentOriginalName($attachment->getClientOriginalName());
+            }
 
             $em->persist($module);
             $em->flush();
@@ -204,5 +222,37 @@ class ModuleController extends BaseController
                 'id' => $course->getId(),
             ]
         );
+    }
+
+    /**
+     * Get attachment for a Module entity.
+     *
+     * @Route("/{id}/download-attachment", name="app_main_modules_download_attachment")
+     *
+     * @param Module $module
+     *
+     * @return BinaryFileResponse
+     */
+    public function downloadAttachmentAction(Module $module)
+    {
+        $path = $this->getParameter('app.course.attachments_path');
+        $filePath = $path.'/'.$module->getCourse()->getAbbreviation().'/'.$module->getAttachmentName();
+        $response = new BinaryFileResponse($filePath);
+
+        $nameComponents = explode('.', $module->getAttachmentOriginalName());
+
+        if ($nameComponents[1] === 'pdf') {
+            $response->setContentDisposition(
+                ResponseHeaderBag::DISPOSITION_INLINE,
+                $module->getAttachmentOriginalName()
+            );
+        } else {
+            $response->setContentDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                $module->getAttachmentOriginalName()
+            );
+        }
+
+        return $response;
     }
 }

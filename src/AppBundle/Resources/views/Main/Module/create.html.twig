@@ -2,6 +2,8 @@
 
 {% trans_default_domain 'messages' %}
 
+{% form_theme form 'AppBundle:Main/Layout/Partials:upload_attachment_field.html.twig' %}
+
 {% block nav %}{% endblock %}
 
 {% block body_content %}
@@ -91,6 +93,29 @@
                     ) }}
                 </div>
                 <span class="help-block">{{ 'help_block.course_module.content'|trans }}</span>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(
+                    form.attachmentFile,
+                    'label.course_module.attachment'|trans,
+                    {
+                        'label_attr' : {
+                            'class': 'f-17'
+                        }
+                    }
+                ) }}
+                <div class="fg-line">
+                {{ form_widget(
+                    form.attachmentFile,
+                    {
+                        'attr': {
+                            'class': 'form-control',
+                        },
+                        'label': 'label.avatar'|trans
+                    }
+                ) }}
+                </div>
             </div>
 
             <div>

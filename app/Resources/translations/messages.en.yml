@@ -101,6 +101,8 @@ label:
         course: Course
         title: Course module title
         content: Course module content
+        attachment: Course module attachment
+    remove_attachment: Remove attachment
 
 help_block:
     course:

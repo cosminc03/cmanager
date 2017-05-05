@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class EditType extends AbstractType
 {
@@ -104,6 +105,10 @@ class EditType extends AbstractType
                     ],
                     'uiColor' => '#ffffff',
                 ],
+            ])
+            ->add('attachmentFile', VichFileType::class, [
+                'required' => false,
+                'download_link' => false,
             ])
         ;
     }
