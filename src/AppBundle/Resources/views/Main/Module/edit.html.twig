@@ -17,7 +17,7 @@
                 form,
                 {
                     'method': 'POST',
-                    'action': path('app_main_modules_edit', {'id':module.id}),
+                    'action': path('app_main_modules_edit', {'id':module.id, 'isCourse':isCourse}),
                         'attr': {
                         'novalidate': 'novalidate',
                     },
@@ -110,7 +110,13 @@
             <span class="hidden">{{ form_row(form._token) }}</span>
             {{ form_end(form, {'render_rest': false}) }}
 
-            <a href="{{ path('app_main_courses_course_modules', {'id':module.course.id}) }}">
+            <a
+                {% if isCourse %}
+                    href="{{ path('app_main_courses_course_modules', {'id':module.course.id}) }}"
+                {% else %}
+                    href="{{ path('app_main_courses_seminar_modules', {'id':module.course.id}) }}"
+                {% endif %}
+            >
                 <button class="btn waves-effect text-transform-initial f-16 pull-right m-t-r-35">
                     {{ 'button.cancel'|trans }}
                 </button>
@@ -129,7 +135,12 @@
                     class="btn bgm-red waves-effect m-t-10 text-transform-initial f-16"
                     id="sa-warning"
                     data-link-delete="app_main_modules_delete"
-                    data-link-redirect="app_main_courses_course_modules">
+                    {% if isCourse %}
+                        data-link-redirect="app_main_courses_course_modules"
+                    {% else %}
+                        data-link-redirect="app_main_courses_seminar_modules"
+                    {% endif %}
+            >
                 {{ 'button.remove_course_module'|trans }}
             </button>
         </div>
@@ -160,6 +171,7 @@
                 closeOnConfirm: false
             }, function(){
                 routeParams['id'] = moduleId;
+                routeParams['isCourse'] = {{ isCourse }};
 
                 $.ajax({
                     url: Routing.generate(deleteLink, routeParams, true),

@@ -329,3 +329,15 @@ hr {
     top:0 !important;
     right: 0 !important;
 }
+
+.comment-wrapper {
+    position: relative !important;
+    display: block !important;
+    opacity: 1 !important;
+    margin: 15px 0 0 !important;
+    z-index: 0 !important;
+    max-width: 100%;
+}
+.popover-user {
+    color: rgba(0, 0, 0, 0.55);
+}

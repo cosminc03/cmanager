@@ -10,15 +10,12 @@ use AppBundle\Form\Module\Main\EditType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
 
 /**
  * Class ModuleController.
@@ -44,6 +41,7 @@ class ModuleController extends BaseController
 
         if (!empty($getParams)) {
             $courseId = $getParams->get('courseId');
+            $isCourse = $getParams->get('isCourse');
         }
 
         $module = new Module();
@@ -73,23 +71,38 @@ class ModuleController extends BaseController
             $em->persist($module);
             $em->flush();
 
-            $this
-                ->get('session')
-                ->getFlashBag()
-                ->set(
+            $flashBag =$this->get('session')->getFlashBag();
+
+
+            if ($isCourse) {
+                $flashBag->set(
                     'success',
                     $this
                         ->get('translator')
                         ->trans('success.course_module.create', [], 'flashes')
-                )
-            ;
+                );
 
-            return $this->redirectToRoute(
-                'app_main_courses_course_modules',
-               [
-                   'id' => $courseId,
-               ]
-            );
+                return $this->redirectToRoute(
+                    'app_main_courses_course_modules',
+                    [
+                        'id' => $courseId,
+                    ]
+                );
+            } else {
+                $flashBag->set(
+                    'success',
+                    $this
+                        ->get('translator')
+                        ->trans('success.seminar_module.create', [], 'flashes')
+                );
+
+                return $this->redirectToRoute(
+                    'app_main_courses_seminar_modules',
+                    [
+                        'id' => $courseId,
+                    ]
+                );
+            }
         }
 
         return $this->render(
@@ -97,6 +110,7 @@ class ModuleController extends BaseController
             [
                 'form' => $form->createView(),
                 'courseId' => $courseId,
+                'isCourse' => $isCourse,
             ]
         );
     }
@@ -114,6 +128,9 @@ class ModuleController extends BaseController
      */
     public function editAction(Request $request, Module $module)
     {
+        $getParams = $request->query;
+        $isCourse = $getParams->get('isCourse');
+
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(EditType::class, $module);
         $form->handleRequest($request);
@@ -130,23 +147,39 @@ class ModuleController extends BaseController
             $em->persist($module);
             $em->flush();
 
-            $this
-                ->get('session')
-                ->getFlashBag()
-                ->set(
+            $flashBag = $this->get('session')->getFlashBag();
+
+            if ($isCourse) {
+                $flashBag->set(
                     'success',
                     $this
                         ->get('translator')
                         ->trans('success.course_module.edit', [], 'flashes')
                 )
-            ;
+                ;
 
-            return $this->redirectToRoute(
-                'app_main_courses_course_modules',
-                [
-                    'id' => $module->getCourse()->getId(),
-                ]
-            );
+                return $this->redirectToRoute(
+                    'app_main_courses_course_modules',
+                    [
+                        'id' => $module->getCourse()->getId(),
+                    ]
+                );
+            } else {
+                $flashBag->set(
+                    'success',
+                    $this
+                        ->get('translator')
+                        ->trans('success.seminar_module.edit', [], 'flashes')
+                )
+                ;
+
+                return $this->redirectToRoute(
+                    'app_main_courses_seminar_modules',
+                    [
+                        'id' => $module->getCourse()->getId(),
+                    ]
+                );
+            }
         }
 
         return $this->render(
@@ -154,6 +187,7 @@ class ModuleController extends BaseController
             [
                 'form' => $form->createView(),
                 'module' => $module,
+                'isCourse' => $isCourse,
             ]
         );
     }
@@ -164,16 +198,23 @@ class ModuleController extends BaseController
      * @Route("/{id}/show", name="app_main_modules_show")
      * @Method("GET")
      *
-     * @param Module $module
+     * @param Request $request
+     * @param Module  $module
      *
      * @return Response
      */
-    public function showAction(Module $module)
+    public function showAction(Request $request, Module $module)
     {
+        $getParams = $request->query;
+        $isCourse = $getParams->get('isCourse');
+
         return $this->render(
             'AppBundle:Main/Module:show.html.twig',
             [
                 'module' => $module,
+                'isCourse' => $isCourse,
+                'userId' => $this->getUser()->getId(),
+                'userFullName' => $this->getUser()->getFullName(),
             ]
         );
     }
@@ -191,16 +232,27 @@ class ModuleController extends BaseController
      */
     public function deleteAction(Request $request, Module $module)
     {
-        $this
-            ->get('session')
-            ->getFlashBag()
-            ->set(
+        $getParams = $request->query;
+        $isCourse = $getParams->get('isCourse');
+        $flashBag =  $this->get('session')->getFlashBag();
+
+        if ($isCourse) {
+            $flashBag->set(
                 'success',
                 $this
                     ->get('translator')
                     ->trans('success.course_module.delete.from_edit', [], 'flashes')
             )
-        ;
+            ;
+        } else {
+            $flashBag->set(
+                'success',
+                $this
+                    ->get('translator')
+                    ->trans('success.seminar_module.delete.from_edit', [], 'flashes')
+            )
+            ;
+        }
 
         $course = $module->getCourse();
 

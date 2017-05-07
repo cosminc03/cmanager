@@ -23,3 +23,8 @@ success:
         edit: Course module successfully edited!
         delete:
             from_edit: Course module successfully deleted!
+    seminar_module:
+        create: Seminar module successfully created!
+        edit: Seminar module successfully edited!
+        delete:
+            from_edit: Seminar module successfully deleted!

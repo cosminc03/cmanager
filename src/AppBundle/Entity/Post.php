@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Post
@@ -31,6 +32,8 @@ class Post
     /**
      * @var User
      *
+     * @Serializer\Exclude()
+     *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="posts")
      * @ORM\JoinColumn(name="user_id", nullable=false)
      */
@@ -38,6 +41,8 @@ class Post
 
     /**
      * @var Module
+     *
+     * @Serializer\Exclude()
      *
      * @ORM\ManyToOne(targetEntity="Module", inversedBy="posts")
      * @ORM\JoinColumn(name="module_id", nullable=true)
@@ -47,12 +52,16 @@ class Post
     /**
      * @var \DateTime
      *
+     * @Serializer\Exclude()
+     *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     private $createdAt;
 
     /**
      * @var \DateTime|null
+     *
+     * @Serializer\Exclude()
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
@@ -191,5 +200,70 @@ class Post
     public function getModule()
     {
         return $this->module;
+    }
+
+    /**
+     * Returns createdById.
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("createdById")
+     *
+     * @return string
+     */
+    public function getCreatedById()
+    {
+        return $this->createdBy ? $this->createdBy->getId() : null;
+    }
+
+    /**
+     * Returns createdByFullName.
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("createdByFullName")
+     *
+     * @return string
+     */
+    public function getCreatedByFullName()
+    {
+        return $this->createdBy ? $this->createdBy->getFullName() : null;
+    }
+
+    /**
+     * Returns moduleId.
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("moduleId")
+     *
+     * @return string
+     */
+    public function getModuleId()
+    {
+        return $this->module ? $this->module->getId() : null;
+    }
+
+    /**
+     * Returns createdAt.
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("createdAt")
+     *
+     * @return string
+     */
+    public function getCreatedAtFormatted()
+    {
+        return $this->createdAt ? $this->createdAt->format('d/m/Y H:i:s') : null;
+    }
+
+    /**
+     * Returns updatedAt.
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("updatedAt")
+     *
+     * @return string
+     */
+    public function getUpdatedAtFormatted()
+    {
+        return $this->updatedAt ? $this->updatedAt->format('d/m/Y H:i:s') : null;
     }
 }

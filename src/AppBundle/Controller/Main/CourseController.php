@@ -402,6 +402,7 @@ class CourseController extends BaseController
             [
                 'course' => $course,
                 'courseModules' => $courseModules,
+                'isCourse' => true,
             ]
         );
     }
@@ -418,10 +419,22 @@ class CourseController extends BaseController
      */
     public function seminarModulesAction(Course $course)
     {
+        $em = $this->getDoctrine()->getManager();
+
+        $seminarModules = $em
+            ->getRepository(Module::class)
+            ->findBy([
+                'course' => $course,
+                'isSeminar' => true,
+            ])
+        ;
+
         return $this->render(
             'AppBundle:Main/Module:list_seminars.html.twig',
             [
                 'course' => $course,
+                'seminarModules' => $seminarModules,
+                'isCourse' => false,
             ]
         );
     }

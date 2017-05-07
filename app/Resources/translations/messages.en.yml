@@ -11,6 +11,11 @@ message:
     already_have_account: Already have account and password?
     removed_course: Removed course cannot be restored!
     removed_course_module: Removed course module cannot be restored!
+    no_comments: No comments for this module. Be the first!
+    new_comment: New comment
+    comment_placeholder: Type new comment...
+    created_at: Created at
+    created_by: Created by
 
 title:
     homepage_admin: CManager Admin
@@ -42,8 +47,8 @@ heading:
     new_course_module: New course module
     edit_course_module: Edit course module
     remove_course_module: Remove course module
-    list_course_modules: List of course type modules
-    list_seminar_modules: List of seminart type modules
+    list_course_modules: List of course modules
+    list_seminar_modules: List of seminar modules
     title: Title
     content: Content
 
@@ -59,6 +64,7 @@ paragraph:
 small:
     no_associate: No professor associated to your course.
     no_course_modules: No course modules associated to this course.
+    no_seminar_modules: No seminar modules associated to this course.
 
 label:
     email: Email
@@ -162,6 +168,7 @@ button:
     create_course_module: Create course module
     remove_course_module: Remove course module
     create_seminar_module: Create seminar module
+    add_comment: Add comment
 
 add:
     announcement: Add new announcement
