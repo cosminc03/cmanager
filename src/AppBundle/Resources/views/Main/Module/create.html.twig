@@ -9,15 +9,15 @@
 {% block body_content %}
     <div class="row m-t-10">
         <div class="col-lg-3 profile-settings-sidebar">
-            <h3>{{ 'heading.new_course_module'|trans }}</h3>
-            <p>{{ 'paragraph.new_course_module'|trans }}</p>
+                <h3>{{ 'heading.new_course_module'|trans }}</h3>
+                <p>{{ 'paragraph.new_course_module'|trans }}</p>
         </div>
         <div class="col-lg-9">
             {{ form_start(
                 form,
                 {
                     'method': 'POST',
-                    'action': path('app_main_modules_create', {'courseId':courseId}),
+                    'action': path('app_main_modules_create', {'courseId':courseId, 'isCourse':isCourse}),
                         'attr': {
                         'novalidate': 'novalidate',
                     },
@@ -127,7 +127,13 @@
             <span class="hidden">{{ form_row(form._token) }}</span>
             {{ form_end(form, {'render_rest': false}) }}
 
-            <a href="{{ path('app_main_courses_course_modules', {'id':courseId}) }}">
+            <a
+                {% if isCourse %}
+                    href="{{ path('app_main_courses_course_modules', {'id':courseId}) }}"
+                {% else %}
+                    href="{{ path('app_main_courses_seminar_modules', {'id':courseId}) }}"
+                {% endif %}
+            >
                 <button class="btn waves-effect text-transform-initial f-16 pull-right m-t-r-35">
                     {{ 'button.cancel'|trans }}
                 </button>
