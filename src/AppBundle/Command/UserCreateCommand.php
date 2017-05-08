@@ -25,6 +25,7 @@ class UserCreateCommand extends ContainerAwareCommand
             ->addArgument('username', InputArgument::REQUIRED, 'The username of the new user')
             ->addOption('first_name', null, InputArgument::OPTIONAL, 'The first name of the new user', 'John')
             ->addOption('last_name', null, InputArgument::OPTIONAL, 'The last name of the new user', 'Doe')
+            ->addOption('phone', null, InputArgument::OPTIONAL, 'The phone of the new user', '0123456789')
             ->addOption('role', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'Roles to set to the user')
         ;
     }
@@ -37,6 +38,7 @@ class UserCreateCommand extends ContainerAwareCommand
         $firstName = $input->getOption('first_name');
         $lastName = $input->getOption('last_name');
         $roles = $input->getOption('role');
+        $phone = $input->getOption('phone');
 
         $em = $this->getContainer()->get('doctrine')->getManager();
 
@@ -59,6 +61,10 @@ class UserCreateCommand extends ContainerAwareCommand
         $user->setPlainPassword($password);
         $user->setEnabled(true);
         $user->setRoles($roles);
+        $user->setPhone($phone);
+        $user->setNationality('Romanian');
+        $user->setCitizenship('Romanian');
+        $user->setGender('gender.male');
 
         $em->persist($user);
         $em->flush();

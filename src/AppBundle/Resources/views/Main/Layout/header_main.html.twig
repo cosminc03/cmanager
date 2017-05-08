@@ -40,15 +40,19 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="no-bkg">
-                        <img class="him-icon avatar" src="{{ asset('bundles/app/assets/images/avatar.jpg') }}">
+                    <a href="{{ path('app_main_users_show', {'id':app.user.id}) }}" class="no-bkg">
+                        {% if user.avatar %}
+                            <img class="him-icon avatar" src="img/avatar.jpg"/>
+                        {% else %}
+                            <img class="him-icon avatar" src="{{ user.gravatar }}"/>
+                        {% endif %}
                     </a>
                 </li>
                 <li class="dropdown">
                     <a data-toggle="dropdown" href=""><i class="him-icon zmdi zmdi-more-vert"></i></a>
                     <ul class="dropdown-menu dropdown-menu-nav dm-icon pull-right">
                         <li>
-                            <a href="">Profile</a>
+                            <a href="{{ path('app_main_users_show', {'id':app.user.id}) }}">Profile</a>
                         </li>
                         <li class="divider"></li>
                         <li>

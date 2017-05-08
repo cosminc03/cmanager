@@ -16,6 +16,8 @@ message:
     comment_placeholder: Type new comment...
     created_at: Created at
     created_by: Created by
+    no_description: This user doesn't have a description yet
+    member_since: Member since
 
 title:
     homepage_admin: CManager Admin
@@ -51,6 +53,9 @@ heading:
     list_seminar_modules: List of seminar modules
     title: Title
     content: Content
+    summary: Summary
+    basic_information: Basic Information
+    contact_information: Contact Information
 
 paragraph:
     new_course: Create your course by filling out the inputs from the form
@@ -214,6 +219,35 @@ navigation:
     homework: Homework
     announcements: Announcements
     settings: Settings
+
+tooltip:
+    edit: Edit
+    subscribe: Subscribe
+
+data_table:
+    full_name: Full Name
+    email: Email Address
+    phone: Phone
+    gender: Gender
+    registration_number: Registration Number
+    birthday: Birthday
+    year_of_study: Year Of Study
+    role: Role
+    nationality: Nationality
+    citizenship: Citizenship
+    skype: Skype
+    twitter: Twitter
+    linkedin: LinkedIn
+    gplus: Google Plus
+
+gender:
+    male: Male
+    female: Female
+
+year_of_study:
+    first: First year
+    second: Second year
+    third: Third year
 
 remove:
     avatar: Remove avatar

@@ -10,6 +10,11 @@ not_blank:
     user: The user field should not be blank
     course_hours: Course hours field should not be blank
     seminar_hours: Seminar hours field should not be blank
+    phone: The phone field should not be blank
+    date_of_birth: The date of birth field should not be blank
+    registration_number: The registration number field should not be blank
+    nationality: The nationality field should not be blank
+    citizenship: The citizenship field should not be blank
 
 invalid:
     email: Invalid email provided
