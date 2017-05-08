@@ -18,6 +18,8 @@ use JMS\Serializer\Annotation as Serializer;
  */
 class User extends BaseUser
 {
+    const GENDER_MALE = 'gender.male';
+    const GENDER_FEMALE = 'gender.female';
     const ROLE_ADMIN = 'ROLE_ADMIN';
     const GRAVATAR_BASE_URL = 'https://www.gravatar.com/avatar/';
 
@@ -33,20 +35,48 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="first_name", type="string", nullable=true)
+     * @ORM\Column(name="first_name", type="string", nullable=false)
      */
     protected $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="last_name", type="string", nullable=true)
+     * @ORM\Column(name="last_name", type="string", nullable=false)
      */
     protected $lastName;
 
     /**
      * @var string
-     * @ORM\Column(name="phone", type="string", length=128, nullable=true)
+     *
+     * @ORM\Column(name="registration_number", type="string", nullable=true)
+     */
+    private $registrationNumber;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nationality", type="string", nullable=false)
+     */
+    private $nationality;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="citizenship", type="string", nullable=false)
+     */
+    private $citizenship;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var string
+     * @ORM\Column(name="phone", type="string", length=128, nullable=false)
      */
     private $phone;
 
@@ -56,6 +86,48 @@ class User extends BaseUser
      * @ORM\Column(name="date_of_birth", type="date", nullable=true)
      */
     private $dateOfBirth;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="year_of_study", type="string", nullable=true)
+     */
+    private $yearOfStudy;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=20, nullable=false)
+     */
+    private $gender;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="skype", type="string", nullable=true)
+     */
+    private $skype;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="linked_in", type="string", nullable=true)
+     */
+    private $linkedIn;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="twitter", type="string", nullable=true)
+     */
+    private $twitter;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gplus", type="string", nullable=true)
+     */
+    private $gplus;
 
     /**
      * @var ArrayCollection|Course[]
@@ -473,6 +545,77 @@ class User extends BaseUser
     }
 
     /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return User
+     */
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime|null $updatedAt
+     *
+     * @return User
+     */
+    public function setUpdatedAt(\DateTime $updatedAt = null)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return User
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
      * Returns createdAt.
      *
      * @Serializer\VirtualProperty()
@@ -512,5 +655,212 @@ class User extends BaseUser
         $gravatarUrl = sprintf('%s%s?d=identicon', self::GRAVATAR_BASE_URL, $email);
 
         return $gravatarUrl;
+    }
+
+    /**
+     * Set registrationNumber
+     *
+     * @param string $registrationNumber
+     * @return User
+     */
+    public function setRegistrationNumber($registrationNumber)
+    {
+        $this->registrationNumber = $registrationNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get registrationNumber
+     *
+     * @return string 
+     */
+    public function getRegistrationNumber()
+    {
+        return $this->registrationNumber;
+    }
+
+    /**
+     * Set nationality
+     *
+     * @param string $nationality
+     * @return User
+     */
+    public function setNationality($nationality)
+    {
+        $this->nationality = $nationality;
+
+        return $this;
+    }
+
+    /**
+     * Get nationality
+     *
+     * @return string 
+     */
+    public function getNationality()
+    {
+        return $this->nationality;
+    }
+
+    /**
+     * Set citizenship
+     *
+     * @param string $citizenship
+     * @return User
+     */
+    public function setCitizenship($citizenship)
+    {
+        $this->citizenship = $citizenship;
+
+        return $this;
+    }
+
+    /**
+     * Get citizenship
+     *
+     * @return string 
+     */
+    public function getCitizenship()
+    {
+        return $this->citizenship;
+    }
+
+    /**
+     * Set gender
+     *
+     * @param string $gender
+     * @return User
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * Get gender
+     *
+     * @return string 
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * Set skype
+     *
+     * @param string $skype
+     * @return User
+     */
+    public function setSkype($skype)
+    {
+        $this->skype = $skype;
+
+        return $this;
+    }
+
+    /**
+     * Get skype
+     *
+     * @return string 
+     */
+    public function getSkype()
+    {
+        return $this->skype;
+    }
+
+    /**
+     * Set linkedIn
+     *
+     * @param string $linkedIn
+     * @return User
+     */
+    public function setLinkedIn($linkedIn)
+    {
+        $this->linkedIn = $linkedIn;
+
+        return $this;
+    }
+
+    /**
+     * Get linkedIn
+     *
+     * @return string 
+     */
+    public function getLinkedIn()
+    {
+        return $this->linkedIn;
+    }
+
+    /**
+     * Set twitter
+     *
+     * @param string $twitter
+     * @return User
+     */
+    public function setTwitter($twitter)
+    {
+        $this->twitter = $twitter;
+
+        return $this;
+    }
+
+    /**
+     * Get twitter
+     *
+     * @return string 
+     */
+    public function getTwitter()
+    {
+        return $this->twitter;
+    }
+
+    /**
+     * Set gplus
+     *
+     * @param string $gplus
+     * @return User
+     */
+    public function setGplus($gplus)
+    {
+        $this->gplus = $gplus;
+
+        return $this;
+    }
+
+    /**
+     * Get gplus
+     *
+     * @return string 
+     */
+    public function getGplus()
+    {
+        return $this->gplus;
+    }
+
+    /**
+     * Set yearOfStudy
+     *
+     * @param string $yearOfStudy
+     * @return User
+     */
+    public function setYearOfStudy($yearOfStudy)
+    {
+        $this->yearOfStudy = $yearOfStudy;
+
+        return $this;
+    }
+
+    /**
+     * Get yearOfStudy
+     *
+     * @return string 
+     */
+    public function getYearOfStudy()
+    {
+        return $this->yearOfStudy;
     }
 }
