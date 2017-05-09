@@ -11,6 +11,9 @@
             <p>{{ 'paragraph.new_course'|trans }}</p>
         </div>
         <div class="col-lg-9">
+            {% if not form.vars.valid %}
+                <div class="f-s-17 c-red m-t-10 m-b-10">{{ 'help_block.form.errors'|trans }}</div>
+            {% endif %}
             {{ form_start(
                 form,
                 {
@@ -21,7 +24,7 @@
                     },
                 }
             ) }}
-                <div class="form-group">
+                <div class="form-group {% if form_errors(form.title) %}has-error has-feedback{% endif %}">
                     {{ form_label(
                         form.title,
                         'label.course.title'|trans,
@@ -45,7 +48,7 @@
                     <span class="help-block">{{ 'help_block.course.title'|trans }}</span>
                 </div>
 
-                <div class="form-group m-t-10">
+                <div class="form-group m-t-10 {% if form_errors(form.abbreviation) %}has-error has-feedback{% endif %}">
                     {{ form_label(
                         form.abbreviation,
                         'label.course.abbreviation'|trans,
@@ -71,7 +74,7 @@
                     <span class="help-block">{{ 'help_block.course.abbreviation'|trans }}</span>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group {% if form_errors(form.description) %}has-error has-feedback{% endif %}">
                     {{ form_label(
                         form.description,
                         'label.course.description'|trans,
@@ -125,7 +128,7 @@
                     ) }}
                 </div>
 
-                <div class="form-group col-sm-6 m-t-10">
+                <div class="form-group col-sm-6 m-t-10 {% if form_errors(form.courseHours) %}has-error has-feedback{% endif %}">
                     {{ form_label(
                         form.courseHours,
                         'label.course.hours'|trans,
@@ -151,7 +154,7 @@
                     <span class="help-block">{{ 'help_block.course.hours'|trans }}</span>
                 </div>
 
-                <div class="form-group col-sm-6 m-t-10">
+                <div class="form-group col-sm-6 m-t-10 {% if form_errors(form.seminarHours) %}has-error has-feedback{% endif %}">
                     {{ form_label(
                         form.seminarHours,
                         'label.course.seminar_hours'|trans,

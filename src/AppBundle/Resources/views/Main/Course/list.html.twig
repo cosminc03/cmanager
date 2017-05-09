@@ -35,13 +35,13 @@
         </div>
     </div>
 
-    {% for flash_message in app.session.flashBag.get('success') %}
-        <div class="row">
-            <div id="general-alert" class="alert alert-success m-t-15">
-                <strong>{{ flash_message }}</strong>
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="row">
+                <div id="general-alert" class="alert alert-success m-t-15">
+                    <strong>{{ flash_message }}</strong>
+                </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
 
     {% if not courses|length > 0 %}
         <div class="row">

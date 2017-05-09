@@ -84,6 +84,7 @@ class UserController extends BaseController
             'AppBundle:Main/User:edit.html.twig',
             [
                 'form' => $form->createView(),
+                'user' => $user,
             ]
         );
     }

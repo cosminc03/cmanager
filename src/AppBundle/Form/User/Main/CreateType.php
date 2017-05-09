@@ -4,17 +4,15 @@ namespace AppBundle\Form\User\Main;
 
 use AppBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class CreateType extends AbstractType
 {
@@ -25,6 +23,14 @@ class CreateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('username', TextType::class, [
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'not_blank.username',
+                    ]),
+                ],
+            ])
             ->add('email', EmailType::class, [
                 'required' => true,
                 'constraints' => [
@@ -61,30 +67,12 @@ class CreateType extends AbstractType
                 ],
             ])
             ->add('dateOfBirth', DateType::class, [
-                'required' => true,
-                'widget' => 'single_text',
-                'format' => 'dd-MM-yyyy',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'not_blank.phone',
-                    ]),
-                ],
-            ])
-            ->add('avatarFile', VichImageType::class, [
                 'required' => false,
-                'download_link' => false,
-                'constraints' => [
-                    new File([
-                        'mimeTypes' => ['image/jpg', 'image/jpeg', 'image/png'],
-                        'mimeTypesMessage' => 'invalid.image',
-                    ]),
-                ],
-            ])
-            ->add('registrationNumber', TextType::class, [
-                'required' => true,
+                'widget' => 'single_text',
+                'format' => 'dd/MM/yyyy',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'not_blank.registration_number',
+                        'message' => 'not_blank.date_of_birth',
                     ]),
                 ],
             ])
@@ -106,8 +94,7 @@ class CreateType extends AbstractType
             ])
             ->add('gender', ChoiceType::class, [
                 'required' => true,
-                'expanded' => true,
-                'multiple' => true,
+                'multiple' => false,
                 'choices' => [
                     'gender.male' => 'gender.male',
                     'gender.female' => 'gender.female',
@@ -116,8 +103,7 @@ class CreateType extends AbstractType
             ])
             ->add('yearOfStudy', ChoiceType::class, [
                 'required' => true,
-                'expanded' => true,
-                'multiple' => true,
+                'multiple' => false,
                 'choices' => [
                     'year_of_study.first' => 'year_of_study.first',
                     'year_of_study.second' => 'year_of_study.second',
@@ -125,7 +111,7 @@ class CreateType extends AbstractType
                 ],
                 'translation_domain' => 'messages',
             ])
-            ->add('description', TextType::class)
+            ->add('description', TextareaType::class)
             ->add('skype', TextType::class)
             ->add('linkedIn', TextType::class)
             ->add('twitter', TextType::class)

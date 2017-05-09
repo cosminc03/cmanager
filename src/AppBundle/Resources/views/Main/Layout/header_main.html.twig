@@ -41,10 +41,10 @@
                 </li>
                 <li>
                     <a href="{{ path('app_main_users_show', {'id':app.user.id}) }}" class="no-bkg">
-                        {% if user.avatar %}
+                        {% if app.user.avatar %}
                             <img class="him-icon avatar" src="img/avatar.jpg"/>
                         {% else %}
-                            <img class="him-icon avatar" src="{{ user.gravatar }}"/>
+                            <img class="him-icon avatar" src="{{ app.user.gravatar }}"/>
                         {% endif %}
                     </a>
                 </li>

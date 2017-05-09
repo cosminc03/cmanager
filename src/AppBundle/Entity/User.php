@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use JMS\Serializer\Annotation as Serializer;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * User
@@ -15,6 +16,8 @@ use JMS\Serializer\Annotation as Serializer;
  * @ORM\Table(name="fos_user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @Vich\Uploadable
+ * @UniqueEntity(fields="username", message="unique.username")
+ * @UniqueEntity(fields="email", message="unique.email")
  */
 class User extends BaseUser
 {
