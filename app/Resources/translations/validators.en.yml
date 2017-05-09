@@ -15,6 +15,8 @@ not_blank:
     registration_number: The registration number field should not be blank
     nationality: The nationality field should not be blank
     citizenship: The citizenship field should not be blank
+    username: The username field should not be blank
+    date_of_birth: The date of birth field shoul not be blank
 
 invalid:
     email: Invalid email provided
@@ -22,6 +24,8 @@ invalid:
 unique:
     title: The title is already taken. Type another title.
     abbreviation: The abbreviation is already taken. Type another abbreviation.
+    username: The username is already taken. Type another username.
+    email: The email is already used. Type another email.
 
 regex:
     course_hours: Cours hours should contain positive numbers.

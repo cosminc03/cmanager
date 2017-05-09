@@ -1,0 +1,437 @@
+{% extends 'AppBundle:Main/Layout:body_main.html.twig' %}
+
+{% trans_default_domain 'messages' %}
+
+{% block nav %}{% endblock %}
+
+{% block body_content %}
+    <div class="row m-t-25">
+        <div class="col-lg-3 profile-settings-sidebar">
+            <h3>{{ 'heading.public_avatar'|trans }}</h3>
+            <p>{{ 'message.change_avatar'|trans }} <a target="_blank" href="http://ro.gravatar.com/">gravatar.com</a></p>
+        </div>
+        <div class="col-lg-9">
+            <div class="clearfix avatar-image">
+                {% if app.user.avatar %}
+                    <img class="avatar-general s160 m-r-20" src="img/avatar.jpg"/>
+                {% else %}
+                    <img class="avatar-general s160 m-r-20" src="{{ app.user.gravatar }}"/>
+                {% endif %}
+            </div>
+            <h4>{{ 'heading.upload_avatar'|trans }}</h4>
+            <div class="m-t-5 m-b-10">
+                <button class="btn btn-default waves-effect text-transform-initial">Browse file...</button>
+                <span class="p-l-20">No file choosen</span>
+            </div>
+            <hr>
+            <div class="m-t-25">
+                <button class="btn btn-default waves-effect text-transform-initial">Remove avatar</button>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-3 profile-settings-sidebar">
+            <h3>{{ 'heading.main_setting'|trans }}</h3>
+            <p>{{ 'message.profile_information'|trans }}</p>
+        </div>
+        <div class="col-lg-9">
+            {% if not form.vars.valid %}
+                <div class="f-s-17 c-red m-t-10 m-b-10">{{ 'help_block.form.errors'|trans }}</div>
+            {% endif %}
+            {{ form_start(
+                form,
+                {
+                    'method': 'POST',
+                    'action': path('app_main_users_edit', {'id': user.id}),
+                    'attr': {
+                        'novalidate': 'novalidate',
+                    },
+                }
+            ) }}
+            <div class="form-group {% if form_errors(form.username) %}has-error has-feedback{% endif %}">
+                {{ form_label(
+                    form.username,
+                    'label.username'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.username) %}
+                    <small class="help-block c-red">{{ form_errors(form.username) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.username,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.user.username'|trans }}</span>
+            </div>
+
+            <div class="form-group {% if form_errors(form.firstName) %}has-error has-feedback{% endif %}">
+                {{ form_label(
+                    form.firstName,
+                    'label.first_name'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.firstName) %}
+                    <small class="help-block c-red">{{ form_errors(form.firstName) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.firstName,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.user.first_name'|trans }}</span>
+            </div>
+
+            <div class="form-group {% if form_errors(form.lastName) %}has-error has-feedback{% endif %}">
+                {{ form_label(
+                    form.lastName,
+                    'label.last_name'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.lastName) %}
+                    <small class="help-block c-red">{{ form_errors(form.lastName) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.lastName,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.user.last_name'|trans }}</span>
+            </div>
+
+            <div class="form-group {% if form_errors(form.email) %}has-error has-feedback{% endif %}">
+                {{ form_label(
+                    form.email,
+                    'label.email'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.email) %}
+                    <small class="help-block c-red">{{ form_errors(form.email) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.email,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.user.email'|trans }}</span>
+            </div>
+
+            <div class="form-group {% if form_errors(form.phone) %}has-error has-feedback{% endif %}">
+                {{ form_label(
+                    form.phone,
+                    'label.phone'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.phone) %}
+                    <small class="help-block c-red">{{ form_errors(form.phone) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.phone,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg input-mask',
+                                'data-mask': '000-00-0000000',
+                                'placeholder': 'eg: 000-00-0000000',
+                                'maxlength': '14',
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.user.phone'|trans }}</span>
+            </div>
+
+            <div class="form-group col-sm-6 m-t-10 {% if form_errors(form.gender) %}has-error has-feedback{% endif %}">
+                <div class="form-group">
+                    {{ form_label(
+                        form.gender,
+                        'label.gender'|trans,
+                        {
+                            'label_attr' : {'class': 'f-17'}
+                        }
+                    ) }}
+                    {% if form_errors(form.gender) %}
+                        <small class="help-block c-red">{{ form_errors(form.gender) }}</small>
+                    {% endif %}
+                    <div class="fg-line">
+                        {{ form_widget(
+                            form.gender,
+                            {
+                                'attr' : {
+                                    'class': 'selectpicker input-lg'
+                                },
+                            }
+                        ) }}
+                    </div>
+                    <span class="help-block">{{ 'help_block.user.gender'|trans }}</span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6 m-t-10 {% if form_errors(form.yearOfStudy) %}has-error has-feedback{% endif %}">
+                <div class="form-group">
+                    {{ form_label(
+                        form.yearOfStudy,
+                        'label.year_of_study'|trans,
+                        {
+                            'label_attr' : {'class': 'f-17'}
+                        }
+                    ) }}
+                    {% if form_errors(form.yearOfStudy) %}
+                        <small class="help-block c-red">{{ form_errors(form.yearOfStudy) }}</small>
+                    {% endif %}
+                    <div class="fg-line">
+                        {{ form_widget(
+                            form.yearOfStudy,
+                            {
+                                'attr' : {
+                                    'class': 'selectpicker input-lg'
+                                },
+                            }
+                        ) }}
+                    </div>
+                    <span class="help-block">{{ 'help_block.user.year_of_study'|trans }}</span>
+                </div>
+            </div>
+
+            <div class="form-group {% if form_errors(form.dateOfBirth) %}has-error has-feedback{% endif %}">
+                {{ form_label(
+                    form.dateOfBirth,
+                    'label.date_of_birth'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.dateOfBirth) %}
+                    <small class="help-block c-red">{{ form_errors(form.dateOfBirth) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.dateOfBirth,
+                        {
+                            'attr' : {
+                                'class': 'form-control date-picker input-lg',
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.user.date_of_birth'|trans }}</span>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(
+                    form.description,
+                    'label.user_profile.description'|trans,
+                    {
+                        'label_attr' : {
+                            'class': 'f-17'
+                        }
+                    }
+                ) }}
+                {% if form_errors(form.description) %}
+                    <small class="help-block c-red">{{ form_errors(form.description) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                    form.description,
+                    {
+                        'attr' : {
+                            'class': 'form-control input-lg',
+                            'rows': '5',
+                            'placeholder': 'placeholder.description'|trans
+                        },
+                    }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.user.description'|trans }}</span>
+            </div>
+
+            <div class="form-group {% if form_errors(form.nationality) %}has-error has-feedback{% endif %}">
+                {{ form_label(
+                    form.nationality,
+                    'label.nationality'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.nationality) %}
+                    <small class="help-block c-red">{{ form_errors(form.nationality) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.nationality,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.user.nationality'|trans }}</span>
+            </div>
+
+            <div class="form-group {% if form_errors(form.citizenship) %}has-error has-feedback{% endif %}">
+                {{ form_label(
+                    form.citizenship,
+                    'label.citizenship'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.citizenship) %}
+                    <small class="help-block c-red">{{ form_errors(form.citizenship) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.citizenship,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.user.citizenship'|trans }}</span>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(
+                    form.skype,
+                    'label.user_profile.skype'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.skype) %}
+                    <small class="help-block c-red">{{ form_errors(form.skype) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.skype,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.user.skype'|trans }}</span>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(
+                    form.linkedIn,
+                    'label.user_profile.linkedIn'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.linkedIn) %}
+                    <small class="help-block c-red">{{ form_errors(form.linkedIn) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.linkedIn,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.user.linkedIn'|trans }}</span>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(
+                    form.twitter,
+                    'label.user_profile.twitter'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.twitter) %}
+                    <small class="help-block c-red">{{ form_errors(form.twitter) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.twitter,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.user.twitter'|trans }}</span>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(
+                    form.gplus,
+                    'label.user_profile.gplus'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.gplus) %}
+                    <small class="help-block c-red">{{ form_errors(form.gplus) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.gplus,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.user.gplus'|trans }}</span>
+            </div>
+
+            <div>
+                <button class="btn bgm-green waves-effect text-transform-initial f-16" type="submit">
+                    {{ 'button.update_profile_settings'|trans }}
+                </button>
+            </div>
+
+            <span class="hidden">{{ form_row(form._token) }}</span>
+            {{ form_end(form, {'render_rest': false}) }}
+
+            <a class="grey-color" href="{{ path('app_main_users_show', {'id':app.user.id}) }}">
+                <button class="btn waves-effect text-transform-initial f-16 pull-right m-t-r-35">{{ 'button.cancel'|trans }}</button>
+            </a>
+        </div>
+    </div>
+{% endblock %}
