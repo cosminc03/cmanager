@@ -158,9 +158,10 @@ class ModuleController extends BaseController
             );
 
             return $this->redirectToRoute(
-                'app_main_courses_seminar_modules',
+                'app_main_courses_users_seminars',
                 [
                     'id' => $courseId,
+                    'userId' => $this->getUser()->getId(),
                 ]
             );
         }
@@ -288,26 +289,43 @@ class ModuleController extends BaseController
     }
 
     /**
-     * Display Module entities.
+     * Display Course Module entities.
      *
-     * @Route("/{id}/show", name="app_main_modules_show")
+     * @Route("/course/{id}/show", name="app_main_modules_course_show")
      * @Method("GET")
      *
-     * @param Request $request
      * @param Module  $module
      *
      * @return Response
      */
-    public function showAction(Request $request, Module $module)
+    public function showAction(Module $module)
     {
-        $getParams = $request->query;
-        $isCourse = $getParams->get('isCourse');
-
         return $this->render(
-            'AppBundle:Main/Module:show.html.twig',
+            'AppBundle:Main/Module:show_course.html.twig',
             [
                 'module' => $module,
-                'isCourse' => $isCourse,
+                'userId' => $this->getUser()->getId(),
+                'userFullName' => $this->getUser()->getFullName(),
+            ]
+        );
+    }
+
+    /**
+     * Display Seminar Module entities.
+     *
+     * @Route("/seminar/{id}/show", name="app_main_modules_seminar_show")
+     * @Method("GET")
+     *
+     * @param Module $module
+     *
+     * @return Response
+     */
+    public function showSeminarAction(Module $module)
+    {
+        return $this->render(
+            'AppBundle:Main/Module:show_seminar.html.twig',
+            [
+                'module' => $module,
                 'userId' => $this->getUser()->getId(),
                 'userFullName' => $this->getUser()->getFullName(),
             ]

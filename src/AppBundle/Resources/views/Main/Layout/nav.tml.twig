@@ -30,7 +30,13 @@
                             {{ 'navigation.infos'|trans }}
                         </a>
                     </li>
-                    <li {% if app.request.get('_route') == 'app_main_courses_associate_professors' %} class="active" {% endif %}>
+                    <li {% if app.request.get('_route') == 'app_main_courses_associate_professors' or
+                            'app_main_courses_users' in app.request.get('_route') or
+                            app.request.get('_route') == 'app_main_modules_seminar_show'
+                        %}
+                            class="active"
+                        {% endif %}
+                    >
                         <a href="{{ path('app_main_courses_associate_professors', {'id': course.id}) }}">
                             {{ 'navigation.associate_proffesors'|trans }}
                         </a>
@@ -64,3 +70,31 @@
         {% endif %}
     </nav>
 </div>
+
+{% if 'app_main_courses_users_' in app.request.get('_route') or
+    app.request.get('_route') == 'app_main_modules_seminar_show'
+%}
+    <div class="nav-submenu">
+        <nav class="ha-menu nav-links">
+            <ul>
+                <li {% if app.request.get('_route') == 'app_main_courses_users_profile' %} class="active" {% endif %}>
+                    <a href="{{ path('app_main_courses_users_profile', {'id':course.id, 'userId':user.id}) }}">
+                        {{ 'navigation.profile'|trans }}
+                    </a>
+                </li>
+                <li {% if app.request.get('_route') == 'app_main_courses_users_seminars' or
+                        app.request.get('_route') == 'app_main_modules_seminar_show'
+                    %}
+                        class="active"
+                    {% endif %}>
+                    <a href="{{ path('app_main_courses_users_seminars', {'id':course.id, 'userId':user.id}) }}">
+                        {{ 'navigation.seminars'|trans }}
+                    </a>
+                </li>
+                <li>
+                    <a href="">Homework</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+{% endif %}

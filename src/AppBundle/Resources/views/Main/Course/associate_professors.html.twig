@@ -31,7 +31,7 @@
                     {% for assistant in course.assistants %}
                         <li class="course-row">
                             <div class="avatar-container s40">
-                                <a href="{{ path('app_main_users_show', {'id':assistant.id}) }}">
+                                <a href="{{ path('app_main_courses_users_profile', {'id':course.id, 'userId':assistant.id}) }}">
                                     {% if assistant.avatar %}
                                         <img class="avatar project-avatar s40" src="{{ asset('bundles/app/assets/images/avatar.jpg') }}"/>
                                     {% else %}
@@ -41,7 +41,7 @@
                             </div>
                             <div class="course-details">
                                 <h4 class="m-t-0 m-b-0">
-                                    <a href="{{ path('app_main_users_show', {'id':assistant.id}) }}">
+                                    <a href="{{ path('app_main_courses_users_profile', {'id':course.id, 'userId':assistant.id}) }}">
                                         {{ assistant.fullName }}
                                     </a>
                                 </h4>

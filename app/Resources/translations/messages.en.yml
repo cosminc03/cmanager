@@ -90,7 +90,7 @@ paragraph:
 small:
     no_associate: No professor associated to your course.
     no_course_modules: No course modules associated to this course.
-    no_seminar_modules: No seminar modules associated to this course.
+    no_seminar_modules: No seminar modules associated to this course from this professor.
     no_professors: No professor found.
 
 label:
@@ -282,6 +282,7 @@ navigation:
     announcements: Announcements
     settings: Settings
     professors: Professors
+    profile: Profile
 
 tooltip:
     edit: Edit

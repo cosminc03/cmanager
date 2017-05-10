@@ -2,6 +2,7 @@
 
 {% trans_default_domain 'messages' %}
 
+{% set user = module.author %}
 {% set course = module.course %}
 {% if module.isCourse %}
     {% set navCourse = true %}
@@ -19,14 +20,14 @@
                     {% else %}
                         <a href="{{ path('app_main_modules_seminar_edit', {'id':module.id}) }}">
                     {% endif %}
-                        <button class="btn bgm-blue waves-effect m-t-5 text-transform-initial f-15">
-                            {% if module.isCourse %}
-                                {{ 'button.edit_course_module'|trans }}
-                            {% else %}
-                                {{ 'button.edit_seminar_module'|trans }}
-                            {% endif %}
-                        </button>
-                    </a>
+                            <button class="btn bgm-blue waves-effect m-t-5 text-transform-initial f-15">
+                                {% if module.isCourse %}
+                                    {{ 'button.edit_course_module'|trans }}
+                                {% else %}
+                                    {{ 'button.edit_seminar_module'|trans }}
+                                {% endif %}
+                            </button>
+                        </a>
                 {% endif %}
                 {% if module.attachmentName %}
                     <a href="{{ path('app_main_modules_download_attachment', {'id':module.id}) }}">
@@ -65,28 +66,28 @@
                 <div class="pmbb-view">
                     <div id="comments">
                         {% if not module.posts|length > 0 %}
-                            <div id="no-comments">{{ 'message.no_comments'|trans }}
-                        {%  else %}
-                            {% for post in module.posts %}
-                                <div class="popover right comment-wrapper">
-                                    <div class="arrow"></div>
-                                    <div class="popover-content">
-                                        <p>{{ post.text }}</p>
-                                    </div>
-                                    <div class="popover-user p-b-10 f-14">
+                        <div id="no-comments">{{ 'message.no_comments'|trans }}
+                            {%  else %}
+                                {% for post in module.posts %}
+                                    <div class="popover right comment-wrapper">
+                                        <div class="arrow"></div>
+                                        <div class="popover-content">
+                                            <p>{{ post.text }}</p>
+                                        </div>
+                                        <div class="popover-user p-b-10 f-14">
                                         <span class="p-l-15">
                                             {{ 'message.created_by'|trans }} {{ post.createdBy.fullName }}
                                         </span>
-                                        <span class="pull-right p-r-15">
+                                            <span class="pull-right p-r-15">
                                             {{ 'message.created_at'|trans }} {{ post.createdAt|date("d/m/Y H:i:s") }}
                                         </span>
+                                        </div>
                                     </div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-                <div id="add-comment" class="m-t-25">
+                    <div id="add-comment" class="m-t-25">
                         <div class="c-black f-500 m-b-10">{{ 'message.new_comment'|trans }}</div>
                         <div class="form-group">
                             <div class="fg-line">
@@ -140,10 +141,10 @@
                                     '</div>' +
                                     '<div class=\"popover-user p-b-10 f-14\">' +
                                     '<span class=\"p-l-15\">' +
-                                        '{{ 'message.created_by'|trans }} ' + data['createdByFullName'] +
+                                    '{{ 'message.created_by'|trans }} ' + data['createdByFullName'] +
                                     '</span>' +
                                     '<span class=\"pull-right p-r-15\">' +
-                                        '{{ 'message.created_at'|trans }} ' + data['createdAt'] +
+                                    '{{ 'message.created_at'|trans }} ' + data['createdAt'] +
                                     '</span>' +
                                     '</div>' +
                                     '</div>');

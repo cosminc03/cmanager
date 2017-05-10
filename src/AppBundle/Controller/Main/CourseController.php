@@ -453,7 +453,6 @@ class CourseController extends BaseController
             [
                 'course' => $course,
                 'seminarModules' => $seminarModules,
-                'isCourse' => false,
             ]
         );
     }
@@ -506,5 +505,70 @@ class CourseController extends BaseController
         ];
 
         return new JsonResponse($message);
+    }
+
+    /**
+     * Get profile for an associate professor for a Course entity.
+     *
+     * @Route("/{id}/users/{userId}/profile", options={"expose"=true}, name="app_main_courses_users_profile")
+     * @Method({"GET"})
+     *
+     * @param Course $course
+     * @param int   $userId
+     *
+     * @return Response
+     */
+    public function userProfileAction(Course $course, $userId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em
+            ->getRepository(User::class)
+            ->find($userId)
+        ;
+
+        return $this->render(
+            'AppBundle:Main/Course:associate_profile.html.twig',
+            [
+                'course' => $course,
+                'user' => $user,
+            ]
+        );
+    }
+
+    /**
+     * Get seminars for an associate professor for a Course entity.
+     *
+     * @Route("/{id}/users/{userId}/seminars", options={"expose"=true}, name="app_main_courses_users_seminars")
+     * @Method({"GET"})
+     *
+     * @param Course $course
+     * @param int   $userId
+     *
+     * @return Response
+     */
+    public function userSeminarsAction(Course $course, $userId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em
+            ->getRepository(User::class)
+            ->find($userId)
+        ;
+
+        $seminarModules = $em
+            ->getRepository(Module::class)
+            ->findBy([
+                'author' => $user,
+                'course' => $course
+            ])
+        ;
+
+        return $this->render(
+            'AppBundle:Main/Module:list_seminars.html.twig',
+            [
+                'course' => $course,
+                'seminarModules' => $seminarModules,
+                'user' => $user,
+            ]
+        );
     }
 }
