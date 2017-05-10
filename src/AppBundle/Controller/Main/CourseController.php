@@ -445,6 +445,7 @@ class CourseController extends BaseController
             ->findBy([
                 'course' => $course,
                 'isSeminar' => true,
+                'author' => $this->getUser(),
             ])
         ;
 
@@ -453,6 +454,7 @@ class CourseController extends BaseController
             [
                 'course' => $course,
                 'seminarModules' => $seminarModules,
+                'user' => $this->getUser(),
             ]
         );
     }
@@ -558,7 +560,8 @@ class CourseController extends BaseController
             ->getRepository(Module::class)
             ->findBy([
                 'author' => $user,
-                'course' => $course
+                'course' => $course,
+                'isSeminar' => true,
             ])
         ;
 

@@ -7,7 +7,6 @@ use AppBundle\Entity\Course;
 use AppBundle\Entity\Module;
 use AppBundle\Form\Module\Main\CreateType;
 use AppBundle\Form\Module\Main\EditType;
-use AppBundle\Repository\PostRepository;
 use AppBundle\Security\CourseVoter;
 use AppBundle\Security\ModuleVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -156,6 +155,15 @@ class ModuleController extends BaseController
                     ->get('translator')
                     ->trans('success.seminar_module.create', [], 'flashes')
             );
+
+            if ($module->getAuthor() == $this->getUser()) {
+                return $this->redirectToRoute(
+                    'app_main_courses_seminar_modules',
+                    [
+                        'id' => $courseId
+                    ]
+                );
+            }
 
             return $this->redirectToRoute(
                 'app_main_courses_users_seminars',
