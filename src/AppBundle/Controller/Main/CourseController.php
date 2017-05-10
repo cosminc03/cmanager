@@ -7,6 +7,7 @@ use AppBundle\Entity\Course;
 use AppBundle\Entity\Module;
 use AppBundle\Entity\User;
 use AppBundle\Form\Course\Main\CreateType;
+use AppBundle\Security\CourseVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,12 +34,28 @@ class CourseController extends BaseController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $courses = $em
-            ->getRepository(Course::class)
-            ->findBy([
-                'author' => $this->getUser(),
-            ])
-        ;
+        if (in_array(User::ROLE_STUDENT, $this->getUser()->getRoles())) {
+            $courses = $em
+                ->getRepository(Course::class)
+                ->findBySubscription($this->getUser())
+            ;
+        }
+
+        if (in_array(User::ROLE_PROFESSOR, $this->getUser()->getRoles())) {
+            $courses = $em
+                ->getRepository(Course::class)
+                ->findBy([
+                    'author' => $this->getUser(),
+                ])
+            ;
+        }
+
+        if (in_array(User::ROLE_ASSOCIATE, $this->getUser()->getRoles())) {
+            $courses = $em
+                ->getRepository(Course::class)
+                ->findByAssociates($this->getUser())
+            ;
+        }
 
         return $this->render(
             'AppBundle:Main/Course:list.html.twig',
@@ -49,8 +66,6 @@ class CourseController extends BaseController
     }
 
     /**
-     * TODO: change to show courses for explore page
-     *
      * List all Course entities.
      *
      * @Route("/explore", name="app_main_courses_explore")
@@ -64,13 +79,11 @@ class CourseController extends BaseController
 
         $courses = $em
             ->getRepository(Course::class)
-            ->findBy([
-                'author' => $this->getUser(),
-            ])
+            ->findAll()
         ;
 
         return $this->render(
-            'AppBundle:Main/Course:list.html.twig',
+            'AppBundle:Main/Course:explore.html.twig',
             [
                 'courses' => $courses,
             ]
@@ -119,6 +132,8 @@ class CourseController extends BaseController
     public function createAction(Request $request)
     {
         $course = new Course();
+        $this->denyAccessUnlessGranted(CourseVoter::CREATE, $course);
+
         $form = $this->createForm(CreateType::class, $course);
         $form->handleRequest($request);
 
@@ -164,6 +179,8 @@ class CourseController extends BaseController
      */
     public function editAction(Request $request, Course $course)
     {
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+
         $form = $this->createForm(CreateType::class, $course);
         $form->handleRequest($request);
 
@@ -235,6 +252,8 @@ class CourseController extends BaseController
      */
     public function deleteAction(Request $request, Course $course)
     {
+        $this->denyAccessUnlessGranted(CourseVoter::DELETE, $course);
+
         $this
             ->get('session')
             ->getFlashBag()
@@ -437,5 +456,55 @@ class CourseController extends BaseController
                 'isCourse' => false,
             ]
         );
+    }
+
+    /**
+     * Subscribe a Course entity.
+     *
+     * @Route("/{id}/subscribe", options={"expose"=true}, name="app_main_courses_subscribe")
+     * @Method({"GET"})
+     *
+     * @param Course $course
+     *
+     * @return JsonResponse
+     */
+    public function subscribeAction(Course $course)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $course->addSubscriber($this->getUser());
+        $em->persist($course);
+        $em->flush();
+
+        $message = [
+            'subscribed' => 'success',
+        ];
+
+        return new JsonResponse($message);
+    }
+
+    /**
+     * Unsubscribe a Course entity.
+     *
+     * @Route("/{id}/unsubscribe", options={"expose"=true}, name="app_main_courses_unsubscribe")
+     * @Method({"GET"})
+     *
+     * @param Course $course
+     *
+     * @return JsonResponse
+     */
+    public function unsubscribeAction(Course $course)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $course->removeSubscriber($this->getUser());
+        $em->persist($course);
+        $em->flush();
+
+        $message = [
+            'unsubscribed' => 'success',
+        ];
+
+        return new JsonResponse($message);
     }
 }

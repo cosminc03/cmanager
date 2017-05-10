@@ -23,7 +23,12 @@ class User extends BaseUser
 {
     const GENDER_MALE = 'gender.male';
     const GENDER_FEMALE = 'gender.female';
+
     const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_STUDENT = 'ROLE_STUDENT';
+    const ROLE_PROFESSOR = 'ROLE_PROFESSOR';
+    const ROLE_ASSOCIATE = 'ROLE_ASSOCIATE';
+
     const GRAVATAR_BASE_URL = 'https://www.gravatar.com/avatar/';
 
     /**
@@ -191,6 +196,15 @@ class User extends BaseUser
      * @var string
      */
     private $avatar;
+
+    /**
+     * @var ArrayCollection|Course[]
+     *
+     * @Serializer\Exclude()
+     *
+     * @ORM\ManyToMany(targetEntity="Course", mappedBy="subscribers")
+     */
+    private $subscribedCourses;
 
     /**
      * @var \DateTime
@@ -865,5 +879,38 @@ class User extends BaseUser
     public function getYearOfStudy()
     {
         return $this->yearOfStudy;
+    }
+
+    /**
+     * Add subscribedCourses
+     *
+     * @param Course $subscribedCourses
+     * @return User
+     */
+    public function addSubscribedCourse(Course $subscribedCourses)
+    {
+        $this->subscribedCourses[] = $subscribedCourses;
+
+        return $this;
+    }
+
+    /**
+     * Remove subscribedCourses
+     *
+     * @param Course $subscribedCourses
+     */
+    public function removeSubscribedCourse(Course $subscribedCourses)
+    {
+        $this->subscribedCourses->removeElement($subscribedCourses);
+    }
+
+    /**
+     * Get subscribedCourses
+     *
+     * @return ArrayCollection|Course[]
+     */
+    public function getSubscribedCourses()
+    {
+        return $this->subscribedCourses;
     }
 }

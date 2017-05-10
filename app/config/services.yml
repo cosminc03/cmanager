@@ -22,3 +22,28 @@ services:
     app.service.course_attachment_directory_namer:
         class: AppBundle\Services\DirectoryNamer
         arguments: [%kernel.root_dir%]
+
+### HANDLERS ###
+    app.security.main.access_denied_handler:
+        class: AppBundle\Security\AccessDeniedMainHandler
+        arguments:
+            - "@twig"
+
+### VOTERS ###
+    app.user_voter:
+        class: AppBundle\Security\UserVoter
+        tags:
+            - { name: security.voter }
+        public: false
+
+    app.course_voter:
+        class: AppBundle\Security\CourseVoter
+        tags:
+            - { name: security.voter }
+        public: false
+
+    app.module_voter:
+        class: AppBundle\Security\ModuleVoter
+        tags:
+            - { name: security.voter }
+        public: false

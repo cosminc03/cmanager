@@ -158,6 +158,24 @@ class Course
     private $assistants;
 
     /**
+     * @var ArrayCollection|User[]
+     *
+     * @Serializer\Exclude()
+     *
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="subscribedCourses")
+     * @ORM\JoinTable(
+     *     name="course_subscriber",
+     *     joinColumns={
+     *          @ORM\JoinColumn(name="course_id")
+     *     },
+     *     inverseJoinColumns={
+     *          @ORM\JoinColumn(name="subscriber_id")
+     *     }
+     * )
+     */
+    private $subscribers;
+
+    /**
      * @var ArrayCollection|Announcement[]
      *
      * @Serializer\Exclude()
@@ -642,5 +660,38 @@ class Course
     public function getBibliography()
     {
         return $this->bibliography;
+    }
+
+    /**
+     * Add subscribers
+     *
+     * @param User $subscribers
+     * @return Course
+     */
+    public function addSubscriber(User $subscribers)
+    {
+        $this->subscribers[] = $subscribers;
+
+        return $this;
+    }
+
+    /**
+     * Remove subscribers
+     *
+     * @param User $subscribers
+     */
+    public function removeSubscriber(User $subscribers)
+    {
+        $this->subscribers->removeElement($subscribers);
+    }
+
+    /**
+     * Get subscribers
+     *
+     * @return ArrayCollection|User[]
+     */
+    public function getSubscribers()
+    {
+        return $this->subscribers;
     }
 }

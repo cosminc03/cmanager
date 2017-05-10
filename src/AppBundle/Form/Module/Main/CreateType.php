@@ -29,8 +29,8 @@ class CreateType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('isCourse', CheckboxType::class)
-            ->add('isSeminar', CheckboxType::class)
+            /*->add('isCourse', CheckboxType::class)
+            ->add('isSeminar', CheckboxType::class)*/
             ->add('content', CKEditorType::class, [
                 'constraints' => [
                     new NotBlank([

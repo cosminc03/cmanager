@@ -6,7 +6,7 @@
     <div class="row m-t-r-35">
         <div class="p-relative clearfix m-b-10">
             <h3>{{ 'heading.list_seminar_modules'|trans }}</h3>
-            <a href="{{ path('app_main_modules_create', {'courseId':course.id, 'isCourse':false}) }}">
+            <a href="{{ path('app_main_modules_seminar_create', {'courseId':course.id}) }}">
                 <button class="btn bgm-green waves-effect m-t-5 text-transform-initial f-15 p-absolute add-module">
                     {{ 'button.add_seminar_module'|trans }}
                 </button>
@@ -42,7 +42,7 @@
                                 {{ seminarModule.content | raw }}
                             </div>
                             <div class="panel-controls">
-                                <a href="{{ path('app_main_modules_show', {'id':seminarModule.id, 'isCourse':isCourse}) }}">
+                                <a href="{{ path('app_main_modules_show', {'id':seminarModule.id}) }}">
                                     <button class="btn bgm-blue waves-effect m-t-5 text-transform-initial f-15">
                                         {{ 'button.view_more'|trans }}
                                     </button>

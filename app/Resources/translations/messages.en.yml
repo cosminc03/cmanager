@@ -11,6 +11,7 @@ message:
     already_have_account: Already have account and password?
     removed_course: Removed course cannot be restored!
     removed_course_module: Removed course module cannot be restored!
+    removed_seminar_module: Removed seminar module cannot be restored!
     no_comments: No comments for this module. Be the first!
     new_comment: New comment
     comment_placeholder: Type new comment...
@@ -20,6 +21,10 @@ message:
     member_since: Member since
     change_avatar: You can change your avatar here or remove the current avatar to revert to
     profile_information: This information will appear on your profile
+    explore_courses: When new courses will be added they will be found here.
+    subscribe_to_course: Subscribe to one course and you will find here your subscribed courses.
+    professor_courses: Add one course and you will find here your personal courses.
+    associate_courses: After association with a course you will find here your associated courses.
 
 title:
     homepage_admin: CManager Admin
@@ -52,6 +57,9 @@ heading:
     edit_course_module: Edit course module
     remove_course_module: Remove course module
     list_course_modules: List of course modules
+    new_seminar_module: New seminar module
+    edit_seminar_module: Edit seminar module
+    remove_seminar_module: Remove seminar module
     list_seminar_modules: List of seminar modules
     title: Title
     content: Content
@@ -61,6 +69,11 @@ heading:
     public_avatar: Public Avatar
     upload_avatar: Upload new avatar
     main_setting: Main Settings
+    no_courses: No courses found
+    not_subscribed: You are not subscribed to any course yet.
+    professor_no_courses: You don't have courses yet.
+    assciate_no_courses: You are not associated to any course yet.
+    professors_list: List of professors
 
 paragraph:
     new_course: Create your course by filling out the inputs from the form
@@ -70,11 +83,15 @@ paragraph:
     new_course_module: Create new course module for new course topic.
     edit_course_module: Update your course module infos by filling out the inputs from the form
     remove_course_module: Removing the course module will delete all related resources
+    new_seminar_module: Create new seminar module for a course.
+    edit_seminar_module: Update your seminar module infos by filling out the inputs from the form
+    remove_seminar_module: Removing the seminar will delete all related resources
 
 small:
     no_associate: No professor associated to your course.
     no_course_modules: No course modules associated to this course.
     no_seminar_modules: No seminar modules associated to this course.
+    no_professors: No professor found.
 
 label:
     email: Email address
@@ -120,6 +137,9 @@ label:
         bibliography: Course bibliograhy(optional)
     seminar:
         seminar: Seminar
+        title: Seminar module title
+        content: Seminar module content
+        attachment: Seminar module attachment
     course_module:
         course: Course
         title: Course module title
@@ -146,6 +166,9 @@ help_block:
     course_module:
         title: Enter title, so people know the full title of the course module.
         content: Enter course module content.
+    seminar_module:
+        title: Enter title, so people know the full title of the seminar module.
+        content: Enter seminar module content.
     user:
         username: Enter your username, so people you know can recognize you.
         first_name: Enter your first name.
@@ -210,6 +233,7 @@ button:
     create_course_module: Create course module
     remove_course_module: Remove course module
     create_seminar_module: Create seminar module
+    remove_seminar_module: Remove seminar module
     add_comment: Add comment
     update_profile_settings: Update profile settings
 
@@ -247,7 +271,7 @@ evaluation:
     exam: Exam
 
 navigation:
-    your_courses: Your courses
+    my_courses: My courses
     starred_courses: Starred courses
     explore_courses: Explore courses
     infos: Infos
@@ -257,6 +281,7 @@ navigation:
     homework: Homework
     announcements: Announcements
     settings: Settings
+    professors: Professors
 
 tooltip:
     edit: Edit

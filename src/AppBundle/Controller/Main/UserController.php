@@ -5,6 +5,8 @@ namespace AppBundle\Controller\Main;
 use AppBundle\Controller\BaseController;
 use AppBundle\Entity\User;
 use AppBundle\Form\User\Main\CreateType;
+use AppBundle\Security\UserVoter;
+use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -51,6 +53,8 @@ class UserController extends BaseController
      */
     public function editAction(Request $request, User $user)
     {
+        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
+
         $form = $this->createForm(CreateType::class, $user);
         $form->handleRequest($request);
 
@@ -105,6 +109,35 @@ class UserController extends BaseController
             'AppBundle:Main/User:show.html.twig',
             [
                 'user' => $user,
+            ]
+        );
+    }
+
+    /**
+     * Display User entities with professor and associate roles.
+     *
+     * @Route("/professors", name="app_main_users_professors")
+     * @Method("GET")
+     *
+     * @return Response
+     */
+    public function listProfessorsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $users = $em->getRepository(User::class)->findAll();
+
+        $professors = new ArrayCollection();
+        /** @var User $user */
+        foreach ($users as $user) {
+            if (in_array(User::ROLE_PROFESSOR, $user->getRoles()) || in_array(User::ROLE_ASSOCIATE, $user->getRoles())) {
+                $professors->add($user);
+            }
+        }
+
+        return $this->render(
+            'AppBundle:Main/User:list_professors.html.twig',
+            [
+                'professors' => $professors,
             ]
         );
     }

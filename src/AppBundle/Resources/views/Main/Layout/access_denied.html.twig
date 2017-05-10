@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+    <!--[if IE 9 ]><html class="ie9"><![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Material Admin</title>
+
+        <!-- Vendor CSS -->
+        <link href="{{ asset('assets/admin/vendors/bower_components/animate.css/animate.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/admin/vendors/bower_components/material-design-iconic-font/dist/css/material-design-iconic-font.min.css') }}" rel="stylesheet">
+
+        <!-- CSS -->
+        <link href="{{ asset('assets/admin/css/app_1.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/admin/css/app_2.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/app/assets/css/main_style.css') }}" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="four-zero">
+            <div class="fz-block">
+                <div>
+                    <img class="s90" src="{{ asset('assets/images/stop-hands.png') }}">
+                </div>
+                <h2 class="f-s-50">Access Denied</h2>
+                <small class="f-18">You don't have permission to access this page</small>
+
+                <div class="fzb-links">
+                    <a href="{{ path('app_main_courses_list') }}"><i class="zmdi zmdi-home"></i></a>
+                </div>
+            </div>
+        </div>
+
+        {% include 'AppBundle:Admin/Layout:older_ie_version.html.twig' %}
+    </body>
+</html>

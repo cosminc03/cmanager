@@ -7,15 +7,16 @@
     <div class="cover-block user-cover-block p-b-15">
         <div class="cover-controls">
             <ul class="actions">
-                <li class="m-r-10">
-                    <a href="{{ path('app_main_courses_edit', {'id': course.id}) }}">
-                        <i class="btn zmdi zmdi-edit" data-toggle="tooltip" data-placement="bottom" data-original-title="Edit"></i>
-                    </a>
-                </li>
+                {% if constant('AppBundle\\Entity\\User::ROLE_PROFESSOR') in app.user.roles and app.user == course.author %}
+                    <li class="m-r-10">
+                        <a href="{{ path('app_main_courses_edit', {'id': course.id}) }}">
+                            <i class="btn zmdi zmdi-edit" data-toggle="tooltip" data-placement="bottom" data-original-title="Edit"></i>
+                        </a>
+                    </li>
+                {% endif %}
                 <li>
-                    <a href="">
-                        <i class="btn zmdi zmdi-wifi-alt" data-toggle="tooltip" data-placement="bottom" data-original-title="Subscribe"></i>
-                    </a>
+                    <i class="btn zmdi zmdi-wifi subscribe {% if app.user in course.subscribers %}hidden{% else %}show{% endif %}" data-toggle="tooltip" data-placement="bottom" data-original-title="Subscribe" data-message="You have successfully subscribed to this course" data-type="success"></i>
+                    <i class="btn zmdi zmdi-wifi-off unsubscribe {% if app.user in course.subscribers %}show{% else %}hidden{% endif %}" data-toggle="tooltip" data-placement="bottom" data-original-title="Unsubscribe" data-message="You have successfully unsubscribed to this course" data-type="danger"></i>
                 </li>
             </ul>
         </div>
@@ -109,4 +110,97 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        function notify (message, type, from, align, icon, animIn, animOut) {
+            $.growl({
+                icon: icon,
+                message: message,
+                url: ''
+            },{
+                element: 'body',
+                type: type,
+                allow_dismiss: true,
+                placement: {
+                    from: from,
+                    align: align
+                },
+                offset: {
+                    x: 20,
+                    y: 85
+                },
+                spacing: 10,
+                z_index: 1031,
+                delay: 2500,
+                timer: 1000,
+                url_target: '_blank',
+                mouse_over: false,
+                animate: {
+                    enter: animIn,
+                    exit: animOut
+                },
+                icon_type: 'class',
+                template: '<div data-growl="container" class="alert" role="alert">' +
+                            '<button type="button" class="close" data-growl="dismiss">' +
+                            '<span aria-hidden="true">&times;</span>' +
+                            '<span class="sr-only">Close</span>' +
+                            '</button>' +
+                            '<span data-growl="icon"></span>' +
+                            '<span data-growl="message"></span>' +
+                            '<a href="#" data-growl="url"></a>' +
+                            '</div>'
+            });
+        };
+
+        $(document).ready(function () {
+            var routeParams = {},
+                message,
+                nType;
+            routeParams['id'] = {{ course.id }};
+
+            $('.subscribe').click(function () {
+                message = $(this).attr('data-message');
+                nType = $(this).attr('data-type');
+
+                $.ajax({
+                    url: Routing.generate('app_main_courses_subscribe', routeParams, true),
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.subscribed === 'success') {
+                            notify(message, nType);
+
+                            $('.subscribe').removeClass('show').addClass('hidden');
+                            $('.unsubscribe').removeClass('hidden').addClass('show');
+                        } else {
+                        }
+                    }
+                });
+            });
+
+            $('.unsubscribe').click(function () {
+                message = $(this).attr('data-message');
+                nType = $(this).attr('data-type');
+
+                $.ajax({
+                    url: Routing.generate('app_main_courses_unsubscribe', routeParams, true),
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.unsubscribed === 'success') {
+                            notify(message, nType);
+
+                            $('.subscribe').removeClass('hidden').addClass('show');
+                            $('.unsubscribe').removeClass('show').addClass('hidden');
+                        } else {
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}
