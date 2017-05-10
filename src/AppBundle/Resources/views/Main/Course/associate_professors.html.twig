@@ -3,23 +3,25 @@
 {% trans_default_domain 'messages' %}
 
 {% block body_content %}
-    <div class="row m-t-r-35">
-        <div class="nav-controls clearfix">
-            <p class="slead m-b-10">{{ 'paragraph.search_user'|trans }}</p>
-            <div class="col-sm-4">
-                <select class="chosen" id="assistants" data-placeholder="Choose a professor...">
-                    <option class="reset-selection">{{ 'option.professor'|trans }}</option>
-                    {% set index = 1 %}
-                    {% for professor in professors %}
-                        <option class="pick-assistant" id="{{ 'index' ~ index }}" value="{{ professor.id }}">{{ professor.fullName }}</option>
-                        {% set index = index + 1 %}
-                    {% endfor %}
-                </select>
+    {% if constant('AppBundle\\Entity\\User::ROLE_PROFESSOR') in app.user.roles and app.user == course.author %}
+        <div class="row m-t-r-35">
+            <div class="nav-controls clearfix">
+                <p class="slead m-b-10">{{ 'paragraph.search_user'|trans }}</p>
+                <div class="col-sm-4">
+                    <select class="chosen" id="assistants" data-placeholder="Choose a professor...">
+                        <option class="reset-selection">{{ 'option.professor'|trans }}</option>
+                        {% set index = 1 %}
+                        {% for professor in professors %}
+                            <option class="pick-assistant" id="{{ 'index' ~ index }}" value="{{ professor.id }}">{{ professor.fullName }}</option>
+                            {% set index = index + 1 %}
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
+            <div id="associate-professor-component"></div>
         </div>
-        <div id="associate-professor-component"></div>
-    </div>
-    <div class="row">
+    {% endif %}
+    <div class="row {% if app.user != course.author %} m-t-r-35 {% endif %}">
         <h3>{{ 'heading.associates_list'|trans }}</h3>
         <div id="associate-professors">
             {% if not course.assistants|length > 0 %}
@@ -29,13 +31,17 @@
                     {% for assistant in course.assistants %}
                         <li class="course-row">
                             <div class="avatar-container s40">
-                                <a href="#">
-                                    <img class="avatar project-avatar s40" src="{{ asset('bundles/app/assets/images/avatar.jpg') }}"/>
+                                <a href="{{ path('app_main_users_show', {'id':assistant.id}) }}">
+                                    {% if assistant.avatar %}
+                                        <img class="avatar project-avatar s40" src="{{ asset('bundles/app/assets/images/avatar.jpg') }}"/>
+                                    {% else %}
+                                        <img class="avatar project-avatar s40" src="{{ assistant.gravatar }}"/>
+                                    {% endif %}
                                 </a>
                             </div>
                             <div class="course-details">
                                 <h4 class="m-t-0 m-b-0">
-                                    <a href="#">
+                                    <a href="{{ path('app_main_users_show', {'id':assistant.id}) }}">
                                         {{ assistant.fullName }}
                                     </a>
                                 </h4>
@@ -45,13 +51,15 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="controls">
-                                <span class="m-l-10">
-                                    <button class="btn bgm-red waves-effect m-t-5 text-transform-initial f-15 remove-associate" data-id="{{ assistant.id }}">
-                                        {{ 'button.remove'|trans }}
-                                    </button>
-                                </span>
-                            </div>
+                            {% if constant('AppBundle\\Entity\\User::ROLE_PROFESSOR') in app.user.roles and app.user == course.author %}
+                                <div class="controls">
+                                    <span class="m-l-10">
+                                        <button class="btn bgm-red waves-effect m-t-5 text-transform-initial f-15 remove-associate" data-id="{{ assistant.id }}">
+                                            {{ 'button.remove'|trans }}
+                                        </button>
+                                    </span>
+                                </div>
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </ul>

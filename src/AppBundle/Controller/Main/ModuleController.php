@@ -7,6 +7,9 @@ use AppBundle\Entity\Course;
 use AppBundle\Entity\Module;
 use AppBundle\Form\Module\Main\CreateType;
 use AppBundle\Form\Module\Main\EditType;
+use AppBundle\Repository\PostRepository;
+use AppBundle\Security\CourseVoter;
+use AppBundle\Security\ModuleVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -25,31 +28,33 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class ModuleController extends BaseController
 {
     /**
-     * Create a new Module entity.
+     * Create a new Course Module entity.
      *
-     * @Route("/create", name="app_main_modules_create")
+     * @Route("/course/create", name="app_main_modules_course_create")
      * @Method({"GET", "POST"})
      *
      * @param Request $request
      *
      * @return Response|RedirectResponse
      */
-    public function createAction(Request $request)
+    public function createCourseAction(Request $request)
     {
+        $module = new Module();
+        $this->denyAccessUnlessGranted(ModuleVoter::CREATE_COURSE, $module);
+
         $em = $this->getDoctrine()->getManager();
         $getParams = $request->query;
 
         if (!empty($getParams)) {
             $courseId = $getParams->get('courseId');
-            $isCourse = $getParams->get('isCourse');
         }
 
-        $module = new Module();
         $form = $this->createForm(CreateType::class, $module);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $module->setAuthor($this->getUser());
+            $module->setIsCourse(true);
 
             if ($form->get('attachmentFile')->getData()) {
                 /** @var UploadedFile $attachment */
@@ -72,53 +77,107 @@ class ModuleController extends BaseController
             $em->flush();
 
             $flashBag =$this->get('session')->getFlashBag();
+            $flashBag->set(
+                'success',
+                $this
+                    ->get('translator')
+                    ->trans('success.course_module.create', [], 'flashes')
+            );
 
-
-            if ($isCourse) {
-                $flashBag->set(
-                    'success',
-                    $this
-                        ->get('translator')
-                        ->trans('success.course_module.create', [], 'flashes')
-                );
-
-                return $this->redirectToRoute(
-                    'app_main_courses_course_modules',
-                    [
-                        'id' => $courseId,
-                    ]
-                );
-            } else {
-                $flashBag->set(
-                    'success',
-                    $this
-                        ->get('translator')
-                        ->trans('success.seminar_module.create', [], 'flashes')
-                );
-
-                return $this->redirectToRoute(
-                    'app_main_courses_seminar_modules',
-                    [
-                        'id' => $courseId,
-                    ]
-                );
-            }
+            return $this->redirectToRoute(
+                'app_main_courses_course_modules',
+                [
+                    'id' => $courseId,
+                ]
+            );
         }
 
         return $this->render(
-            'AppBundle:Main/Module:create.html.twig',
+            'AppBundle:Main/Module:create_course.html.twig',
             [
                 'form' => $form->createView(),
                 'courseId' => $courseId,
-                'isCourse' => $isCourse,
             ]
         );
     }
 
     /**
-     * Edit Module entity.
+     * Create a new Seminar Module entity.
      *
-     * @Route("/{id}/edit", name="app_main_modules_edit")
+     * @Route("/seminar/create", name="app_main_modules_seminar_create")
+     * @Method({"GET", "POST"})
+     *
+     * @param Request $request
+     *
+     * @return Response|RedirectResponse
+     */
+    public function createSeminarAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $getParams = $request->query;
+
+        if (!empty($getParams)) {
+            $courseId = $getParams->get('courseId');
+            $course = $em
+                ->getRepository(Course::class)
+                ->find($courseId)
+            ;
+        } else {
+            $course = null;
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::CREATE_SEMINAR, $course);
+
+        $module = new Module();
+        $form = $this->createForm(CreateType::class, $module);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $module->setAuthor($this->getUser());
+            $module->setIsSeminar(true);
+
+            if ($form->get('attachmentFile')->getData()) {
+                /** @var UploadedFile $attachment */
+                $attachment = $form->get('attachmentFile')->getData();
+                $module->setAttachmentOriginalName($attachment->getClientOriginalName());
+            }
+
+            if ($course) {
+                $module->setCourse($course);
+            }
+
+            $em->persist($module);
+            $em->flush();
+
+            $flashBag =$this->get('session')->getFlashBag();
+            $flashBag->set(
+                'success',
+                $this
+                    ->get('translator')
+                    ->trans('success.seminar_module.create', [], 'flashes')
+            );
+
+            return $this->redirectToRoute(
+                'app_main_courses_seminar_modules',
+                [
+                    'id' => $courseId,
+                ]
+            );
+        }
+
+        return $this->render(
+            'AppBundle:Main/Module:create_seminar.html.twig',
+            [
+                'form' => $form->createView(),
+                'courseId' => $courseId,
+            ]
+        );
+    }
+
+    /**
+     * Edit Course Module entity.
+     *
+     * @Route("/course/{id}/edit", name="app_main_modules_course_edit")
      * @Method({"GET", "POST"})
      *
      * @param Request $request
@@ -126,10 +185,9 @@ class ModuleController extends BaseController
      *
      * @return Response|RedirectResponse
      */
-    public function editAction(Request $request, Module $module)
+    public function editCourseAction(Request $request, Module $module)
     {
-        $getParams = $request->query;
-        $isCourse = $getParams->get('isCourse');
+        $this->denyAccessUnlessGranted(ModuleVoter::EDIT_COURSE, $module);
 
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(EditType::class, $module);
@@ -148,46 +206,83 @@ class ModuleController extends BaseController
             $em->flush();
 
             $flashBag = $this->get('session')->getFlashBag();
+            $flashBag->set(
+                'success',
+                $this
+                    ->get('translator')
+                    ->trans('success.course_module.edit', [], 'flashes')
+            )
+            ;
 
-            if ($isCourse) {
-                $flashBag->set(
-                    'success',
-                    $this
-                        ->get('translator')
-                        ->trans('success.course_module.edit', [], 'flashes')
-                )
-                ;
-
-                return $this->redirectToRoute(
-                    'app_main_courses_course_modules',
-                    [
-                        'id' => $module->getCourse()->getId(),
-                    ]
-                );
-            } else {
-                $flashBag->set(
-                    'success',
-                    $this
-                        ->get('translator')
-                        ->trans('success.seminar_module.edit', [], 'flashes')
-                )
-                ;
-
-                return $this->redirectToRoute(
-                    'app_main_courses_seminar_modules',
-                    [
-                        'id' => $module->getCourse()->getId(),
-                    ]
-                );
-            }
+            return $this->redirectToRoute(
+                'app_main_courses_course_modules',
+                [
+                    'id' => $module->getCourse()->getId(),
+                ]
+            );
         }
 
         return $this->render(
-            'AppBundle:Main/Module:edit.html.twig',
+            'AppBundle:Main/Module:edit_course.html.twig',
             [
                 'form' => $form->createView(),
                 'module' => $module,
-                'isCourse' => $isCourse,
+            ]
+        );
+    }
+
+    /**
+     * Edit Seminar Module entity.
+     *
+     * @Route("/seminar/{id}/edit", name="app_main_modules_seminar_edit")
+     * @Method({"GET", "POST"})
+     *
+     * @param Request $request
+     * @param Module  $module
+     *
+     * @return Response|RedirectResponse
+     */
+    public function editSeminarAction(Request $request, Module $module)
+    {
+        $this->denyAccessUnlessGranted(ModuleVoter::EDIT_SEMINAR, $module);
+
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(EditType::class, $module);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $module->setUpdatedAt(new \DateTime());
+
+            if ($form->get('attachmentFile')->getData()) {
+                /** @var UploadedFile $attachment */
+                $attachment = $form->get('attachmentFile')->getData();
+                $module->setAttachmentOriginalName($attachment->getClientOriginalName());
+            }
+
+            $em->persist($module);
+            $em->flush();
+
+            $flashBag = $this->get('session')->getFlashBag();
+            $flashBag->set(
+                'success',
+                $this
+                    ->get('translator')
+                    ->trans('success.seminar_module.edit', [], 'flashes')
+            );
+
+            return $this->redirectToRoute(
+                'app_main_courses_seminar_modules',
+                [
+                    'id' => $module->getCourse()->getId(),
+                ]
+            );
+        }
+
+        return $this->render(
+            'AppBundle:Main/Module:edit_seminar.html.twig',
+            [
+                'form' => $form->createView(),
+                'module' => $module,
             ]
         );
     }
@@ -220,9 +315,9 @@ class ModuleController extends BaseController
     }
 
     /**
-     * Deletes a Module entity.
+     * Deletes a Course Module entity.
      *
-     * @Route("/{id}/delete", options={"expose"=true}, name="app_main_modules_delete")
+     * @Route("/course/{id}/delete", options={"expose"=true}, name="app_main_modules_course_delete")
      * @Method({"GET"})
      *
      * @param Request    $request
@@ -230,29 +325,18 @@ class ModuleController extends BaseController
      *
      * @return RedirectResponse|JsonResponse
      */
-    public function deleteAction(Request $request, Module $module)
+    public function deleteCourseAction(Request $request, Module $module)
     {
-        $getParams = $request->query;
-        $isCourse = $getParams->get('isCourse');
-        $flashBag =  $this->get('session')->getFlashBag();
+        $this->denyAccessUnlessGranted(ModuleVoter::DELETE_COURSE, $module);
 
-        if ($isCourse) {
-            $flashBag->set(
-                'success',
-                $this
-                    ->get('translator')
-                    ->trans('success.course_module.delete.from_edit', [], 'flashes')
-            )
-            ;
-        } else {
-            $flashBag->set(
-                'success',
-                $this
-                    ->get('translator')
-                    ->trans('success.seminar_module.delete.from_edit', [], 'flashes')
-            )
-            ;
-        }
+        $flashBag =  $this->get('session')->getFlashBag();
+        $flashBag->set(
+            'success',
+            $this
+                ->get('translator')
+                ->trans('success.course_module.delete.from_edit', [], 'flashes')
+        );
+
 
         $course = $module->getCourse();
 
@@ -270,6 +354,51 @@ class ModuleController extends BaseController
 
         return $this->redirectToRoute(
             'app_main_courses_course_modules',
+            [
+                'id' => $course->getId(),
+            ]
+        );
+    }
+
+    /**
+     * Deletes a Seminar Module entity.
+     *
+     * @Route("/seminar/{id}/delete", options={"expose"=true}, name="app_main_modules_seminar_delete")
+     * @Method({"GET"})
+     *
+     * @param Request    $request
+     * @param Module     $module
+     *
+     * @return RedirectResponse|JsonResponse
+     */
+    public function deleteSeminarAction(Request $request, Module $module)
+    {
+        $this->denyAccessUnlessGranted(ModuleVoter::DELETE_SEMINAR, $module);
+
+        $flashBag =  $this->get('session')->getFlashBag();
+        $flashBag->set(
+            'success',
+            $this
+                ->get('translator')
+                ->trans('success.seminar_module.delete.from_edit', [], 'flashes')
+        );
+
+        $course = $module->getCourse();
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($module);
+        $em->flush();
+
+        if ($request->isXmlHttpRequest()) {
+            $message = [
+                'delete' => 'success',
+            ];
+
+            return new JsonResponse($message);
+        }
+
+        return $this->redirectToRoute(
+            'app_main_courses_seminar_modules',
             [
                 'id' => $course->getId(),
             ]

@@ -9,16 +9,13 @@
         <div class="cover-block user-cover-block p-b-15">
             <div class="cover-controls">
                 <ul class="actions">
-                    <li class="m-r-10">
-                        <a href="{{ path('app_main_users_edit', {'id':app.user.id}) }}">
-                            <i class="btn zmdi zmdi-edit" data-toggle="tooltip" data-placement="bottom" data-original-title="{{ 'tooltip.edit'|trans }}"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="">
-                            <i class="btn zmdi zmdi-wifi-alt" data-toggle="tooltip" data-placement="bottom" data-original-title="{{ 'tooltip.subscribe'|trans }}"></i>
-                        </a>
-                    </li>
+                    {% if app.user == user %}
+                        <li class="m-r-10">
+                            <a href="{{ path('app_main_users_edit', {'id':app.user.id}) }}">
+                                <i class="btn zmdi zmdi-edit" data-toggle="tooltip" data-placement="bottom" data-original-title="{{ 'tooltip.edit'|trans }}"></i>
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
             <div class="profile-header">

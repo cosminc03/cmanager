@@ -27,36 +27,13 @@
                     <option>Oldest created</option>
                 </select>
             </div>
-            {% if constant('AppBundle\\Entity\\User::ROLE_PROFESSOR') in app.user.roles %}
-                <a href="{{ path('app_main_courses_create') }}">
-                    <button class="btn bgm-green waves-effect m-t-5 text-transform-initial f-15">
-                        New course
-                    </button>
-                </a>
-            {% endif %}
         </div>
     </div>
 
-        {% for flash_message in app.session.flashBag.get('success') %}
-            <div class="row">
-                <div id="general-alert" class="alert alert-success m-t-15">
-                    <strong>{{ flash_message }}</strong>
-                </div>
-            </div>
-        {% endfor %}
-
     {% if not courses|length > 0 %}
         <div class="row">
-            {% if constant('AppBundle\\Entity\\User::ROLE_PROFESSOR') in app.user.roles %}
-                <h3>{{ 'heading.professor_no_courses'|trans }}</h3>
-                <small>{{ 'message.professor_courses'|trans }}</small>
-            {% elseif constant('AppBundle\\Entity\\User::ROLE_ASSOCIATE') in app.user.roles %}
-                <h3>{{ 'heading.assciate_no_courses'|trans }}</h3>
-                <small>{{ 'message.associate_courses'|trans }}</small>
-            {% else %}
-                <h3>{{ 'heading.not_subscribed'|trans }}</h3>
-                <small>{{ 'message.subscribe_to_course'|trans }}</small>
-            {% endif %}
+            <h3>{{ 'heading.no_courses'|trans }}</h3>
+            <small>{{ 'message.explore_courses'|trans }}</small>
         </div>
     {% else %}
         <div class="row">

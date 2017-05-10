@@ -2,57 +2,65 @@
 
 <div class="nav-wrapper clearfix">
     <nav class="ha-menu nav-links">
-        {% if app.request.get('_route') in ['app_main_courses_list', 'app_main_courses_starred', 'app_main_courses_explore'] %}
-            <ul>
-                <li {% if app.request.get('_route') == 'app_main_courses_list' %} class="active" {% endif %}>
-                    <a href="{{ path('app_main_courses_list') }}">
-                        {{ 'navigation.your_courses'|trans }}
-                    </a>
-                </li>
-                <li {% if app.request.get('_route') == 'app_main_courses_starred' %} class="active" {% endif %}>
-                    <a href="{{ path('app_main_courses_starred') }}">
-                        {{ 'navigation.starred_courses'|trans }}
-                    </a>
-                </li>
-                <li {% if app.request.get('_route') == 'app_main_courses_explore' %} class="active" {% endif %}>
-                    <a href="{{ path('app_main_courses_explore') }}">
-                        {{ 'navigation.explore_courses'|trans }}
-                    </a>
-                </li>
-            </ul>
-        {% else %}
-            <ul>
-                <li {% if app.request.get('_route') == 'app_main_courses_show' %} class="active" {% endif %}>
-                    <a href="{{ path('app_main_courses_show', {'id': course.id}) }}">
-                        {{ 'navigation.infos'|trans }}
-                    </a>
-                </li>
-                <li {% if app.request.get('_route') == 'app_main_courses_associate_professors' %} class="active" {% endif %}>
-                    <a href="{{ path('app_main_courses_associate_professors', {'id': course.id}) }}">
-                        {{ 'navigation.associate_proffesors'|trans }}
-                    </a>
-                </li>
-                <li {% if app.request.get('_route') == 'app_main_courses_course_modules' or navCourse is defined %} class="active" {% endif %}>
-                    <a href="{{ path('app_main_courses_course_modules', {'id': course.id}) }}">
-                        {{ 'navigation.courses'|trans }}
-                    </a>
-                </li>
-                <li {% if app.request.get('_route') == 'app_main_courses_seminar_modules' or navSeminar is defined %} class="active" {% endif %}>
-                    <a href="{{ path('app_main_courses_seminar_modules', {'id': course.id}) }}">
-                        {{ 'navigation.seminars'|trans }}
-                    </a>
-                </li>
-                <li {% if app.request.get('_route') == 'app_main_announcements_list_by_course' %} class="active" {% endif %}>
-                    <a href="#">
-                        {{ 'navigation.announcements'|trans }}
-                    </a>
-                </li>
-                <li {% if app.request.get('_route') == 'app_main_courses_edit' %} class="active" {% endif %}>
-                    <a href="{{ path('app_main_courses_edit', {'id': course.id}) }}">
-                        {{ 'navigation.settings'|trans }}
-                    </a>
-                </li>
-            </ul>
+        {% if app.request.get('_route') not in ['app_main_users_professors'] %}
+            {% if app.request.get('_route') in ['app_main_courses_list', 'app_main_courses_starred', 'app_main_courses_explore'] %}
+                <ul>
+                    <li {% if app.request.get('_route') == 'app_main_courses_list' %} class="active" {% endif %}>
+                        <a href="{{ path('app_main_courses_list') }}">
+                            {{ 'navigation.my_courses'|trans }}
+                        </a>
+                    </li>
+                    {% if constant('AppBundle\\Entity\\User::ROLE_STUDENT') not in app.user.roles %}
+                        <li {% if app.request.get('_route') == 'app_main_courses_starred' %} class="active" {% endif %}>
+                            <a href="{{ path('app_main_courses_starred') }}">
+                                {{ 'navigation.starred_courses'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li {% if app.request.get('_route') == 'app_main_courses_explore' %} class="active" {% endif %}>
+                        <a href="{{ path('app_main_courses_explore') }}">
+                            {{ 'navigation.explore_courses'|trans }}
+                        </a>
+                    </li>
+                </ul>
+            {% else %}
+                <ul>
+                    <li {% if app.request.get('_route') == 'app_main_courses_show' %} class="active" {% endif %}>
+                        <a href="{{ path('app_main_courses_show', {'id': course.id}) }}">
+                            {{ 'navigation.infos'|trans }}
+                        </a>
+                    </li>
+                    <li {% if app.request.get('_route') == 'app_main_courses_associate_professors' %} class="active" {% endif %}>
+                        <a href="{{ path('app_main_courses_associate_professors', {'id': course.id}) }}">
+                            {{ 'navigation.associate_proffesors'|trans }}
+                        </a>
+                    </li>
+                    <li {% if app.request.get('_route') == 'app_main_courses_course_modules' or navCourse is defined %} class="active" {% endif %}>
+                        <a href="{{ path('app_main_courses_course_modules', {'id': course.id}) }}">
+                            {{ 'navigation.courses'|trans }}
+                        </a>
+                    </li>
+                    {% if constant('AppBundle\\Entity\\User::ROLE_PROFESSOR') in app.user.roles and app.user == course.author %}
+                        <li {% if app.request.get('_route') == 'app_main_courses_seminar_modules' or navSeminar is defined %} class="active" {% endif %}>
+                            <a href="{{ path('app_main_courses_seminar_modules', {'id': course.id}) }}">
+                                {{ 'navigation.seminars'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li {% if app.request.get('_route') == 'app_main_announcements_list_by_course' %} class="active" {% endif %}>
+                        <a href="#">
+                            {{ 'navigation.announcements'|trans }}
+                        </a>
+                    </li>
+                    {% if constant('AppBundle\\Entity\\User::ROLE_PROFESSOR') in app.user.roles and app.user == course.author %}
+                        <li {% if app.request.get('_route') == 'app_main_courses_edit' %} class="active" {% endif %}>
+                            <a href="{{ path('app_main_courses_edit', {'id': course.id}) }}">
+                                {{ 'navigation.settings'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            {% endif %}
         {% endif %}
     </nav>
 </div>

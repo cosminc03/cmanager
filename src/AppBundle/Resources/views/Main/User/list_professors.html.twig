@@ -1,0 +1,42 @@
+{% extends 'AppBundle:Main/Layout:body_main.html.twig' %}
+
+{% trans_default_domain 'messages' %}
+
+{% block body_content %}
+    <div class="row m-t-r-35">
+        <h3>{{ 'heading.professors_list'|trans }}</h3>
+        <div id="associate-professors">
+            {% if not professors|length > 0 %}
+                <small>{{ 'small.no_professors'|trans }}</small>
+            {% else %}
+                <ul class="course-list">
+                    {% for professor in professors %}
+                        <li class="course-row">
+                            <div class="avatar-container s40">
+                                <a href="{{ path('app_main_users_show', {'id':professor.id}) }}">
+                                    {% if professor.avatar %}
+                                        <img class="avatar project-avatar s40" src="{{ asset('bundles/app/assets/images/avatar.jpg') }}"/>
+                                    {% else %}
+                                        <img class="avatar project-avatar s40" src="{{ professor.gravatar }}"/>
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <div class="course-details">
+                                <h4 class="m-t-0 m-b-0">
+                                    <a href="{{ path('app_main_users_show', {'id':professor.id}) }}">
+                                        {{ professor.fullName }}
+                                    </a>
+                                </h4>
+                                <div class="course-details-description m-t-5">
+                                    <p dir="auto">
+                                        {{ professor.email }}
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

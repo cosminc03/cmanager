@@ -41,11 +41,10 @@ security:
             logout:
                 path: app_main_security_logout
                 target: app_main_security_login
+            access_denied_handler: app.security.main.access_denied_handler
 
     access_control:
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        #- { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        #- { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, role: ROLE_SUPER_ADMIN }
         - { path: ^/, role: ROLE_USER }

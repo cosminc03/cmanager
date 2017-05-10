@@ -13,11 +13,21 @@
     <div class="row m-t-r-35 col-sm-8 p-l-0">
         <div>
             <div class="panel-controls">
-                <a href="{{ path('app_main_modules_edit', {'id':module.id, 'isCourse': isCourse}) }}">
-                    <button class="btn bgm-blue waves-effect m-t-5 text-transform-initial f-15">
-                        {{ 'button.edit_course_module'|trans }}
-                    </button>
-                </a>
+                {% if app.user == module.author %}
+                    {% if module.isCourse %}
+                        <a href="{{ path('app_main_modules_course_edit', {'id':module.id}) }}">
+                    {% else %}
+                        <a href="{{ path('app_main_modules_seminar_edit', {'id':module.id}) }}">
+                    {% endif %}
+                        <button class="btn bgm-blue waves-effect m-t-5 text-transform-initial f-15">
+                            {% if module.isCourse %}
+                                {{ 'button.edit_course_module'|trans }}
+                            {% else %}
+                                {{ 'button.edit_seminar_module'|trans }}
+                            {% endif %}
+                        </button>
+                    </a>
+                {% endif %}
                 {% if module.attachmentName %}
                     <a href="{{ path('app_main_modules_download_attachment', {'id':module.id}) }}">
                         <button class="btn bgm-orange waves-effect m-t-5 text-transform-initial f-15">

@@ -9,21 +9,24 @@
 {% block body_content %}
     <div class="row m-t-10">
         <div class="col-lg-3 profile-settings-sidebar">
-                <h3>{{ 'heading.new_course_module'|trans }}</h3>
-                <p>{{ 'paragraph.new_course_module'|trans }}</p>
+            <h3>{{ 'heading.edit_course_module'|trans }}</h3>
+            <p>{{ 'paragraph.edit_course_module'|trans }}</p>
         </div>
         <div class="col-lg-9">
+            {% if not form.vars.valid %}
+                <div class="f-s-17 c-red m-t-10 m-b-10">{{ 'help_block.form.errors'|trans }}</div>
+            {% endif %}
             {{ form_start(
                 form,
                 {
                     'method': 'POST',
-                    'action': path('app_main_modules_create', {'courseId':courseId, 'isCourse':isCourse}),
+                    'action': path('app_main_modules_course_edit', {'id':module.id}),
                         'attr': {
                         'novalidate': 'novalidate',
                     },
                 }
             ) }}
-            <div class="form-group">
+            <div class="form-group {% if form_errors(form.title) %}has-error has-feedback{% endif %}">
                 {{ form_label(
                     form.title,
                     'label.course_module.title'|trans,
@@ -47,27 +50,7 @@
                 <span class="help-block">{{ 'help_block.course_module.title'|trans }}</span>
             </div>
 
-            <div class="form-group">
-                <div class="checkbox m-b-15">
-                    <label>
-                        {{ form_widget(form.isCourse) }}
-                        <i class="input-helper"></i>
-                        {{ 'label.course_module.course'|trans }}
-                    </label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="checkbox m-b-15">
-                    <label>
-                        {{ form_widget(form.isSeminar) }}
-                        <i class="input-helper"></i>
-                        {{ 'label.seminar.seminar'|trans }}
-                    </label>
-                </div>
-            </div>
-
-            <div class="form-group">
+            <div class="form-group {% if form_errors(form.content) %}has-error has-feedback{% endif %}">
                 {{ form_label(
                     form.content,
                     'label.course_module.content'|trans,
@@ -106,38 +89,53 @@
                     }
                 ) }}
                 <div class="fg-line">
-                {{ form_widget(
-                    form.attachmentFile,
-                    {
-                        'attr': {
-                            'class': 'form-control',
-                        },
-                        'label': 'label.avatar'|trans
-                    }
-                ) }}
+                    {{ form_widget(
+                        form.attachmentFile,
+                        {
+                            'attr': {
+                                'class': 'form-control',
+                            },
+                        }
+                    ) }}
+                    {% if module.attachmentName %}
+                        <div class="m-t-10">{{ module.attachmentOriginalName }}</div>
+                    {% endif %}
                 </div>
+
             </div>
 
             <div>
                 <button class="btn bgm-green waves-effect text-transform-initial f-16" type="submit">
-                    {{ 'button.create_course_module'|trans }}
+                    {{ 'button.save_changes'|trans }}
                 </button>
             </div>
 
             <span class="hidden">{{ form_row(form._token) }}</span>
             {{ form_end(form, {'render_rest': false}) }}
 
-            <a
-                {% if isCourse %}
-                    href="{{ path('app_main_courses_course_modules', {'id':courseId}) }}"
-                {% else %}
-                    href="{{ path('app_main_courses_seminar_modules', {'id':courseId}) }}"
-                {% endif %}
-            >
+            <a class="grey-color" href="{{ path('app_main_courses_course_modules', {'id':module.course.id}) }}">
                 <button class="btn waves-effect text-transform-initial f-16 pull-right m-t-r-35">
                     {{ 'button.cancel'|trans }}
                 </button>
             </a>
+        </div>
+    </div>
+    <hr>
+    <div class="row m-t-10">
+        <div class="col-lg-3 profile-settings-sidebar">
+            <h3 class="c-red">{{ 'heading.remove_course_module'|trans }}</h3>
+            <p>{{ 'paragraph.remove_course_module'|trans }}</p>
+        </div>
+        <div class="col-lg-9">
+            <div class="f-500 f-17 m-t-10">{{ 'message.removed_course_module'|trans }}</div>
+            <button
+                    class="btn bgm-red waves-effect m-t-10 text-transform-initial f-16"
+                    id="sa-warning"
+                    data-link-delete="app_main_modules_course_delete"
+                    data-link-redirect="app_main_courses_course_modules"
+            >
+                {{ 'button.remove_course_module'|trans }}
+            </button>
         </div>
     </div>
 {% endblock %}
@@ -145,4 +143,41 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('assets/admin/vendors/bower_components/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('assets/admin/vendors/bower_components/sweetalert/dist/sweetalert.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $('#sa-warning').click(function(){
+            var moduleName = "{{ module.title }}",
+                moduleId = {{ module.id }},
+                courseId = {{ module.course.id }},
+                deleteLink = $('#sa-warning').attr('data-link-delete'),
+                redirectLink = $('#sa-warning').attr('data-link-redirect'),
+                routeParams = {};
+
+            swal({
+                title: "Are you sure?",
+                text: "You are going to delete course module " + moduleName + " and you will not be able to recover it!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete course module!",
+                closeOnConfirm: false
+            }, function(){
+                routeParams['id'] = moduleId;
+
+                $.ajax({
+                    url: Routing.generate(deleteLink, routeParams, true),
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.delete === 'success') {
+                            window.location.replace(Routing.generate(redirectLink, {'id': courseId}, true))
+                        } else {
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
 {% endblock %}

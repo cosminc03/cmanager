@@ -351,3 +351,7 @@ hr {
 .grey-color>button {
     color: rgba(0, 0, 0, 0.85098);
 }
+
+.f-s-50 {
+    font-size: 50px!important;
+}
