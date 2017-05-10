@@ -125,12 +125,16 @@ class CourseVoter extends Voter
      */
     private function canCreateSeminar(Course $course, User $user)
     {
+        if (in_array(User::ROLE_PROFESSOR, $user->getRoles())) {
+            return true;
+        }
+
         $associates = $course->getAssistants();
 
         if (!$associates->contains($user)) {
             return false;
         }
 
-        return in_array(User::ROLE_PROFESSOR, $user->getRoles()) || in_array(User::ROLE_ASSOCIATE, $user->getRoles());
+        return true;
     }
 }

@@ -2,6 +2,7 @@
 
 {% trans_default_domain 'messages' %}
 
+{% set user = module.author %}
 {% set course = module.course %}
 {% if module.isCourse %}
     {% set navCourse = true %}

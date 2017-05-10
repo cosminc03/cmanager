@@ -1,0 +1,165 @@
+{% extends 'AppBundle:Main/Layout:body_main.html.twig' %}
+
+{% trans_default_domain 'messages' %}
+
+{% block body_content %}
+    <div class="user-profile">
+        <div class="cover-block user-cover-block p-b-15">
+            <div class="cover-controls">
+                <ul class="actions">
+                    {% if app.user == user %}
+                        <li class="m-r-10">
+                            <a href="{{ path('app_main_users_edit', {'id':app.user.id}) }}">
+                                <i class="btn zmdi zmdi-edit" data-toggle="tooltip" data-placement="bottom" data-original-title="{{ 'tooltip.edit'|trans }}"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="profile-header">
+                <div class="avatar-holder">
+                    {% if user.avatar %}
+                        <img class="profile-avatar s90" src="img/avatar.jpg"/>
+                    {% else %}
+                        <img class="profile-avatar s90" src="{{ user.gravatar }}"/>
+                    {% endif %}
+                </div>
+                <div class="user-info">
+                    <div class="cover-title">{{ user.fullName }}</div>
+                    <div class="cover-desc">
+                        <span class="middle-dot-divider">@{{ user.username|lower }}</span>
+                        <span>{{ 'message.member_since'|trans }} {{ user.createdAt|date('M d, Y') }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pm-body clearfix">
+
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="row">
+                <div id="general-alert" class="alert alert-success m-t-15">
+                    <strong>{{ flash_message }}</strong>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="pmb-block p-t-15">
+            <div class="pmbb-header m-b-20">
+                <h2>
+                    <i class="zmdi zmdi-equalizer m-r-10"></i> {{ 'heading.summary'|trans }}
+                </h2>
+            </div>
+            <div class="pmbb-body p-l-30">
+                <div class="pmbb-view">
+                    {% if user.description %}
+                        {{ user.description }}
+                    {% else %}
+                        {{ 'message.no_description'|trans }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="pmb-block p-t-15">
+            <div class="pmbb-header m-b-20">
+                <h2>
+                    <i class="zmdi zmdi-account m-r-10"></i> {{ 'heading.basic_information'|trans }}
+                </h2>
+            </div>
+            <div class="pmbb-body p-l-30">
+                <div class="pmbb-view">
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'data_table.full_name'|trans }}</dt>
+                        <dd>{{ user.fullName }}</dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'data_table.registration_number'|trans }}</dt>
+                        <dd>{{ user.registrationNumber }}</dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'data_table.year_of_study'|trans }}</dt>
+                        <dd>{{ user.yearOfStudy|trans }}</dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'data_table.birthday'|trans }}</dt>
+                        <dd>{{ user.dateOfBirth|date('M d, Y') }}</dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'data_table.gender'|trans }}</dt>
+                        <dd>{{ user.gender|trans }}</dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'data_table.nationality'|trans }}</dt>
+                        <dd>{{ user.nationality }}</dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'data_table.citizenship'|trans }}</dt>
+                        <dd>{{ user.citizenship }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <div class="pmb-block p-t-15">
+            <div class="pmbb-header m-b-20">
+                <h2>
+                    <i class="zmdi zmdi-phone m-r-10"></i> {{ 'heading.contact_information'|trans }}
+                </h2>
+            </div>
+            <div class="pmbb-body p-l-30">
+                <div class="pmbb-view">
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'data_table.phone'|trans }}</dt>
+                        <dd>{{ user.phone }}</dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'data_table.email'|trans }}</dt>
+                        <dd>{{ user.email }}</dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'data_table.twitter'|trans }}</dt>
+                        <dd>
+                            {% if user.twitter %}
+                                {{ user.twitter }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'data_table.skype'|trans }}</dt>
+                        <dd>
+                            {% if user.skype %}
+                                {{ user.skype }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'data_table.linkedin'|trans }}</dt>
+                        <dd>
+                            {% if user.linkedIn %}
+                                {{ user.linkedIn }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'data_table.gplus'|trans }}</dt>
+                        <dd>
+                            {% if user.gplus %}
+                                {{ user.gplus }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
