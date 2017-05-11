@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Main;
 
 use AppBundle\Controller\BaseController;
 use AppBundle\Entity\Course;
+use AppBundle\Entity\Homework;
 use AppBundle\Entity\Module;
 use AppBundle\Entity\User;
 use AppBundle\Form\Course\Main\CreateType;
@@ -574,4 +575,102 @@ class CourseController extends BaseController
             ]
         );
     }
+
+    /**
+     * Get homework for a Course entity.
+     *
+     * @Route("/{id}/homework", options={"expose"=true}, name="app_main_courses_list_homework")
+     * @Method({"GET"})
+     *
+     * @param Course $course
+     *
+     * @return Response
+     */
+    public function listHomeworkAction(Course $course)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $homework = $em
+            ->getRepository(Homework::class)
+            ->findBy([
+                'course' => $course,
+                'author' => $course->getAuthor(),
+                'isCourseHomework' => true,
+            ])
+        ;
+
+        return $this->render(
+            'AppBundle:Main/Homework:list.html.twig',
+            [
+                'course' => $course,
+                'homework' => $homework,
+            ]
+        );
+    }
+
+    /**
+     * Show one homework for a Course entity.
+     *
+     * @Route("/{id}/homework/{homeworkId}", options={"expose"=true}, name="app_main_courses_show_homework")
+     * @Method({"GET"})
+     *
+     * @param Course $course
+     *
+     * @return Response
+     */
+    public function showHomeworkAction(Course $course, $homeworkId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $homework = $em
+            ->getRepository(Homework::class)
+            ->find($homeworkId)
+        ;
+
+        return $this->render(
+            'AppBundle:Main/Homework:show_course_homework.html.twig',
+            [
+                'course' => $course,
+                'homework' => $homework,
+            ]
+        );
+    }
+
+    /**
+     * Get homework for an associate professor for a Course entity.
+     *
+     * @Route("/{id}/users/{userId}/homework", options={"expose"=true}, name="app_main_courses_users_homework")
+     * @Method({"GET"})
+     *
+     * @param Course $course
+     * @param int   $userId
+     *
+     * @return Response
+     */
+    public function userHomeworkAction(Course $course, $userId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em
+            ->getRepository(User::class)
+            ->find($userId)
+        ;
+
+        $homework = $em
+            ->getRepository(Homework::class)
+            ->findBy([
+                'author' => $user,
+                'course' => $course,
+                'isCourseHomework' => false,
+            ])
+        ;
+
+        return $this->render(
+            'AppBundle:Main/Homework:list_user.html.twig',
+            [
+                'course' => $course,
+                'homework' => $homework,
+                'user' => $user,
+            ]
+        );
+    }
+
 }

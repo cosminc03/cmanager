@@ -163,6 +163,15 @@ class User extends BaseUser
     private $modules;
 
     /**
+     * @var ArrayCollection|Homework[]
+     *
+     * @Serializer\Exclude()
+     *
+     * @ORM\OneToMany(targetEntity="Homework", mappedBy="author")
+     */
+    private $homework;
+
+    /**
      * @var ArrayCollection|Announcement[]
      *
      * @Serializer\Exclude()
@@ -232,6 +241,7 @@ class User extends BaseUser
         $this->courses = new ArrayCollection();
         $this->labs = new ArrayCollection();
         $this->modules = new ArrayCollection();
+        $this->homework = new ArrayCollection();
         $this->announcements = new ArrayCollection();
         $this->posts = new ArrayCollection();
     }
@@ -412,6 +422,40 @@ class User extends BaseUser
     public function getModules()
     {
         return $this->modules;
+    }
+
+    /**
+     * Add homework
+     *
+     * @param Homework $hmwork
+     *
+     * @return User
+     */
+    public function addHomework(Homework $hmwork)
+    {
+        $this->homework[] = $hmwork;
+
+        return $this;
+    }
+
+    /**
+     * Remove homework
+     *
+     * @param Homework $hmwork
+     */
+    public function removeHomework(Homework $hmwork)
+    {
+        $this->homework->removeElement($hmwork);
+    }
+
+    /**
+     * Get homework
+     *
+     * @return ArrayCollection|Homework[]
+     */
+    public function getHomework()
+    {
+        return $this->homework;
     }
 
     /**

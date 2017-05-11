@@ -28,3 +28,8 @@ success:
         edit: Seminar module successfully edited!
         delete:
             from_edit: Seminar module successfully deleted!
+    homework:
+        create: Homework successfully created!
+        edit: Homework successfully edited!
+        delete:
+            from_edit: Homework successfully deleted!

@@ -133,6 +133,15 @@ class Course
     private $modules;
 
     /**
+     * @var ArrayCollection|Homework[]
+     *
+     * @Serializer\Exclude()
+     *
+     * @ORM\OneToMany(targetEntity="Homework", mappedBy="course")
+     */
+    private $homework;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="link_to_grades", type="string", length=255, nullable=true)
@@ -188,6 +197,7 @@ class Course
     {
         $this->createdAt = new \DateTime();
         $this->modules = new ArrayCollection();
+        $this->homework = new ArrayCollection();
         $this->assistants = new ArrayCollection();
         $this->announcements = new ArrayCollection();
     }
@@ -402,6 +412,40 @@ class Course
     public function getModules()
     {
         return $this->modules;
+    }
+
+    /**
+     * Add homework
+     *
+     * @param Homework $hmwork
+     *
+     * @return Course
+     */
+    public function addHomework(Homework $hmwork)
+    {
+        $this->homework[] = $hmwork;
+
+        return $this;
+    }
+
+    /**
+     * Remove homework
+     *
+     * @param Homework $hmwork
+     */
+    public function removeHomework(Homework $hmwork)
+    {
+        $this->homework->removeElement($hmwork);
+    }
+
+    /**
+     * Get homework
+     *
+     * @return ArrayCollection|Homework[]
+     */
+    public function getHomework()
+    {
+        return $this->homework;
     }
 
     /**

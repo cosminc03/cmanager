@@ -47,3 +47,9 @@ services:
         tags:
             - { name: security.voter }
         public: false
+
+    app.homework_voter:
+        class: AppBundle\Security\HomeworkVoter
+        tags:
+            - { name: security.voter }
+        public: false

@@ -1,0 +1,248 @@
+{% extends 'AppBundle:Main/Layout:body_main.html.twig' %}
+
+{% trans_default_domain 'messages' %}
+
+{% form_theme form 'AppBundle:Main/Layout/Partials:upload_attachment_field.html.twig' %}
+
+{% block nav %}{% endblock %}
+
+{% block body_content %}
+    <div class="row m-t-10">
+        <div class="col-lg-3 profile-settings-sidebar">
+            <h3>{{ 'heading.edit_homework'|trans }}</h3>
+            <p>{{ 'paragraph.edit_homework'|trans }}</p>
+        </div>
+        <div class="col-lg-9">
+            {% if not form.vars.valid %}
+                <div class="f-s-17 c-red m-t-10 m-b-10">{{ 'help_block.form.errors'|trans }}</div>
+            {% endif %}
+            {{ form_start(
+                form,
+                {
+                    'method': 'POST',
+                    'action': path('app_main_homework_edit', {'id':homework.id, 'isCourseHomework': isCourseHomework}),
+                    'attr': {
+                        'novalidate': 'novalidate',
+                    },
+                }
+            ) }}
+            <div class="form-group {% if form_errors(form.title) %}has-error has-feedback{% endif %}">
+                {{ form_label(
+                    form.title,
+                    'label.homework.title'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.title) %}
+                    <small class="help-block c-red">{{ form_errors(form.title) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.title,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg'
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.homework.title'|trans }}</span>
+            </div>
+
+            <div class="form-group {% if form_errors(form.deadline) %}has-error has-feedback{% endif %}">
+                {{ form_label(
+                    form.deadline,
+                    'label.homework.deadline'|trans,
+                    {
+                        'label_attr' : {'class': 'f-17'}
+                    }
+                ) }}
+                {% if form_errors(form.deadline) %}
+                    <small class="help-block c-red">{{ form_errors(form.deadline) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.deadline,
+                        {
+                            'attr' : {
+                                'class': 'form-control date-picker input-lg',
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.homework.deadline'|trans }}</span>
+            </div>
+
+            <div class="form-group {% if form_errors(form.content) %}has-error has-feedback{% endif %}">
+                {{ form_label(
+                    form.content,
+                    'label.homework.content'|trans,
+                    {
+                        'label_attr' : {
+                            'class': 'f-17'
+                        }
+                    }
+                ) }}
+                {% if form_errors(form.content) %}
+                    <small class="help-block c-red">{{ form_errors(form.content) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.content,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg',
+                                'rows': '5',
+                                'placeholder': 'placeholder.content'|trans
+                            },
+                        }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.homework.content'|trans }}</span>
+            </div>
+
+            <div class="form-group {% if form_errors(form.observation) %}has-error has-feedback{% endif %}">
+                {{ form_label(
+                    form.observation,
+                    'label.homework.observation'|trans,
+                    {
+                        'label_attr' : {
+                            'class': 'f-17'
+                        }
+                    }
+                ) }}
+                {% if form_errors(form.observation) %}
+                    <small class="help-block c-red">{{ form_errors(form.observation) }}</small>
+                {% endif %}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.observation,
+                        {
+                            'attr' : {
+                                'class': 'form-control input-lg',
+                                'rows': '5',
+                                'placeholder': 'placeholder.observation'|trans
+                            },
+                    }
+                    ) }}
+                </div>
+                <span class="help-block">{{ 'help_block.homework.observation'|trans }}</span>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(
+                    form.attachmentFile,
+                    'label.homework.attachment'|trans,
+                    {
+                        'label_attr' : {
+                            'class': 'f-17'
+                        }
+                    }
+                ) }}
+                <div class="fg-line">
+                    {{ form_widget(
+                        form.attachmentFile,
+                        {
+                            'attr': {
+                                'class': 'form-control',
+                            },
+                        }
+                    ) }}
+                </div>
+            </div>
+
+            <div>
+                <button class="btn bgm-green waves-effect text-transform-initial f-16" type="submit">
+                    {{ 'button.edit_homework'|trans }}
+                </button>
+            </div>
+
+            <span class="hidden">{{ form_row(form._token) }}</span>
+            {{ form_end(form, {'render_rest': false}) }}
+
+            {% if isCourseHomework %}
+                <a class="grey-color" href="{{ path('app_main_courses_list_homework', {'id':homework.course.id}) }}">
+                    <button class="btn waves-effect text-transform-initial f-16 pull-right m-t-r-35">
+                        {{ 'button.cancel'|trans }}
+                    </button>
+                </a>
+            {% else %}
+                <a class="grey-color" href="{{ path('app_main_courses_users_homework', {'id':homework.course.id, 'userId': app.user.id}) }}">
+                    <button class="btn waves-effect text-transform-initial f-16 pull-right m-t-r-35">
+                        {{ 'button.cancel'|trans }}
+                    </button>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <div class="row m-t-10">
+        <div class="col-lg-3 profile-settings-sidebar">
+            <h3 class="c-red">{{ 'heading.remove_homework'|trans }}</h3>
+            <p>{{ 'paragraph.remove_homework'|trans }}</p>
+        </div>
+        <div class="col-lg-9">
+            <div class="f-500 f-17 m-t-10">{{ 'message.removed_homework'|trans }}</div>
+            <button
+                    class="btn bgm-red waves-effect m-t-10 text-transform-initial f-16"
+                    id="sa-warning"
+                    data-link-delete="app_main_homework_delete"
+                    {% if isCourseHomework %}
+                        data-link-redirect="app_main_courses_list_homework"
+                    {% else %}
+                        data-link-redirect="app_main_courses_users_homework"
+                    {% endif %}
+            >
+                {{ 'button.remove_homework'|trans }}
+            </button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/admin/vendors/bower_components/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('assets/admin/vendors/bower_components/sweetalert/dist/sweetalert.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $('#sa-warning').click(function(){
+            var moduleName = "{{ homework.title }}",
+                moduleId = {{ homework.id }},
+                courseId = {{ homework.course.id }},
+                userId = {{ app.user.id }},
+                deleteLink = $('#sa-warning').attr('data-link-delete'),
+                redirectLink = $('#sa-warning').attr('data-link-redirect'),
+                routeParams = {};
+
+            swal({
+                title: "Are you sure?",
+                text: "You are going to delete seminar module " + moduleName + " and you will not be able to recover it!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete seminar module!",
+                closeOnConfirm: false
+            }, function(){
+                routeParams['id'] = moduleId;
+
+                $.ajax({
+                    url: Routing.generate(deleteLink, routeParams, true),
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.delete === 'success') {
+                            {% if isCourseHomework %}
+                                window.location.replace(Routing.generate(redirectLink, {'id': courseId}, true));
+                            {% else %}
+                                window.location.replace(Routing.generate(redirectLink, {'id': courseId, 'userId':userId}, true));
+                            {% endif %}
+                        } else {
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

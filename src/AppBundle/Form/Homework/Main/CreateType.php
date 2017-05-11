@@ -1,10 +1,11 @@
 <?php
 
-namespace AppBundle\Form\Module\Main;
+namespace AppBundle\Form\Homework\Main;
 
-use AppBundle\Entity\Module;
+use AppBundle\Entity\Homework;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,12 +29,90 @@ class CreateType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('deadline', DateType::class, [
+                'required' => false,
+                'widget' => 'single_text',
+                'format' => 'dd/MM/yyyy',
+            ])
             ->add('content', CKEditorType::class, [
                 'constraints' => [
                     new NotBlank([
                         'message' => 'not_blank.content',
                     ]),
                 ],
+                'config' => [
+                    'toolbar' => [
+                        [
+                            'name' => 'basic_styles',
+                            'items' => [
+                                'Bold',
+                                'Italic',
+                                'Underline',
+                                'Strike',
+                                'Subscript',
+                                'Superscript',
+                                '-',
+                                'RemoveFormat',
+                            ],
+                        ],
+                        [
+                            'name' => 'clipboard',
+                            'items' => [
+                                'Cut',
+                                'Copy',
+                                'Paste',
+                                'PasteText',
+                                'PasteFromWord',
+                                '-',
+                                'Undo',
+                                'Redo',
+                            ],
+                        ],
+                        [
+                            'name' => 'links',
+                            'items' => [
+                                'Link',
+                                'Unlink',
+                                'Anchor',
+                            ],
+                        ],
+                        [
+                            'name' => 'paragraph',
+                            'items' => [
+                                'NumberedList',
+                                'BulletedList',
+                                '-',
+                                'Outdent',
+                                'Indent',
+                                '-',
+                                'Blockquote',
+                                'CreateDiv',
+                                '-',
+                                'JustifyLeft',
+                                'JustifyCenter',
+                                'JustifyRight',
+                                'JustifyBlock',
+                                '-',
+                                'BidiLtr',
+                                'BidiRtl',
+                            ],
+                        ],
+                        [
+                            'name' => 'styles',
+                            'items' => [
+                                'Styles',
+                                'Format',
+                                'Font',
+                                'FontSize',
+                                'TextColor',
+                                'BGColor',
+                            ],
+                        ],
+                    ],
+                    'uiColor' => '#ffffff',
+                ],
+            ])
+            ->add('observation', CKEditorType::class, [
                 'config' => [
                     'toolbar' => [
                         [
@@ -120,7 +199,7 @@ class CreateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Module::class,
+            'data_class' => Homework::class,
         ]);
     }
 }
