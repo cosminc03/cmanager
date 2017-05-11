@@ -19,6 +19,7 @@ class CourseVoter extends Voter
     const DELETE = 'delete';
 
     const CREATE_SEMINAR = 'create_seminar';
+    const CREATE_HOMEWORK = 'create_homework';
 
     /**
      * Define actions on entity.
@@ -37,6 +38,7 @@ class CourseVoter extends Voter
                     self::EDIT,
                     self::DELETE,
                     self::CREATE_SEMINAR,
+                    self::CREATE_HOMEWORK,
                 ]
         )) {
             return false;
@@ -71,6 +73,8 @@ class CourseVoter extends Voter
                 return $this->canDelete($subject, $user);
             case self::CREATE_SEMINAR:
                 return $this->canCreateSeminar($subject, $user);
+            case self::CREATE_HOMEWORK:
+                return $this->canCreateHomework($subject, $user);
         }
 
         return false;
@@ -124,6 +128,29 @@ class CourseVoter extends Voter
      * @return bool
      */
     private function canCreateSeminar(Course $course, User $user)
+    {
+        if (in_array(User::ROLE_PROFESSOR, $user->getRoles())) {
+            return true;
+        }
+
+        $associates = $course->getAssistants();
+
+        if (!$associates->contains($user)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Create access restriction.
+     *
+     * @param Course  $course
+     * @param User    $user
+     *
+     * @return bool
+     */
+    private function canCreateHomework(Course $course, User $user)
     {
         if (in_array(User::ROLE_PROFESSOR, $user->getRoles())) {
             return true;

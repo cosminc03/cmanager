@@ -50,6 +50,16 @@ class Post
     private $module;
 
     /**
+     * @var Homework
+     *
+     * @Serializer\Exclude()
+     *
+     * @ORM\ManyToOne(targetEntity="Homework", inversedBy="posts")
+     * @ORM\JoinColumn(name="homework_id", nullable=true)
+     */
+    private $homework;
+
+    /**
      * @var \DateTime
      *
      * @Serializer\Exclude()
@@ -203,6 +213,30 @@ class Post
     }
 
     /**
+     * Set homework
+     *
+     * @param Homework $homework
+     *
+     * @return Post
+     */
+    public function setHomework(Homework $homework = null)
+    {
+        $this->homework = $homework;
+
+        return $this;
+    }
+
+    /**
+     * Get homework
+     *
+     * @return Homework
+     */
+    public function getHomework()
+    {
+        return $this->homework;
+    }
+
+    /**
      * Returns createdById.
      *
      * @Serializer\VirtualProperty()
@@ -239,6 +273,19 @@ class Post
     public function getModuleId()
     {
         return $this->module ? $this->module->getId() : null;
+    }
+
+    /**
+     * Returns homeworkId.
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("homeworkId")
+     *
+     * @return string
+     */
+    public function getHomeworkId()
+    {
+        return $this->homework ? $this->homework->getId() : null;
     }
 
     /**

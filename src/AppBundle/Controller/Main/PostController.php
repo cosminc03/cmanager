@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Main;
 
 use AppBundle\Controller\BaseController;
+use AppBundle\Entity\Homework;
 use AppBundle\Entity\Module;
 use AppBundle\Entity\Post;
 use AppBundle\Entity\User;
@@ -35,23 +36,39 @@ class PostController extends BaseController
             $em = $this->getDoctrine()->getManager();
             $data = $request->request->all();
 
-            $module = $em
-                ->getRepository(Module::class)
-                ->find($data['moduleId'])
-            ;
+            if (isset($data['moduleId'])) {
+                $module = $em
+                    ->getRepository(Module::class)
+                    ->find($data['moduleId'])
+                ;
+            }
+
+            if (isset($data['homeworkId'])) {
+                $homework = $em
+                    ->getRepository(Homework::class)
+                    ->find($data['homeworkId'])
+                ;
+            }
 
             $user = $em
                 ->getRepository(User::class)
                 ->find($data['userId'])
             ;
 
-            if ($user && $module) {
+            if ($user) {
                 $post = new Post();
                 $post
-                    ->setModule($module)
                     ->setCreatedBy($user)
                     ->setText($data['comment'])
                 ;
+
+                if (isset($module)) {
+                    $post->setModule($module);
+                }
+
+                if (isset($homework)) {
+                    $post->setHomework($homework);
+                }
 
                 $em->persist($post);
                 $em->flush();

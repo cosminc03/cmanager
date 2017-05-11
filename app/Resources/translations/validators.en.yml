@@ -1,5 +1,5 @@
 not_blank:
-    content: The content field should not be blak
+    content: The content field should not be blank
     text: The text field should not be blank
     title: The title field should not be blank
     first_name: First name should not be blank

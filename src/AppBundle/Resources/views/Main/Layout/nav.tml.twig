@@ -32,7 +32,8 @@
                     </li>
                     <li {% if (app.request.get('_route') == 'app_main_courses_associate_professors' or
                             'app_main_courses_users' in app.request.get('_route') or
-                            app.request.get('_route') == 'app_main_modules_seminar_show') and
+                            app.request.get('_route') == 'app_main_modules_seminar_show' or
+                            app.request.get('_route') == 'app_main_homework_show') and
                             hideSecondNav is not defined
                         %}
                             class="active"
@@ -54,6 +55,16 @@
                             </a>
                         </li>
                     {% endif %}
+                    <li {% if app.request.get('_route') == 'app_main_courses_list_homework' or
+                            app.request.get('_route') == 'app_main_courses_show_homework'
+                        %}
+                            class="active"
+                        {% endif %}
+                    >
+                        <a href="{{ path('app_main_courses_list_homework', {'id': course.id}) }}">
+                            {{ 'navigation.homework'|trans }}
+                        </a>
+                    </li>
                     <li {% if app.request.get('_route') == 'app_main_announcements_list_by_course' %} class="active" {% endif %}>
                         <a href="#">
                             {{ 'navigation.announcements'|trans }}
@@ -74,7 +85,8 @@
 
 {% if hideSecondNav is not defined %}
     {% if 'app_main_courses_users_' in app.request.get('_route') or
-        app.request.get('_route') == 'app_main_modules_seminar_show'
+        app.request.get('_route') == 'app_main_modules_seminar_show' or
+        app.request.get('_route') == 'app_main_homework_show'
     %}
         <div class="nav-submenu">
             <nav class="ha-menu nav-links">
@@ -93,8 +105,14 @@
                             {{ 'navigation.seminars'|trans }}
                         </a>
                     </li>
-                    <li>
-                        <a href="">Homework</a>
+                    <li {% if app.request.get('_route') == 'app_main_courses_users_homework' or
+                            app.request.get('_route') == 'app_main_homework_show'
+                        %}
+                            class="active"
+                        {% endif %}>
+                        <a href="{{ path('app_main_courses_users_homework', {'id':course.id, 'userId':user.id}) }}">
+                            {{ 'navigation.homework'|trans }}
+                        </a>
                     </li>
                 </ul>
             </nav>
