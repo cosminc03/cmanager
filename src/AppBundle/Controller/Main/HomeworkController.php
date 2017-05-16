@@ -4,12 +4,15 @@ namespace AppBundle\Controller\Main;
 
 use AppBundle\Controller\BaseController;
 use AppBundle\Entity\Course;
+use AppBundle\Entity\File;
 use AppBundle\Entity\Homework;
 use AppBundle\Form\Homework\Main\CreateType;
 use AppBundle\Security\CourseVoter;
 use AppBundle\Security\HomeworkVoter;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,6 +20,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use AppBundle\Form\File\Main\CreateType as FileCreateType;
 
 /**
  * Class HomeworkController.
@@ -66,12 +70,6 @@ class HomeworkController extends BaseController
             $homework->setAuthor($this->getUser());
             $homework->setIsCourseHomework($isCourseHomework);
             $homework->setCourse($course);
-
-            if ($form->get('attachmentFile')->getData()) {
-                /** @var UploadedFile $attachment */
-                $attachment = $form->get('attachmentFile')->getData();
-                $homework->setAttachmentOriginalName($attachment->getClientOriginalName());
-            }
 
             $em->persist($homework);
             $em->flush();
@@ -145,12 +143,6 @@ class HomeworkController extends BaseController
             $homework->setAuthor($this->getUser());
             $homework->setIsCourseHomework($isCourseHomework);
 
-            if ($form->get('attachmentFile')->getData()) {
-                /** @var UploadedFile $attachment */
-                $attachment = $form->get('attachmentFile')->getData();
-                $homework->setAttachmentOriginalName($attachment->getClientOriginalName());
-            }
-
             $em->persist($homework);
             $em->flush();
 
@@ -159,7 +151,7 @@ class HomeworkController extends BaseController
                 'success',
                 $this
                     ->get('translator')
-                    ->trans('success.edit.create', [], 'flashes')
+                    ->trans('success.homework.edit', [], 'flashes')
             );
 
             if ($isCourseHomework) {
@@ -195,15 +187,70 @@ class HomeworkController extends BaseController
     /**
      * Display Homework entities.
      *
-     * @Route("/{id}/show", name="app_main_homework_show")
-     * @Method("GET")
+     * @Route("/{id}/show", options={"expose"=true}, name="app_main_homework_show")
+     * @Method({"GET", "POST"})
      *
+     * @param Request  $request
      * @param Homework $homework
      *
      * @return Response
      */
-    public function showSeminarAction(Homework $homework)
+    public function showSeminarAction(Request $request, Homework $homework)
     {
+        $file = new File();
+        $fileUploadForm = $this->createForm(FileCreateType::class, $file);
+        $fileUploadForm->handleRequest($request);
+
+        if ($fileUploadForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            // $fileUploaded stores the uploaded file
+            /** @var UploadedFile $file */
+            $uploadedFile = $fileUploadForm->get('uploadedFile')->getData();
+
+            // Generate a unique name for the file before saving it
+            $fileName = md5(uniqid()).'.'.$uploadedFile->guessExtension();
+
+            $savePath = $this->getParameter('app.course.attachments_path');
+            $savePath = $savePath.'/'.$homework->getCourse()->getAbbreviation();
+            // Move the file to the directory where brochures are stored
+            $uploadedFile->move(
+                $savePath,
+                $fileName
+            );
+
+            if ($file->getOriginalName()) {
+                $originalName = $file->getOriginalName().'.'.$uploadedFile->guessExtension();
+            } else {
+                $originalName = $uploadedFile->getClientOriginalName();
+            }
+
+            $file->setName($fileName);
+            $file->setOriginalName($originalName);
+            $file->setHomework($homework);
+
+            $em->persist($file);
+            $em->flush();
+
+            $this
+                ->get('session')
+                ->getFlashBag()
+                ->set(
+                    'success',
+                    $this
+                        ->get('translator')
+                        ->trans('success.uploaded_file.added', [], 'flashes')
+                )
+            ;
+
+            $this->redirectToRoute(
+                'app_main_homework_show',
+                [
+                    'id' => $homework->getId(),
+                ]
+            );
+        }
+
         return $this->render(
             'AppBundle:Main/Homework:show.html.twig',
             [
@@ -211,6 +258,7 @@ class HomeworkController extends BaseController
                 'course' => $homework->getCourse(),
                 'userId' => $this->getUser()->getId(),
                 'userFullName' => $this->getUser()->getFullName(),
+                'fileUploadForm' => $fileUploadForm->createView(),
             ]
         );
     }
@@ -263,34 +311,78 @@ class HomeworkController extends BaseController
     }
 
     /**
-     * Get attachment for a Homework entity.
+     * Upload new file for a Module entity.
      *
-     * @Route("/{id}/download-attachment", name="app_main_homework_download_attachment")
+     * @Route("/uploaded-file/{id}/delete", options={"expose"=true}, name="app_main_homework_delete_uploaded_file")
+     * @Method({"GET"})
      *
-     * @param Homework $homework
+     * @param File $file
      *
-     * @return BinaryFileResponse
+     * @return JsonResponse
      */
-    public function downloadAttachmentAction(Homework $homework)
+    public function deleteUploadedFileAction(File $file)
     {
         $path = $this->getParameter('app.course.attachments_path');
-        $filePath = $path.'/'.$homework->getCourse()->getAbbreviation().'/'.$homework->getAttachmentName();
-        $response = new BinaryFileResponse($filePath);
+        $pathToFile = $path.'/'.$file->getHomework()->getCourse()->getAbbreviation().'/'.$file->getName();
 
-        $nameComponents = explode('.', $homework->getAttachmentOriginalName());
+        $fs = new Filesystem();
+        $fs->remove($pathToFile);
 
-        if ($nameComponents[1] === 'pdf') {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($file);
+        $em->flush();
+
+        $this
+            ->get('session')
+            ->getFlashBag()
+            ->set(
+                'success',
+                $this
+                    ->get('translator')
+                    ->trans('success.uploaded_file.delete', [], 'flashes')
+            )
+        ;
+
+        $message = [
+            'delete' => 'success',
+        ];
+
+        return new JsonResponse($message);
+    }
+
+    /**
+     * Download file associated with a Module entity.
+     *
+     * @Route("/download-file/{id}", options={"expose"=true}, name="app_main_homework_download_file")
+     * @Method({"GET"})
+     *
+     * @param File $file
+     *
+     * @return Response|JsonResponse
+     */
+    public function downloadFileAction(File $file)
+    {
+        try {
+            $displayName = $file->getOriginalName();
+            $fileName = $file->getName();
+            $path = $this->getParameter('app.course.attachments_path');
+            $filePath = $path."/".$file->getHomework()->getCourse()->getAbbreviation()."/".$fileName;
+
+            $response = new BinaryFileResponse($filePath);
             $response->setContentDisposition(
                 ResponseHeaderBag::DISPOSITION_INLINE,
-                $homework->getAttachmentOriginalName()
+                $displayName
             );
-        } else {
-            $response->setContentDisposition(
-                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-                $homework->getAttachmentOriginalName()
-            );
-        }
 
-        return $response;
+            return $response;
+        } catch (Exception $e) {
+            $array = [
+                'status' => 0,
+                'message' => 'Download error',
+            ];
+            $response = new JsonResponse($array, 400);
+
+            return $response;
+        }
     }
 }

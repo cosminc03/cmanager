@@ -185,11 +185,6 @@ class CreateType extends AbstractType
                     'uiColor' => '#ffffff',
                 ],
             ])
-            ->add('attachmentFile', VichFileType::class, [
-                'required' => false,
-                'allow_delete' => true,
-                'download_link' => false,
-            ])
         ;
     }
 

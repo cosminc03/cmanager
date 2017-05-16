@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Main;
 
 use AppBundle\Controller\BaseController;
 use AppBundle\Entity\Course;
+use AppBundle\Entity\File;
 use AppBundle\Entity\Homework;
 use AppBundle\Entity\Module;
 use AppBundle\Entity\User;
@@ -11,10 +12,12 @@ use AppBundle\Form\Course\Main\CreateType;
 use AppBundle\Security\CourseVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Form\File\Main\CreateType as FileCreateType;
 
 /**
  * Class CourseController.
@@ -612,13 +615,14 @@ class CourseController extends BaseController
      * Show one homework for a Course entity.
      *
      * @Route("/{id}/homework/{homeworkId}", options={"expose"=true}, name="app_main_courses_show_homework")
-     * @Method({"GET"})
+     * @Method({"GET", "POST"})
      *
-     * @param Course $course
+     * @param Request $request
+     * @param Course  $course
      *
      * @return Response
      */
-    public function showHomeworkAction(Course $course, $homeworkId)
+    public function showHomeworkAction(Request $request, Course $course, $homeworkId)
     {
         $em = $this->getDoctrine()->getManager();
         $homework = $em
@@ -626,11 +630,67 @@ class CourseController extends BaseController
             ->find($homeworkId)
         ;
 
+        $file = new File();
+        $fileUploadForm = $this->createForm(FileCreateType::class, $file);
+        $fileUploadForm->handleRequest($request);
+
+        if ($fileUploadForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            // $fileUploaded stores the uploaded file
+            /** @var UploadedFile $file */
+            $uploadedFile = $fileUploadForm->get('uploadedFile')->getData();
+
+            // Generate a unique name for the file before saving it
+            $fileName = md5(uniqid()).'.'.$uploadedFile->guessExtension();
+
+            $savePath = $this->getParameter('app.course.attachments_path');
+            $savePath = $savePath.'/'.$homework->getCourse()->getAbbreviation();
+            // Move the file to the directory where brochures are stored
+            $uploadedFile->move(
+                $savePath,
+                $fileName
+            );
+
+            if ($file->getOriginalName()) {
+                $originalName = $file->getOriginalName().'.'.$uploadedFile->guessExtension();
+            } else {
+                $originalName = $uploadedFile->getClientOriginalName();
+            }
+
+            $file->setName($fileName);
+            $file->setOriginalName($originalName);
+            $file->setHomework($homework);
+
+            $em->persist($file);
+            $em->flush();
+
+            $this
+                ->get('session')
+                ->getFlashBag()
+                ->set(
+                    'success',
+                    $this
+                        ->get('translator')
+                        ->trans('success.uploaded_file.added', [], 'flashes')
+                )
+            ;
+
+            $this->redirectToRoute(
+                'app_main_courses_show_homework',
+                [
+                    'id' => $course->getId(),
+                    'homeworkId' => $homeworkId,
+                ]
+            );
+        }
+
         return $this->render(
             'AppBundle:Main/Homework:show_course_homework.html.twig',
             [
                 'course' => $course,
                 'homework' => $homework,
+                'fileUploadForm' => $fileUploadForm->createView(),
             ]
         );
     }

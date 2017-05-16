@@ -4,15 +4,12 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Homework
  *
  * @ORM\Table(name="homework")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\HomeworkRepository")
- * @Vich\Uploadable
  */
 class Homework
 {
@@ -52,27 +49,6 @@ class Homework
      * @ORM\Column(name="is_course_homework", type="boolean", nullable=false, options={"default"=0})
      */
     private $isCourseHomework = false;
-
-    /**
-     * @Vich\UploadableField(mapping="course_resources", fileNameProperty="attachmentName")
-     *
-     * @var File
-     */
-    private $attachmentFile;
-
-    /**
-     * @ORM\Column(name="attachment_name", type="string", length=255, nullable=true)
-     *
-     * @var string
-     */
-    private $attachmentName;
-
-    /**
-     * @ORM\Column(name="attachment_original_name", type="string", length=255, nullable=true)
-     *
-     * @var string
-     */
-    private $attachmentOriginalName;
 
     /**
      * @var \DateTime
@@ -118,10 +94,18 @@ class Homework
      */
     private $posts;
 
+    /**
+     * @var ArrayCollection|File[]
+     *
+     * @ORM\OneToMany(targetEntity="File", mappedBy="homework")
+     */
+    private $files;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->posts = new ArrayCollection();
+        $this->files = new ArrayCollection();
     }
 
     /**
@@ -385,68 +369,35 @@ class Homework
     }
 
     /**
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $attachmentFile
+     * Add file
      *
+     * @param File $file
      * @return Homework
      */
-    public function setAttachmentFile(File $attachmentFile = null)
+    public function addFile(File $file)
     {
-        $this->attachmentFile = $attachmentFile;
-
-        if ($attachmentFile) {
-            // It is required that at least one field changes if you are using doctrine
-            // otherwise the event listeners won't be called and the file is lost
-            $this->updatedAt = new \DateTimeImmutable();
-        }
+        $this->files[] = $file;
 
         return $this;
     }
 
     /**
-     * @return File|null
-     */
-    public function getAttachmentFile()
-    {
-        return $this->attachmentFile;
-    }
-
-    /**
-     * @param string $attachmentName
+     * Remove file
      *
-     * @return Homework
+     * @param File $file
      */
-    public function setAttachmentName($attachmentName)
+    public function removeFile(File $file)
     {
-        $this->attachmentName = $attachmentName;
-
-        return $this;
+        $this->files->removeElement($file);
     }
 
     /**
-     * @return string|null
-     */
-    public function getAttachmentName()
-    {
-        return $this->attachmentName;
-    }
-
-    /**
-     * @param string $attachmentOriginalName
+     * Get files
      *
-     * @return Homework
+     * @return ArrayCollection|File[]
      */
-    public function setAttachmentOriginalName($attachmentOriginalName)
+    public function getFiles()
     {
-        $this->attachmentOriginalName = $attachmentOriginalName;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getAttachmentOriginalName()
-    {
-        return $this->attachmentOriginalName;
+        return $this->files;
     }
 }

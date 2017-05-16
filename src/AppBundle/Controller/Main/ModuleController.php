@@ -59,12 +59,6 @@ class ModuleController extends BaseController
             $module->setAuthor($this->getUser());
             $module->setIsCourse(true);
 
-            if ($form->get('attachmentFile')->getData()) {
-                /** @var UploadedFile $attachment */
-                $attachment = $form->get('attachmentFile')->getData();
-                $module->setAttachmentOriginalName($attachment->getClientOriginalName());
-            }
-
             if ($courseId) {
                 $course = $em
                     ->getRepository(Course::class)
@@ -139,12 +133,6 @@ class ModuleController extends BaseController
             $module->setAuthor($this->getUser());
             $module->setIsSeminar(true);
 
-            if ($form->get('attachmentFile')->getData()) {
-                /** @var UploadedFile $attachment */
-                $attachment = $form->get('attachmentFile')->getData();
-                $module->setAttachmentOriginalName($attachment->getClientOriginalName());
-            }
-
             if ($course) {
                 $module->setCourse($course);
             }
@@ -209,12 +197,6 @@ class ModuleController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
             $module->setUpdatedAt(new \DateTime());
 
-            if ($form->get('attachmentFile')->getData()) {
-                /** @var UploadedFile $attachment */
-                $attachment = $form->get('attachmentFile')->getData();
-                $module->setAttachmentOriginalName($attachment->getClientOriginalName());
-            }
-
             $em->persist($module);
             $em->flush();
 
@@ -265,12 +247,6 @@ class ModuleController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $module->setUpdatedAt(new \DateTime());
-
-            if ($form->get('attachmentFile')->getData()) {
-                /** @var UploadedFile $attachment */
-                $attachment = $form->get('attachmentFile')->getData();
-                $module->setAttachmentOriginalName($attachment->getClientOriginalName());
-            }
 
             $em->persist($module);
             $em->flush();
@@ -445,6 +421,11 @@ class ModuleController extends BaseController
             );
         }
 
+        $hideAuxNav = false;
+        if ($module->getCourse()->getAuthor() == $this->getUser()) {
+            $hideAuxNav = true;
+        }
+
         return $this->render(
             'AppBundle:Main/Module:show_seminar.html.twig',
             [
@@ -452,6 +433,7 @@ class ModuleController extends BaseController
                 'userId' => $this->getUser()->getId(),
                 'userFullName' => $this->getUser()->getFullName(),
                 'fileUploadForm' => $fileUploadForm->createView(),
+                'hideAuxNav' => $hideAuxNav,
             ]
         );
     }
@@ -638,8 +620,6 @@ class ModuleController extends BaseController
             $filePath = $path."/".$file->getModule()->getCourse()->getAbbreviation()."/".$fileName;
 
             $response = new BinaryFileResponse($filePath);
-            /*$response->headers->set ( 'Content-Type', 'text/plain' );
-            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $displayName);*/
             $response->setContentDisposition(
                 ResponseHeaderBag::DISPOSITION_INLINE,
                 $displayName
