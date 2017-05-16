@@ -4,6 +4,9 @@
 
 {% set user = module.author %}
 {% set course = module.course %}
+{% if hideAuxNav %}
+    {% set hideSecondNav = true %}
+{% endif %}
 {% if module.isCourse %}
     {% set navCourse = true %}
 {% else %}
@@ -25,14 +28,15 @@
                         </button>
                     </a>
                 {% endif %}
-                {% if module.attachmentName %}
-                    <a href="{{ path('app_main_modules_download_attachment', {'id':module.id}) }}">
-                        <button class="btn bgm-orange waves-effect m-t-5 text-transform-initial f-15">
-                            {{ 'button.download_attachment'|trans }}
-                        </button>
-                    </a>
-                {% endif %}
             </div>
+
+            {% for flash_message in app.session.flashBag.get('success') %}
+                <div class="row">
+                    <div id="general-alert" class="alert alert-success m-t-15">
+                        <strong>{{ flash_message }}</strong>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
         <div class="pmb-block p-t-15">
             <div class="pmbb-header">

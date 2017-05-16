@@ -43,9 +43,19 @@ class File
      * @Serializer\Exclude()
      *
      * @ORM\ManyToOne(targetEntity="Module", inversedBy="files")
-     * @ORM\JoinColumn(name="module_id", nullable=false)
+     * @ORM\JoinColumn(name="module_id", nullable=true)
      */
     private $module;
+
+    /**
+     * @var Homework
+     *
+     * @Serializer\Exclude()
+     *
+     * @ORM\ManyToOne(targetEntity="Homework", inversedBy="files")
+     * @ORM\JoinColumn(name="homework_id", nullable=true)
+     */
+    private $homework;
 
     /**
      * @var \DateTime
@@ -159,5 +169,28 @@ class File
     public function getModule()
     {
         return $this->module;
+    }
+
+    /**
+     * Set homework
+     *
+     * @param Homework $homework
+     * @return File
+     */
+    public function setHomework(Homework $homework)
+    {
+        $this->homework = $homework;
+
+        return $this;
+    }
+
+    /**
+     * Get homework
+     *
+     * @return Homework
+     */
+    public function getHomework()
+    {
+        return $this->homework;
     }
 }
