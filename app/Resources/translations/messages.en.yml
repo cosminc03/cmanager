@@ -27,6 +27,7 @@ message:
     professor_courses: Add one course and you will find here your personal courses.
     associate_courses: After association with a course you will find here your associated courses.
     removed_homework: Removed homework cannot be restored!
+    no_files: No files for this module.
 
 title:
     homepage_admin: CManager Admin
@@ -68,6 +69,7 @@ heading:
     remove_homework: Remove homework
     title: Title
     content: Content
+    attachments: Attachments
     summary: Summary
     basic_information: Basic Information
     contact_information: Contact Information
@@ -84,6 +86,7 @@ heading:
     observation: Observation
     comments: Comments
     deadline: Deadline
+    comments: Comments
 
 paragraph:
     new_course: Create your course by filling out the inputs from the form
@@ -99,6 +102,7 @@ paragraph:
     new_homework: Create new homework by filling out the inputs from the form
     edit_homework: Update your homework infos by filling out the inputs from the form
     remove_homework: Removing homework will delete all related resources
+    upload_files_course: You will be able to upload file on the show page after you create course module
 
 small:
     no_associate: No professor associated to your course.
@@ -173,6 +177,8 @@ label:
         observation: Homework observation
         attachment: Homework attachment
         deadline: Homework deadline
+    upload_file:
+        name: Name
 
 help_block:
     course:
@@ -212,6 +218,8 @@ help_block:
         content: Enter homework content.
         observation: Enter homework observation.
         deadline: Select homework deadline.
+    upload_file:
+        name: Enter name if you want to save file with different name.
 
 table_header_cell:
     id: Id
@@ -231,6 +239,9 @@ table_header_cell:
     enabled: Enabled
     created_at: Created at
     updated_at: Updated at
+    uploaded_at: Uploaded at
+    file_name: File name
+    options: Options
 
 button:
     register: Register
@@ -265,6 +276,8 @@ button:
     create_homework: Create homework
     edit_homework: Edit homework
     remove_homework: Remove homework
+    save_attachment: Save attachment
+    close: Close
 
 add:
     announcement: Add new announcement
@@ -317,6 +330,7 @@ navigation:
 tooltip:
     edit: Edit
     subscribe: Subscribe
+    upload_file: Upload file
 
 data_table:
     full_name: Full Name

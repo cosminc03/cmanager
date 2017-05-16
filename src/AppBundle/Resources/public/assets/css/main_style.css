@@ -367,3 +367,7 @@ hr {
 .f-s-50 {
     font-size: 50px!important;
 }
+
+.d-inline-block {
+    display: inline-block;
+}

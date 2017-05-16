@@ -106,10 +106,6 @@ class EditType extends AbstractType
                     'uiColor' => '#ffffff',
                 ],
             ])
-            ->add('attachmentFile', VichFileType::class, [
-                'required' => false,
-                'download_link' => false,
-            ])
         ;
     }
 
