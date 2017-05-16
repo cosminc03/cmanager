@@ -15,19 +15,15 @@
         <div>
             <div class="panel-controls">
                 {% if app.user == module.author %}
-                    {% if module.isCourse %}
-                        <a href="{{ path('app_main_modules_course_edit', {'id':module.id}) }}">
-                    {% else %}
-                        <a href="{{ path('app_main_modules_seminar_edit', {'id':module.id}) }}">
-                    {% endif %}
-                            <button class="btn bgm-blue waves-effect m-t-5 text-transform-initial f-15">
-                                {% if module.isCourse %}
-                                    {{ 'button.edit_course_module'|trans }}
-                                {% else %}
-                                    {{ 'button.edit_seminar_module'|trans }}
-                                {% endif %}
-                            </button>
-                        </a>
+                    <a href="{{ path('app_main_modules_seminar_edit', {'id':module.id}) }}">
+                        <button class="btn bgm-blue waves-effect m-t-5 text-transform-initial f-15">
+                            {% if module.isCourse %}
+                                {{ 'button.edit_course_module'|trans }}
+                            {% else %}
+                                {{ 'button.edit_seminar_module'|trans }}
+                            {% endif %}
+                        </button>
+                    </a>
                 {% endif %}
                 {% if module.attachmentName %}
                     <a href="{{ path('app_main_modules_download_attachment', {'id':module.id}) }}">
@@ -60,7 +56,137 @@
 
         <div class="pmb-block p-t-15">
             <div class="pmbb-header">
-                <h2><i class="zmdi zmdi-comment"></i> Comments</h2>
+                <h2 class="d-inline-block"><i class="zmdi zmdi-folder"></i> {{ 'heading.attachments'|trans }}</h2>
+                {% if app.user == module.author %}
+                    <a data-toggle="modal" href="#modalDefault" class="btn bgm-orange text-transform-initial waves-effect f-15 m-l-10 m-b-10">
+                        <i class="zmdi zmdi-file-plus"></i>
+                    </a>
+                {% endif %}
+            </div>
+            <div class="pmbb-body p-l-30">
+                <div class="pmbb-view">
+                    {# Modal for file upload #}
+                    <div class="modal fade" id="modalDefault" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                {{ form_start(
+                                fileUploadForm,
+                                {
+                                    'method': 'POST',
+                                    'action': path('app_main_modules_course_show', {'id':module.id}),
+                                    'attr': {
+                                    'class': 'form-upload',
+                                    'novalidate': 'novalidate',
+                                },
+                                }
+                                ) }}
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Upload attachment</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+                                        <div class="form-group {% if form_errors(fileUploadForm.originalName) %}has-error has-feedback{% endif %}">
+                                            {{ form_label(
+                                            fileUploadForm.originalName,
+                                            'label.upload_file.name'|trans,
+                                            {
+                                                'label_attr' : {'class': 'f-17'}
+                                            }
+                                            ) }}
+                                            {% if form_errors(fileUploadForm.originalName) %}
+                                                <small class="help-block c-red">{{ form_errors(fileUploadForm.originalName) }}</small>
+                                            {% endif %}
+                                            <div class="fg-line">
+                                                {{ form_widget(
+                                                fileUploadForm.originalName,
+                                                {
+                                                    'attr' : {
+                                                    'class': 'form-control input-lg'
+                                                },
+                                                }
+                                                ) }}
+                                            </div>
+                                            <span class="help-block">{{ 'help_block.upload_file.name'|trans }}</span>
+                                        </div>
+                                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                                            <span class="btn btn-primary btn-file m-r-10">
+                                                <span class="fileinput-new">Upload file</span>
+                                                {{ form_widget(
+                                                fileUploadForm.uploadedFile,
+                                                {
+                                                    'attr' : {
+                                                    'class': 'form-control input-lg'
+                                                },
+                                                }
+                                                ) }}
+                                            </span>
+                                            <span class="fileinput-filename"></span>
+                                            <a href="#" class="close fileinput-exists" data-dismiss="fileinput">&times;</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-link upload-file">{{ 'button.save_attachment'|trans }}</button>
+                                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ 'button.cancel'|trans }}</button>
+                                </div>
+                                <span class="hidden">{{ form_row(fileUploadForm._token) }}</span>
+                                {{ form_end(fileUploadForm, {'render_rest': false}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if not module.files|length > 0 %}
+                        <div id="no-files">{{ 'message.no_files'|trans }}</div>
+                    {% else %}
+                        {# Table with all files uploaded #}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>{{ 'table_header_cell.file_name'|trans }}</th>
+                                    <th>{{ 'table_header_cell.uploaded_at'|trans }}</th>
+                                    <th>{{ 'table_header_cell.options'|trans }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% set i = 1 %}
+                                {% for uploadedFile in module.files %}
+                                    <tr>
+                                        <td>{{ i }}</td>
+                                        <td>{{ uploadedFile.originalName }}</td>
+                                        <td>{{ uploadedFile.createdAt|date("d/m/Y H:i:s") }}</td>
+                                        <td>
+                                            <a href="{{ path('app_main_modules_download_file', {'id':uploadedFile.id}) }}" target="_blank">
+                                                <button class="btn btn-primary waves-effect">
+                                                    <i class="zmdi zmdi-download"></i>
+                                                </button>
+                                            </a>
+                                            {% if app.user == module.author %}
+                                                <button
+                                                    class="btn btn-danger waves-effect delete-file"
+                                                    data-redirect = "app_main_modules_seminar_show"
+                                                    data-delete="app_main_modules_delete_uploaded_file"
+                                                    data-id="{{ uploadedFile.id }}"
+                                                >
+                                                    <i class="zmdi zmdi-delete"></i>
+                                                </button>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% set i = i + 1 %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="pmb-block p-t-15">
+            <div class="pmbb-header">
+                <h2><i class="zmdi zmdi-comment"></i> {{ 'heading.comments'|trans }}</h2>
             </div>
             <div class="pmbb-body p-l-30">
                 <div class="pmbb-view">
@@ -154,6 +280,32 @@
                         }
                     });
                 }
+            });
+
+            $('.delete-file').on('click', function () {
+                var fileId = $(this).attr('data-id'),
+                    deleteLink = $(this).attr('data-delete'),
+                    redirectLink = $(this).attr('data-redirect'),
+                    moduleId = {{ module.id }};
+
+                $.ajax({
+                    type: 'get',
+                    url: Routing.generate(deleteLink, {'id': fileId}, true),
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.delete == 'success') {
+                            window.location.replace(Routing.generate(redirectLink, {'id': moduleId}, true))
+                        }
+                    },
+                    error: function (response, desc, err){
+                        if (response.responseJSON && response.responseJSON.message) {
+                            console.log(response.responseJSON.message);
+                        }
+                        else{
+                            console.log(desc);
+                        }
+                    }
+                });
             });
         });
     </script>

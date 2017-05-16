@@ -78,32 +78,6 @@
                 <span class="help-block">{{ 'help_block.course_module.content'|trans }}</span>
             </div>
 
-            <div class="form-group">
-                {{ form_label(
-                    form.attachmentFile,
-                    'label.course_module.attachment'|trans,
-                    {
-                        'label_attr' : {
-                            'class': 'f-17'
-                        }
-                    }
-                ) }}
-                <div class="fg-line">
-                    {{ form_widget(
-                        form.attachmentFile,
-                        {
-                            'attr': {
-                                'class': 'form-control',
-                            },
-                        }
-                    ) }}
-                    {% if module.attachmentName %}
-                        <div class="m-t-10">{{ module.attachmentOriginalName }}</div>
-                    {% endif %}
-                </div>
-
-            </div>
-
             <div>
                 <button class="btn bgm-green waves-effect text-transform-initial f-16" type="submit">
                     {{ 'button.save_changes'|trans }}

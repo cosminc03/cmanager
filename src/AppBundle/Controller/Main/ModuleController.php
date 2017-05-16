@@ -4,13 +4,17 @@ namespace AppBundle\Controller\Main;
 
 use AppBundle\Controller\BaseController;
 use AppBundle\Entity\Course;
+use AppBundle\Entity\File;
 use AppBundle\Entity\Module;
 use AppBundle\Form\Module\Main\CreateType;
 use AppBundle\Form\Module\Main\EditType;
+use AppBundle\Form\File\Main\CreateType as FileCreateType;
 use AppBundle\Security\CourseVoter;
 use AppBundle\Security\ModuleVoter;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -299,21 +303,77 @@ class ModuleController extends BaseController
     /**
      * Display Course Module entities.
      *
-     * @Route("/course/{id}/show", name="app_main_modules_course_show")
-     * @Method("GET")
+     * @Route("/course/{id}/show", options={"expose"=true}, name="app_main_modules_course_show")
+     * @Method({"GET", "POST"})
      *
+     * @param Request $request
      * @param Module  $module
      *
      * @return Response
      */
-    public function showAction(Module $module)
+    public function showAction(Request $request, Module $module)
     {
+        $file = new File();
+        $fileUploadForm = $this->createForm(FileCreateType::class, $file);
+        $fileUploadForm->handleRequest($request);
+
+        if ($fileUploadForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            // $fileUploaded stores the uploaded file
+            /** @var UploadedFile $file */
+            $uploadedFile = $fileUploadForm->get('uploadedFile')->getData();
+
+            // Generate a unique name for the file before saving it
+            $fileName = md5(uniqid()).'.'.$uploadedFile->guessExtension();
+
+            $savePath = $this->getParameter('app.course.attachments_path');
+            $savePath = $savePath.'/'.$module->getCourse()->getAbbreviation();
+            // Move the file to the directory where brochures are stored
+            $uploadedFile->move(
+                $savePath,
+                $fileName
+            );
+
+            if ($file->getOriginalName()) {
+                $originalName = $file->getOriginalName().'.'.$uploadedFile->guessExtension();
+            } else {
+                $originalName = $uploadedFile->getClientOriginalName();
+            }
+
+            $file->setName($fileName);
+            $file->setOriginalName($originalName);
+            $file->setModule($module);
+
+            $em->persist($file);
+            $em->flush();
+
+            $this
+                ->get('session')
+                ->getFlashBag()
+                ->set(
+                    'success',
+                    $this
+                        ->get('translator')
+                        ->trans('success.uploaded_file.added', [], 'flashes')
+                )
+            ;
+
+            $this->redirectToRoute(
+                'app_main_modules_course_show',
+                [
+                    'id' => $module->getId(),
+                ]
+            );
+        }
+
         return $this->render(
             'AppBundle:Main/Module:show_course.html.twig',
             [
                 'module' => $module,
                 'userId' => $this->getUser()->getId(),
                 'userFullName' => $this->getUser()->getFullName(),
+                'fileUploadForm' => $fileUploadForm->createView(),
             ]
         );
     }
@@ -321,21 +381,77 @@ class ModuleController extends BaseController
     /**
      * Display Seminar Module entities.
      *
-     * @Route("/seminar/{id}/show", name="app_main_modules_seminar_show")
-     * @Method("GET")
+     * @Route("/seminar/{id}/show", options={"expose"=true}, name="app_main_modules_seminar_show")
+     * @Method({"GET", "POST"})
      *
-     * @param Module $module
+     * @param Request $request
+     * @param Module  $module
      *
      * @return Response
      */
-    public function showSeminarAction(Module $module)
+    public function showSeminarAction(Request $request, Module $module)
     {
+        $file = new File();
+        $fileUploadForm = $this->createForm(FileCreateType::class, $file);
+        $fileUploadForm->handleRequest($request);
+
+        if ($fileUploadForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            // $fileUploaded stores the uploaded file
+            /** @var UploadedFile $file */
+            $uploadedFile = $fileUploadForm->get('uploadedFile')->getData();
+
+            // Generate a unique name for the file before saving it
+            $fileName = md5(uniqid()).'.'.$uploadedFile->guessExtension();
+
+            $savePath = $this->getParameter('app.course.attachments_path');
+            $savePath = $savePath.'/'.$module->getCourse()->getAbbreviation();
+            // Move the file to the directory where brochures are stored
+            $uploadedFile->move(
+                $savePath,
+                $fileName
+            );
+
+            if ($file->getOriginalName()) {
+                $originalName = $file->getOriginalName().'.'.$uploadedFile->guessExtension();
+            } else {
+                $originalName = $uploadedFile->getClientOriginalName();
+            }
+
+            $file->setName($fileName);
+            $file->setOriginalName($originalName);
+            $file->setModule($module);
+
+            $em->persist($file);
+            $em->flush();
+
+            $this
+                ->get('session')
+                ->getFlashBag()
+                ->set(
+                    'success',
+                    $this
+                        ->get('translator')
+                        ->trans('success.uploaded_file.added', [], 'flashes')
+                )
+            ;
+
+            $this->redirectToRoute(
+                'app_main_modules_seminar_show',
+                [
+                    'id' => $module->getId(),
+                ]
+            );
+        }
+
         return $this->render(
             'AppBundle:Main/Module:show_seminar.html.twig',
             [
                 'module' => $module,
                 'userId' => $this->getUser()->getId(),
                 'userFullName' => $this->getUser()->getFullName(),
+                'fileUploadForm' => $fileUploadForm->createView(),
             ]
         );
     }
@@ -461,5 +577,83 @@ class ModuleController extends BaseController
         }
 
         return $response;
+    }
+
+    /**
+     * Upload new file for a Module entity.
+     *
+     * @Route("/uploaded-file/{id}/delete", options={"expose"=true}, name="app_main_modules_delete_uploaded_file")
+     * @Method({"GET"})
+     *
+     * @param File $file
+     *
+     * @return JsonResponse
+     */
+    public function deleteUploadedFileAction(File $file)
+    {
+        $path = $this->getParameter('app.course.attachments_path');
+        $pathToFile = $path.'/'.$file->getModule()->getCourse()->getAbbreviation().'/'.$file->getName();
+
+        $fs = new Filesystem();
+        $fs->remove($pathToFile);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($file);
+        $em->flush();
+
+        $this
+            ->get('session')
+            ->getFlashBag()
+            ->set(
+                'success',
+                $this
+                    ->get('translator')
+                    ->trans('success.uploaded_file.delete', [], 'flashes')
+            )
+        ;
+
+        $message = [
+            'delete' => 'success',
+        ];
+
+        return new JsonResponse($message);
+    }
+
+    /**
+     * Download file associated with a Module entity.
+     *
+     * @Route("/download-file/{id}", options={"expose"=true}, name="app_main_modules_download_file")
+     * @Method({"GET"})
+     *
+     * @param File $file
+     *
+     * @return Response|JsonResponse
+     */
+    public function downloadFileAction(File $file)
+    {
+        try {
+            $displayName = $file->getOriginalName();
+            $fileName = $file->getName();
+            $path = $this->getParameter('app.course.attachments_path');
+            $filePath = $path."/".$file->getModule()->getCourse()->getAbbreviation()."/".$fileName;
+
+            $response = new BinaryFileResponse($filePath);
+            /*$response->headers->set ( 'Content-Type', 'text/plain' );
+            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $displayName);*/
+            $response->setContentDisposition(
+                ResponseHeaderBag::DISPOSITION_INLINE,
+                $displayName
+            );
+
+            return $response;
+        } catch (Exception $e) {
+            $array = [
+                'status' => 0,
+                'message' => 'Download error',
+            ];
+            $response = new JsonResponse($array, 400);
+
+            return $response;
+        }
     }
 }

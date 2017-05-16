@@ -33,3 +33,6 @@ success:
         edit: Homework successfully edited!
         delete:
             from_edit: Homework successfully deleted!
+    uploaded_file:
+        added: New file successfully uploaded!
+        delete: File successfully deleted!

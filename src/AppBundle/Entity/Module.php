@@ -111,10 +111,18 @@ class Module
      */
     private $posts;
 
+    /**
+     * @var ArrayCollection|File[]
+     *
+     * @ORM\OneToMany(targetEntity="File", mappedBy="module")
+     */
+    private $files;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->posts = new ArrayCollection();
+        $this->files = new ArrayCollection();
     }
 
     /**
@@ -417,5 +425,38 @@ class Module
     public function getAttachmentOriginalName()
     {
         return $this->attachmentOriginalName;
+    }
+
+    /**
+     * Add files
+     *
+     * @param File $files
+     * @return Module
+     */
+    public function addFile(File $files)
+    {
+        $this->files[] = $files;
+
+        return $this;
+    }
+
+    /**
+     * Remove files
+     *
+     * @param File $files
+     */
+    public function removeFile(File $files)
+    {
+        $this->files->removeElement($files);
+    }
+
+    /**
+     * Get files
+     *
+     * @return ArrayCollection|File[]
+     */
+    public function getFiles()
+    {
+        return $this->files;
     }
 }
