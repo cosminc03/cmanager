@@ -24,7 +24,7 @@
     {% if app.user != course.author %}
         <div class="row  m-t-r-35">
             <h3>Course Coordinator</h3>
-            <div class="associate-professors">
+            <div class="course-author">
                 <ul class="course-list">
                     <li class="course-row">
                         <div class="avatar-container s40">
@@ -55,7 +55,7 @@
     {% endif %}
     <div class="row">
         <h3>{{ 'heading.associates_list'|trans }}</h3>
-        <div class="associate-professors">
+        <div id="associate-professors">
             {% if not course.assistants|length > 0 %}
                 <small>{{ 'small.no_associate'|trans }}</small>
             {% else %}
