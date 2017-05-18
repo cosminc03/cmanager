@@ -1,0 +1,79 @@
+{% extends 'AppBundle:Main/Layout:body_main.html.twig' %}
+
+{% trans_default_domain 'messages' %}
+
+{% block body_content %}
+    <div class="row m-t-r-35">
+        <div class="nav-controls">
+            <div class="col-sm-2">
+                <div class="fg-line">
+                    <input type="text" class="form-control" placeholder="Filter by name...">
+                </div>
+            </div>
+            <div class="col-sm-2 m-t-5">
+                <select class="selectpicker">
+                    <option disabled="disabled" selected="selected">Filter by year</option>
+                    <option>Year I</option>
+                    <option>Year II</option>
+                    <option>Year III</option>
+                </select>
+            </div>
+            <div class="col-sm-2 m-t-5">
+                <select class="selectpicker">
+                    <option>Name</option>
+                    <option>Last updated</option>
+                    <option>Oldest updated</option>
+                    <option>Last created</option>
+                    <option>Oldest created</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="row">
+            <div id="general-alert" class="alert alert-success m-t-15">
+                <strong>{{ flash_message }}</strong>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% if not courses|length > 0 %}
+        <div class="row">
+            <h3>{{ 'heading.assciate_no_courses'|trans }}</h3>
+            <small>{{ 'message.associate_courses'|trans }}</small>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="course-list-holder">
+                <ul class="course-list">
+                    {% for course in courses %}
+                        <li class="course-row">
+                            <div class="avatar-container s40">
+                                <a href="{{ path('app_main_courses_show', {'id': course.id}) }}">
+                                    <img class="round s40" avatar="{{ course.title }}"/>
+                                </a>
+                            </div>
+                            <div class="course-details">
+                                <h4 class="m-t-0 m-b-0">
+                                    <a href="{{ path('app_main_courses_show', {'id': course.id}) }}">{{ course.abbreviation|upper }}/{{ course.title }}</a>
+                                </h4>
+                                <div class="course-details-description m-t-5">
+                                    <p dir="auto">
+                                        {{ course.description }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="controls">
+                        <span class="m-l-10">
+                            <i class="zmdi zmdi-star"></i>
+                            {{ course.subscribers|length }}
+                        </span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

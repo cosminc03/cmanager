@@ -14,10 +14,12 @@
                         </a>
                     </li>
                 {% endif %}
-                <li>
-                    <i class="btn zmdi zmdi-wifi subscribe {% if app.user in course.subscribers %}hidden{% else %}show{% endif %}" data-toggle="tooltip" data-placement="bottom" data-original-title="Subscribe" data-message="You have successfully subscribed to this course" data-type="success"></i>
-                    <i class="btn zmdi zmdi-wifi-off unsubscribe {% if app.user in course.subscribers %}show{% else %}hidden{% endif %}" data-toggle="tooltip" data-placement="bottom" data-original-title="Unsubscribe" data-message="You have successfully unsubscribed to this course" data-type="danger"></i>
-                </li>
+                {% if constant('AppBundle\\Entity\\User::ROLE_STUDENT') in app.user.roles %}
+                    <li>
+                        <i class="btn zmdi zmdi-wifi subscribe {% if app.user in course.subscribers %}hidden{% else %}show{% endif %}" data-toggle="tooltip" data-placement="bottom" data-original-title="Subscribe" data-message="You have successfully subscribed to this course" data-type="success"></i>
+                        <i class="btn zmdi zmdi-wifi-off unsubscribe {% if app.user in course.subscribers %}show{% else %}hidden{% endif %}" data-toggle="tooltip" data-placement="bottom" data-original-title="Unsubscribe" data-message="You have successfully unsubscribed to this course" data-type="danger"></i>
+                    </li>
+                {% endif %}
             </ul>
         </div>
         <div class="profile-header">

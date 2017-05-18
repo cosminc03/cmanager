@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new AppBundle\AppBundle(),
 
             //additional
+            new Snc\RedisBundle\SncRedisBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
@@ -25,6 +26,10 @@ class AppKernel extends Kernel
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Vich\UploaderBundle\VichUploaderBundle(),
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
+            new Gos\Bundle\WebSocketBundle\GosWebSocketBundle(),
+            new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle(),
+            new \Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

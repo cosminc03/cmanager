@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Main;
 
 use AppBundle\Controller\BaseController;
+use AppBundle\Entity\Announcement;
 use AppBundle\Entity\Course;
 use AppBundle\Entity\File;
 use AppBundle\Entity\Homework;
@@ -54,13 +55,6 @@ class CourseController extends BaseController
             ;
         }
 
-        if (in_array(User::ROLE_ASSOCIATE, $this->getUser()->getRoles())) {
-            $courses = $em
-                ->getRepository(Course::class)
-                ->findByAssociates($this->getUser())
-            ;
-        }
-
         return $this->render(
             'AppBundle:Main/Course:list.html.twig',
             [
@@ -95,28 +89,24 @@ class CourseController extends BaseController
     }
 
     /**
-     * TODO: change to show courses for starred page
+     * List associated courses for professors.
      *
-     * List user starred Course entities
-     *
-     * @Route("/starred", name="app_main_courses_starred")
+     * @Route("/associated", name="app_main_courses_associated")
      * @Method({"GET"})
      *
      * @return Response
      */
-    public function starredAction()
+    public function associatedAction()
     {
         $em = $this->getDoctrine()->getManager();
 
         $courses = $em
             ->getRepository(Course::class)
-            ->findBy([
-                'author' => $this->getUser(),
-            ])
+            ->findByAssociates($this->getUser())
         ;
 
         return $this->render(
-            'AppBundle:Main/Course:list.html.twig',
+            'AppBundle:Main/Course:associated.html.twig',
             [
                 'courses' => $courses,
             ]
@@ -477,6 +467,14 @@ class CourseController extends BaseController
     {
         $em = $this->getDoctrine()->getManager();
 
+        $notifications = $course->getNotifications();
+        foreach ($notifications as $notification) {
+            if (!$notification->getReaders()->contains($this->getUser())) {
+                $notification->addReader($this->getUser());
+                $em->persist($notification);
+            }
+        }
+
         $course->addSubscriber($this->getUser());
         $em->persist($course);
         $em->flush();
@@ -723,12 +721,94 @@ class CourseController extends BaseController
             ])
         ;
 
+        $hideAuxNav = false;
+        if ($course->getAuthor() == $this->getUser()) {
+            $hideAuxNav = true;
+        }
+
         return $this->render(
             'AppBundle:Main/Homework:list_user.html.twig',
             [
                 'course' => $course,
                 'homework' => $homework,
                 'user' => $user,
+                'hideAuxNav' => $hideAuxNav,
+            ]
+        );
+    }
+
+    /**
+     * Get announcements for a Course entity.
+     *
+     * @Route("/{id}/announcements", options={"expose"=true}, name="app_main_courses_list_announcements")
+     * @Method({"GET"})
+     *
+     * @param Course $course
+     *
+     * @return Response
+     */
+    public function listAnnouncementsAction(Course $course)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $announcements = $em
+            ->getRepository(Announcement::class)
+            ->findBy([
+                'course' => $course,
+                'createdBy' => $course->getAuthor(),
+                'isCourseAnnouncement' => true,
+            ])
+        ;
+
+        return $this->render(
+            'AppBundle:Main/Announcement:list.html.twig',
+            [
+                'course' => $course,
+                'announcements' => $announcements,
+            ]
+        );
+    }
+
+    /**
+     * Get announcements for an associate professor for a Course entity.
+     *
+     * @Route("/{id}/users/{userId}/announcements", options={"expose"=true}, name="app_main_courses_users_announcements")
+     * @Method({"GET"})
+     *
+     * @param Course $course
+     * @param int   $userId
+     *
+     * @return Response
+     */
+    public function usersAnnouncementsAction(Course $course, $userId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em
+            ->getRepository(User::class)
+            ->find($userId)
+        ;
+
+        $announcements = $em
+            ->getRepository(Announcement::class)
+            ->findBy([
+                'createdBy' => $user,
+                'course' => $course,
+                'isCourseAnnouncement' => false,
+            ])
+        ;
+
+        $hideAuxNav = false;
+        if ($course->getAuthor() == $this->getUser()) {
+            $hideAuxNav = true;
+        }
+
+        return $this->render(
+            'AppBundle:Main/Announcement:list_user.html.twig',
+            [
+                'course' => $course,
+                'announcements' => $announcements,
+                'user' => $user,
+                'hideAuxNav' => $hideAuxNav,
             ]
         );
     }

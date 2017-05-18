@@ -1,0 +1,172 @@
+{% extends 'AppBundle:Main/Layout:body_main.html.twig' %}
+
+{% trans_default_domain 'messages' %}
+
+{% block nav %}{% endblock %}
+
+{% block body_content %}
+    <div class="row m-t-10">
+        <div class="col-lg-3 profile-settings-sidebar">
+            <h3>{{ 'heading.edit_announcement'|trans }}</h3>
+            <p>{{ 'paragraph.edit_announcement'|trans }}</p>
+        </div>
+        <div class="col-lg-9">
+            {% if not form.vars.valid %}
+                <div class="f-s-17 c-red m-t-10 m-b-10">{{ 'help_block.form.errors'|trans }}</div>
+            {% endif %}
+            {{ form_start(
+                form,
+                {
+                    'method': 'POST',
+                    'action': path('app_main_announcements_edit', {'id':announcement.id}),
+                    'attr': {
+                        'novalidate': 'novalidate',
+                    },
+                }
+            ) }}
+                <div class="form-group {% if form_errors(form.title) %}has-error has-feedback{% endif %}">
+                    {{ form_label(
+                        form.title,
+                        'label.announcement.title'|trans,
+                        {
+                            'label_attr' : {'class': 'f-17'}
+                        }
+                    ) }}
+                    {% if form_errors(form.title) %}
+                        <small class="help-block c-red">{{ form_errors(form.title) }}</small>
+                    {% endif %}
+                    <div class="fg-line">
+                        {{ form_widget(
+                            form.title,
+                            {
+                                'attr' : {
+                                    'class': 'form-control input-lg'
+                                },
+                            }
+                        ) }}
+                    </div>
+                    <span class="help-block">{{ 'help_block.announcement.title'|trans }}</span>
+                </div>
+
+                <div class="form-group {% if form_errors(form.content) %}has-error has-feedback{% endif %}">
+                    {{ form_label(
+                        form.content,
+                        'label.announcement.content'|trans,
+                        {
+                            'label_attr' : {
+                                'class': 'f-17'
+                            }
+                        }
+                    ) }}
+                    {% if form_errors(form.content) %}
+                        <small class="help-block c-red">{{ form_errors(form.content) }}</small>
+                    {% endif %}
+                    <div class="fg-line">
+                        {{ form_widget(
+                            form.content,
+                            {
+                                'attr' : {
+                                    'class': 'form-control input-lg',
+                                    'rows': '5',
+                                    'placeholder': 'placeholder.content'|trans
+                                },
+                            }
+                        ) }}
+                    </div>
+                    <span class="help-block">{{ 'help_block.announcement.content'|trans }}</span>
+                </div>
+
+                <div>
+                    <button class="btn bgm-green waves-effect text-transform-initial f-16" type="submit">
+                        {{ 'button.edit_announcement'|trans }}
+                    </button>
+                </div>
+
+                <span class="hidden">{{ form_row(form._token) }}</span>
+            {{ form_end(form, {'render_rest': false}) }}
+
+            {% if isCourseAnnouncement %}
+                <a class="grey-color" href="{{ path('app_main_courses_list_announcements', {'id':announcement.course.id}) }}">
+                    <button class="btn waves-effect text-transform-initial f-16 pull-right m-t-r-35">
+                        {{ 'button.cancel'|trans }}
+                    </button>
+                </a>
+            {% else %}
+                <a class="grey-color" href="{{ path('app_main_courses_users_announcements', {'id':announcement.course.id, 'userId': app.user.id}) }}">
+                    <button class="btn waves-effect text-transform-initial f-16 pull-right m-t-r-35">
+                        {{ 'button.cancel'|trans }}
+                    </button>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <div class="row m-t-10">
+        <div class="col-lg-3 profile-settings-sidebar">
+            <h3 class="c-red">{{ 'heading.remove_announcement'|trans }}</h3>
+            <p>{{ 'paragraph.remove_announcement'|trans }}</p>
+        </div>
+        <div class="col-lg-9">
+            <div class="f-500 f-17 m-t-10">{{ 'message.removed_announcement'|trans }}</div>
+            <button
+                    class="btn bgm-red waves-effect m-t-10 text-transform-initial f-16"
+                    id="sa-warning"
+                    data-link-delete="app_main_announcements_delete"
+                    {% if isCourseAnnouncement %}
+                        data-link-redirect="app_main_courses_list_announcements"
+                    {% else %}
+                        data-link-redirect="app_main_courses_users_announcements"
+                    {% endif %}
+            >
+                {{ 'button.remove_announcement'|trans }}
+            </button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/admin/vendors/bower_components/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('assets/admin/vendors/bower_components/sweetalert/dist/sweetalert.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $('#sa-warning').click(function(){
+            var announcementName = "{{ announcement.title }}",
+                announcementId = {{ announcement.id }},
+                courseId = {{ announcement.course.id }},
+                userId = {{ app.user.id }},
+                deleteLink = $('#sa-warning').attr('data-link-delete'),
+                redirectLink = $('#sa-warning').attr('data-link-redirect'),
+                routeParams = {};
+
+            swal({
+                title: "Are you sure?",
+                text: "You are going to delete announcement " + announcementName + " and you will not be able to recover it!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete announcement!",
+                closeOnConfirm: false
+            }, function(){
+                routeParams['id'] = announcementId;
+
+                $.ajax({
+                    url: Routing.generate(deleteLink, routeParams, true),
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.delete === 'success') {
+                            {% if isCourseAnnouncement %}
+                                window.location.replace(Routing.generate(redirectLink, {'id': courseId}, true));
+                            {% else %}
+                                window.location.replace(Routing.generate(redirectLink, {'id': courseId, 'userId':userId}, true));
+                            {% endif %}
+                        } else {
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

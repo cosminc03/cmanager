@@ -251,6 +251,11 @@ class HomeworkController extends BaseController
             );
         }
 
+        $hideAuxNav = false;
+        if ($homework->getCourse()->getAuthor() == $this->getUser()) {
+            $hideAuxNav = true;
+        }
+
         return $this->render(
             'AppBundle:Main/Homework:show.html.twig',
             [
@@ -259,6 +264,7 @@ class HomeworkController extends BaseController
                 'userId' => $this->getUser()->getId(),
                 'userFullName' => $this->getUser()->getFullName(),
                 'fileUploadForm' => $fileUploadForm->createView(),
+                'hideAuxNav' => $hideAuxNav,
             ]
         );
     }

@@ -1,0 +1,23 @@
+# Web Socket Configuration
+gos_web_socket:
+    server:
+        port: 8080        #The port the socket server will listen on
+        host: 127.0.0.1   #The host ip to bind to
+        router:
+            resources:
+                - '@AppBundle/Resources/config/pubsub/routing.yml'
+    client:
+        firewall: main
+        session_handler: "@session.handler.redis"
+        storage:
+            driver: "@gos_web_socket.client_storage.driver.redis"
+            decorator: "@gos_web_socket.client_storage.doctrine.decorator"
+            ttl: 28800
+            prefix: client_
+    pushers:
+        zmq:
+            default: true
+            host: 127.0.0.1
+            port: 5555
+            persistent: true
+            protocol: tcp

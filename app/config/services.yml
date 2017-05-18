@@ -4,17 +4,35 @@ parameters:
     #parameter_name: value
 
 services:
+    redis.client:
+        class: Predis\Client
+        arguments:
+            -
+                host: '%redis_host%'
+
+    session.handler.redis:
+        class: Snc\RedisBundle\Session\Storage\Handler\RedisSessionHandler
+        arguments:
+            - '@redis.client'
+
+    app.course_notification_topic_service:
+        class: AppBundle\Topic\CourseNotificationTopic
+        arguments:
+            - '@gos_web_socket.websocket.client_manipulator'
+        tags:
+            - { name: gos_web_socket.topic}
+
     app.service.request_parser:
         class: AppBundle\Services\RequestParserService
 
     app.service.data_table:
         class: AppBundle\Services\DataTableService
         arguments:
-            - "@doctrine.orm.entity_manager"
-            - "@app.service.request_parser"
-            - "@jms_serializer"
-            - "@fos_js_routing.encoder"
-            - "@fos_js_routing.normalizer"
+            - '@doctrine.orm.entity_manager'
+            - '@app.service.request_parser'
+            - '@jms_serializer'
+            - '@fos_js_routing.encoder'
+            - '@fos_js_routing.normalizer'
 
     app.service.user:
         class: AppBundle\Services\UserService
@@ -23,11 +41,16 @@ services:
         class: AppBundle\Services\DirectoryNamer
         arguments: [%kernel.root_dir%]
 
+    app.service.notification:
+        class: AppBundle\Services\NotificationService
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
 ### HANDLERS ###
     app.security.main.access_denied_handler:
         class: AppBundle\Security\AccessDeniedMainHandler
         arguments:
-            - "@twig"
+            - '@twig'
 
 ### VOTERS ###
     app.user_voter:

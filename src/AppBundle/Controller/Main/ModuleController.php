@@ -11,6 +11,7 @@ use AppBundle\Form\Module\Main\EditType;
 use AppBundle\Form\File\Main\CreateType as FileCreateType;
 use AppBundle\Security\CourseVoter;
 use AppBundle\Security\ModuleVoter;
+use AppBundle\Topic\CourseNotificationTopic;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -48,6 +49,7 @@ class ModuleController extends BaseController
         $em = $this->getDoctrine()->getManager();
         $getParams = $request->query;
 
+        $courseId = null;
         if (!empty($getParams)) {
             $courseId = $getParams->get('courseId');
         }
@@ -59,19 +61,34 @@ class ModuleController extends BaseController
             $module->setAuthor($this->getUser());
             $module->setIsCourse(true);
 
-            if ($courseId) {
-                $course = $em
-                    ->getRepository(Course::class)
-                    ->find($courseId)
-                ;
+            $course = $em
+                ->getRepository(Course::class)
+                ->find($courseId)
+            ;
 
-                if ($course) {
-                    $module->setCourse($course);
-                }
+            if ($course) {
+                $module->setCourse($course);
             }
 
             $em->persist($module);
             $em->flush();
+
+            // Push notification for new course creation
+            if ($course->getSubscribers()->count() or $course->getAssistants()->count()) {
+                $pusher = $this->container->get('gos_web_socket.zmq.pusher');
+
+                $pusher->push(
+                    ['type' => CourseNotificationTopic::CREATE_COURSE_MODULE],
+                    'course_notification_topic',
+                    ['id' => $course->getId()]
+                );
+
+                $message =  'notification.new_course_module';
+                $this
+                    ->get('app.service.notification')
+                    ->addNotificationByType(CourseNotificationTopic::CREATE_COURSE_MODULE, $this->getUser(), $course, $module, $message)
+                ;
+            }
 
             $flashBag =$this->get('session')->getFlashBag();
             $flashBag->set(

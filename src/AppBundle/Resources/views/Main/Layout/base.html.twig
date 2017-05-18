@@ -59,6 +59,59 @@
 
             <script src="{{ asset('bundles/app/assets/js/alert_messages.js') }}"></script>
             <script src="{{ asset('bundles/app/assets/js/avatar_letters.js') }}"></script>
+            <script src="{{ asset('bundles/app/assets/js/user_notification_number.js') }}"></script>
+
+            {% if app.user %}
+                {% if constant('AppBundle\\Entity\\User::ROLE_STUDENT') in app.user.roles and app.user.subscribedCourses|length %}
+                    {{ ws_client() }}
+                    <script type="text/javascript">
+                        var webSocket = WS.connect("ws://127.0.0.1:8080");
+
+                        webSocket.on("socket/connect", function (session) {
+                            console.log("Student Successfully Connected!");
+
+                            // session is an Autobahn JS WAMP session.
+                            {% for course in app.user.subscribedCourses %}
+                                var id = {{ course.id }};
+
+                                session.subscribe("course/notification/channel/room/" + id, function (uri, payload) {
+                                    changeUserNotificationNumber();
+                                    console.log('Notificare noua');
+                                    console.log(payload);
+                                });
+                            {% endfor %}
+                        });
+
+                        webSocket.on("socket/disconnect", function (error) {
+                            // error provides us with some insight into the disconnection: error.reason and error.code
+                        });
+                    </script>
+                {% elseif app.user.labs|length %}
+                    {{ ws_client() }}
+                    <script type="text/javascript">
+                        var webSocket = WS.connect("ws://127.0.0.1:8080");
+
+                        webSocket.on("socket/connect", function (session) {
+                            console.log("Professor Successfully Connected!");
+
+                            // session is an Autobahn JS WAMP session.
+                            {% for course in app.user.labs %}
+                                var id = {{ course.id }};
+
+                                session.subscribe("course/notification/channel/room/" + id, function (uri, payload) {
+                                    changeUserNotificationNumber();
+                                    console.log('Notificare noua');
+                                    console.log(payload);
+                                });
+                            {% endfor %}
+                        });
+
+                        webSocket.on("socket/disconnect", function (error) {
+                            // error provides us with some insight into the disconnection: error.reason and error.code
+                        });
+                    </script>
+                {% endif %}
+            {% endif %}
         {% endblock %}
     {% endblock %}
     </body>
