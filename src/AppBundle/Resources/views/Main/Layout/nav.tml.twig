@@ -3,7 +3,7 @@
 <div class="nav-wrapper clearfix">
     <nav class="ha-menu nav-links">
         {% if app.request.get('_route') not in ['app_main_users_professors'] %}
-            {% if app.request.get('_route') in ['app_main_courses_list', 'app_main_courses_starred', 'app_main_courses_explore'] %}
+            {% if app.request.get('_route') in ['app_main_courses_list', 'app_main_courses_associated', 'app_main_courses_explore'] %}
                 <ul>
                     <li {% if app.request.get('_route') == 'app_main_courses_list' %} class="active" {% endif %}>
                         <a href="{{ path('app_main_courses_list') }}">
@@ -11,9 +11,9 @@
                         </a>
                     </li>
                     {% if constant('AppBundle\\Entity\\User::ROLE_STUDENT') not in app.user.roles %}
-                        <li {% if app.request.get('_route') == 'app_main_courses_starred' %} class="active" {% endif %}>
-                            <a href="{{ path('app_main_courses_starred') }}">
-                                {{ 'navigation.starred_courses'|trans }}
+                        <li {% if app.request.get('_route') == 'app_main_courses_associated' %} class="active" {% endif %}>
+                            <a href="{{ path('app_main_courses_associated') }}">
+                                {{ 'navigation.associated_courses'|trans }}
                             </a>
                         </li>
                     {% endif %}
@@ -55,6 +55,20 @@
                             </a>
                         </li>
                     {% endif %}
+                    {% if constant('AppBundle\\Entity\\User::ROLE_PROFESSOR') in app.user.roles and app.user == course.author %}
+                        <li {% if app.request.get('_route') == 'app_main_courses_users_homework' or profSeminar is defined %} class="active" {% endif %}>
+                            <a href="{{ path('app_main_courses_users_homework', {'id': course.id, 'userId':app.user.id}) }}">
+                                {{ 'navigation.seminar_homework'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if constant('AppBundle\\Entity\\User::ROLE_PROFESSOR') in app.user.roles and app.user == course.author %}
+                        <li {% if app.request.get('_route') == 'app_main_courses_users_announcements' %} class="active" {% endif %}>
+                            <a href="{{ path('app_main_courses_users_announcements', {'id': course.id, 'userId': app.user.id}) }}">
+                                {{ 'navigation.seminar_announcements'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
                     <li {% if app.request.get('_route') == 'app_main_courses_list_homework' or
                             app.request.get('_route') == 'app_main_courses_show_homework'
                         %}
@@ -65,8 +79,8 @@
                             {{ 'navigation.homework'|trans }}
                         </a>
                     </li>
-                    <li {% if app.request.get('_route') == 'app_main_announcements_list_by_course' %} class="active" {% endif %}>
-                        <a href="#">
+                    <li {% if app.request.get('_route') == 'app_main_courses_list_announcements' %} class="active" {% endif %}>
+                        <a href="{{ path('app_main_courses_list_announcements', {'id':course.id}) }}">
                             {{ 'navigation.announcements'|trans }}
                         </a>
                     </li>
@@ -112,6 +126,13 @@
                         {% endif %}>
                         <a href="{{ path('app_main_courses_users_homework', {'id':course.id, 'userId':user.id}) }}">
                             {{ 'navigation.homework'|trans }}
+                        </a>
+                    </li>
+                    <li {% if app.request.get('_route') == 'app_main_courses_users_announcements' %}
+                            class="active"
+                        {% endif %}>
+                        <a href="{{ path('app_main_courses_users_announcements', {'id':course.id, 'userId':user.id}) }}">
+                            {{ 'navigation.announcements'|trans }}
                         </a>
                     </li>
                 </ul>

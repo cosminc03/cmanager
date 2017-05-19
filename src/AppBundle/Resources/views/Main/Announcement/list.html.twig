@@ -2,18 +2,14 @@
 
 {% trans_default_domain 'messages' %}
 
-{% if hideAuxNav %}
-    {% set hideSecondNav = true %}
-{% endif %}
-
 {% block body_content %}
     <div class="row m-t-r-35">
         <div class="p-relative clearfix m-b-10">
-            <h3>{{ 'heading.list_seminar_homework'|trans }}</h3>
-            {% if user == app.user %}
-                <a href="{{ path('app_main_homework_create', {'courseId':course.id, 'isCourseHomework':false}) }}">
+            <h3>{{ 'heading.list_course_announcements'|trans }}</h3>
+            {% if course.author == app.user %}
+                <a href="{{ path('app_main_announcements_create', {'courseId':course.id, 'isCourseAnnouncement':true}) }}">
                     <button class="btn bgm-green waves-effect m-t-5 text-transform-initial f-15 p-absolute add-module">
-                        {{ 'button.add_homework'|trans }}
+                        {{ 'button.add_announcement'|trans }}
                     </button>
                 </a>
             {% endif %}
@@ -27,33 +23,35 @@
             </div>
         {% endfor %}
 
-        {% if not homework|length > 0 %}
-            <small>{{ 'small.no_homework'|trans }}</small>
+        {% if not announcements|length > 0 %}
+            <small>{{ 'small.no_announcements'|trans }}</small>
         {% else %}
             <div class="panel-group" role="tablist" aria-multiselectable="true">
                 {% set index = 1 %}
-                {% for hmwork in homework %}
+                {% for announcement in announcements %}
                     <div class="panel panel-collapse">
                         <div class="panel-heading" role="tab" id="{{ 'heading' ~ index }}">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" data-parent="#accordion" href="{{ '#collapse' ~ index }}"
                                    aria-expanded="false" aria-controls="{{ 'collapse' ~ index }}" class="f-16">
-                                    {{ hmwork.title }}
+                                    {{ announcement.title }}
                                 </a>
                             </h4>
                         </div>
                         <div id="{{ 'collapse' ~ index }}" class="collapse" role="tabpanel"
                              aria-labelledby="{{ 'heading' ~ index }}">
                             <div class="panel-body">
-                                {{ hmwork.content | raw }}
+                                {{ announcement.content | raw }}
                             </div>
-                            <div class="panel-controls">
-                                <a href="{{ path('app_main_homework_show', {'id':hmwork.id}) }}">
-                                    <button class="btn bgm-blue waves-effect m-t-5 text-transform-initial f-15">
-                                        {{ 'button.view_more'|trans }}
-                                    </button>
-                                </a>
-                            </div>
+                            {% if announcement.createdBy == app.user %}
+                                <div class="panel-controls">
+                                    <a href="{{ path('app_main_announcements_edit', {'id':announcement.id}) }}">
+                                        <button class="btn bgm-blue waves-effect m-t-5 text-transform-initial f-15">
+                                            {{ 'button.edit_announcement'|trans }}
+                                        </button>
+                                    </a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                     {% set index = index + 1 %}

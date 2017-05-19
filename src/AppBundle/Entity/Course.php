@@ -193,6 +193,15 @@ class Course
      */
     private $announcements;
 
+    /**
+     * @var ArrayCollection|Notification[]
+     *
+     * @Serializer\Exclude()
+     *
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="course")
+     */
+    private $notifications;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -200,6 +209,7 @@ class Course
         $this->homework = new ArrayCollection();
         $this->assistants = new ArrayCollection();
         $this->announcements = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     /**
@@ -737,5 +747,39 @@ class Course
     public function getSubscribers()
     {
         return $this->subscribers;
+    }
+
+    /**
+     * Add notification
+     *
+     * @param Notification $notification
+     *
+     * @return Course
+     */
+    public function addNotification(Notification $notification)
+    {
+        $this->notifications[] = $notification;
+
+        return $this;
+    }
+
+    /**
+     * Remove notification
+     *
+     * @param Notification $notification
+     */
+    public function removeNotification(Notification $notification)
+    {
+        $this->notifications->removeElement($notification);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return ArrayCollection|Notification[]
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
     }
 }

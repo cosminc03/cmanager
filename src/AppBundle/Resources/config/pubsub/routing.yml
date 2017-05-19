@@ -1,0 +1,4 @@
+course_notification_topic:
+    channel: course/notification/channel/room/{id}
+    handler:
+        callback: 'course.notification.topic' #related to the getName() of your topic

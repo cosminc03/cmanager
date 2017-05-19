@@ -36,9 +36,9 @@
         <li class="pull-right p-t-10">
             <ul class="hi-menu">
                 <li>
-                    <a data-toggle="dropdown" href="">
+                    <a href="{{ path('app_main_users_notifications') }}">
                         <i class="him-icon zmdi zmdi-notifications"></i>
-                        <i class="him-counts blue-bkg">9</i>
+                        {{ render(controller('AppBundle:Main/User:notificationsNumber')) }}
                     </a>
                 </li>
                 <li>

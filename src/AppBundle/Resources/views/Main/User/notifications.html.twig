@@ -1,0 +1,55 @@
+{% extends 'AppBundle:Main/Layout:body_main.html.twig' %}
+
+{% trans_default_domain 'messages' %}
+
+{% block nav %}{% endblock %}
+
+{% block body_content %}
+    {% if not notifications|length > 0 %}
+        <div class="row">
+            <h3>{{ 'heading.no_notifications'|trans }}</h3>
+            <small>{{ 'message.no_notifications'|trans }}</small>
+        </div>
+    {% else %}
+        <div class="row">
+            <h3 class="m-b-10">{{ 'heading.notifications'|trans }}</h3>
+            <div class="course-list-holder">
+                <ul class="course-list">
+                    {% for notification in pagination %}
+                        <li class="course-row {% if app.user not in notification.readers %}unseen-notification{% endif %}">
+                            <div class="avatar-container s40">
+                                <a href="{{ path('app_main_courses_show', {'id': notification.course.id}) }}">
+                                    <img class="round s40" avatar="{{ notification.course.title }}"/>
+                                </a>
+                            </div>
+                            <div class="course-details">
+                                <h4 class="m-t-0 m-b-0">
+                                    <a href="{{ path('app_main_courses_show', {'id': notification.course.id}) }}">
+                                        {{ notification.course.abbreviation|upper }}/{{ notification.course.title }}
+                                    </a>
+                                </h4>
+                                <div class="course-details-description m-t-5">
+                                    <p dir="auto">
+                                        {{ notification.message|trans }}
+                                        {% if constant('AppBundle\\Topic\\CourseNotificationTopic::CREATE_COURSE_MODULE') == notification.type %}
+                                            <a href="{{ path('app_main_courses_course_modules', {'id':notification.course.id}) }}" class="c-blue">{{ 'link.view_course_module'|trans }}</a>
+                                        {% elseif constant('AppBundle\\Topic\\CourseNotificationTopic::NEW_COURSE_ANNOUNCEMENT') == notification.type %}
+                                            <a href="{{ path('app_main_courses_list_announcements', {'id':notification.course.id}) }}" class="c-blue">{{ 'link.view_course_announcements'|trans }}</a>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="navigation text-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+        {{ render(controller(
+            'AppBundle:Main/User:seenNotifications',
+            { 'notifications': pagination.items }
+        )) }}
+    {% endif %}
+{% endblock %}

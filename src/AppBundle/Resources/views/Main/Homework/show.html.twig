@@ -4,6 +4,11 @@
 
 {% set user = homework.author %}
 
+{% if hideAuxNav %}
+    {% set hideSecondNav = true %}
+    {% set profSeminar = true %}
+{% endif %}
+
 {% block body_content %}
     <div class="row m-t-r-35 col-sm-8 p-l-0">
         <div>

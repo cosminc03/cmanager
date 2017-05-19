@@ -36,3 +36,8 @@ success:
     uploaded_file:
         added: New file successfully uploaded!
         delete: File successfully deleted!
+    annnouncement:
+        create: Announcement successfully created!
+        edit: Announcement successfully edited!
+        delete:
+            from_edit: Announcement successfully deleted!

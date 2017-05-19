@@ -24,3 +24,5 @@ parameters:
     app.user.avatars_path: '%kernel.root_dir%/../web/uploads/avatars'
     app.course.uri_prefix: /uploads/attachments
     app.course.attachments_path: '%kernel.root_dir%/../web/uploads/courses'
+    redis_host: localhost
+    app.notifications.per_page: 10

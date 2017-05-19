@@ -48,6 +48,23 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         ;
         $manager->persist($professor);
 
+        $roles = [User::ROLE_PROFESSOR];
+        $professor = new User();
+        $professor
+            ->setFirstName('Arthur')
+            ->setLastName('Baxter')
+            ->setPhone('0123456789')
+            ->setNationality('Romanian')
+            ->setCitizenship('Romanian')
+            ->setGender('gender.male')
+            ->setUsername('arthur.baxter')
+            ->setEmail('chirica3.cosmin+professor002@gmail.com')
+            ->setPlainPassword('Professor2')
+            ->setEnabled(true)
+            ->setRoles($roles)
+        ;
+        $manager->persist($professor);
+
         $roles = [User::ROLE_ASSOCIATE];
         $associate = new User();
         $associate

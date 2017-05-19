@@ -3,10 +3,12 @@
 namespace AppBundle\Controller\Main;
 
 use AppBundle\Controller\BaseController;
+use AppBundle\Entity\Notification;
 use AppBundle\Entity\User;
 use AppBundle\Form\User\Main\CreateType;
 use AppBundle\Security\UserVoter;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation as Serializer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -140,5 +142,110 @@ class UserController extends BaseController
                 'professors' => $professors,
             ]
         );
+    }
+
+    /**
+     * @Route("/notifications", name="app_main_users_notifications")
+     * @Method({"GET", "POST"})
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function notificationsAction(Request $request)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if (in_array(User::ROLE_STUDENT, $user->getRoles())) {
+            $courses = $user->getSubscribedCourses();
+        } else {
+            $courses = $user->getLabs();
+        }
+
+        $notifications = $this
+            ->getDoctrine()
+            ->getRepository(Notification::class)
+            ->findAllNotifications($courses)
+        ;
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $notifications,
+            $request->get('page', 1),
+            $this->container->getParameter('app.notifications.per_page')
+        );
+
+        return $this->render(
+            'AppBundle:Main/User:notifications.html.twig',
+            [
+                'notifications' => $notifications,
+                'pagination' => $pagination,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/notifications-number", name="app_main_users_notifications_number")
+     * @Method("GET")
+     *
+     * @return Response
+     */
+    public function notificationsNumberAction()
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if (in_array(User::ROLE_STUDENT, $user->getRoles())) {
+            $courses = $user->getSubscribedCourses();
+        } else {
+            $courses = $user->getLabs();
+        }
+
+        $notifications = $this
+            ->getDoctrine()
+            ->getRepository(Notification::class)
+            ->findAllNotifications($courses)
+        ;
+
+        $notificationsNumber = 0;
+        /** @var Notification $notification */
+        foreach ($notifications as $notification) {
+            if (!$notification->getReaders()->contains($user)) {
+                $notificationsNumber += 1;
+            }
+        }
+
+        return $this->render(
+            'AppBundle:Main/Layout:notifications_number.html.twig',
+            [
+                'notificationsNumber' => $notificationsNumber,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/notifications/seen", name="app_main_users_seen_notifications")
+     * @Method({"GET"})
+     *
+     * @param $notifications
+     *
+     * @return Response
+     */
+    public function seenNotificationsAction($notifications)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var Notification $notification */
+        foreach ($notifications as $notification) {
+            if (!$notification->getReaders()->contains($this->getUser())) {
+                $notification->addReader($this->getUser());
+                $em->persist($notification);
+            }
+        }
+
+        $em->flush();
+
+        return new Response();
     }
 }

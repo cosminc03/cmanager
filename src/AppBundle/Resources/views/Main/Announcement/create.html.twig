@@ -1,0 +1,108 @@
+{% extends 'AppBundle:Main/Layout:body_main.html.twig' %}
+
+{% trans_default_domain 'messages' %}
+
+{% block nav %}{% endblock %}
+
+{% block body_content %}
+    <div class="row m-t-10">
+        <div class="col-lg-3 profile-settings-sidebar">
+            <h3>{{ 'heading.new_announcement'|trans }}</h3>
+            <p>{{ 'paragraph.new_announcement'|trans }}</p>
+        </div>
+        <div class="col-lg-9">
+            {% if not form.vars.valid %}
+                <div class="f-s-17 c-red m-t-10 m-b-10">{{ 'help_block.form.errors'|trans }}</div>
+            {% endif %}
+            {{ form_start(
+                form,
+                {
+                    'method': 'POST',
+                    'action': path('app_main_announcements_create', {'courseId':courseId, 'isCourseAnnouncement': isCourseAnnouncement}),
+                    'attr': {
+                        'novalidate': 'novalidate',
+                    },
+                }
+            ) }}
+                <div class="form-group {% if form_errors(form.title) %}has-error has-feedback{% endif %}">
+                    {{ form_label(
+                        form.title,
+                        'label.announcement.title'|trans,
+                        {
+                            'label_attr' : {'class': 'f-17'}
+                        }
+                    ) }}
+                    {% if form_errors(form.title) %}
+                        <small class="help-block c-red">{{ form_errors(form.title) }}</small>
+                    {% endif %}
+                    <div class="fg-line">
+                        {{ form_widget(
+                            form.title,
+                            {
+                                'attr' : {
+                                    'class': 'form-control input-lg'
+                                },
+                            }
+                        ) }}
+                    </div>
+                    <span class="help-block">{{ 'help_block.announcement.title'|trans }}</span>
+                </div>
+
+                <div class="form-group {% if form_errors(form.content) %}has-error has-feedback{% endif %}">
+                    {{ form_label(
+                        form.content,
+                        'label.announcement.content'|trans,
+                        {
+                            'label_attr' : {
+                                'class': 'f-17'
+                            }
+                        }
+                    ) }}
+                    {% if form_errors(form.content) %}
+                        <small class="help-block c-red">{{ form_errors(form.content) }}</small>
+                    {% endif %}
+                    <div class="fg-line">
+                        {{ form_widget(
+                            form.content,
+                            {
+                                'attr' : {
+                                    'class': 'form-control input-lg',
+                                    'rows': '5',
+                                    'placeholder': 'placeholder.content'|trans
+                                },
+                            }
+                        ) }}
+                    </div>
+                    <span class="help-block">{{ 'help_block.announcement.content'|trans }}</span>
+                </div>
+
+                <div>
+                    <button class="btn bgm-green waves-effect text-transform-initial f-16" type="submit">
+                        {{ 'button.create_announcement'|trans }}
+                    </button>
+                </div>
+
+                <span class="hidden">{{ form_row(form._token) }}</span>
+            {{ form_end(form, {'render_rest': false}) }}
+
+            {% if isCourseAnnouncement %}
+                <a class="grey-color" href="{{ path('app_main_courses_list_announcements', {'id':courseId}) }}">
+                    <button class="btn waves-effect text-transform-initial f-16 pull-right m-t-r-35">
+                        {{ 'button.cancel'|trans }}
+                    </button>
+                </a>
+            {% else %}
+                <a class="grey-color" href="{{ path('app_main_courses_users_announcements', {'id':courseId, 'userId': app.user.id}) }}">
+                    <button class="btn waves-effect text-transform-initial f-16 pull-right m-t-r-35">
+                        {{ 'button.cancel'|trans }}
+                    </button>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/admin/vendors/bower_components/ckeditor/ckeditor.js') }}"></script>
+{% endblock %}

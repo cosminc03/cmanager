@@ -216,6 +216,22 @@ class User extends BaseUser
     private $subscribedCourses;
 
     /**
+     * @var ArrayCollection|Notification[]
+     *
+     * @Serializer\Exclude()
+     *
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="author")
+     */
+    private $notifications;
+
+    /**
+     * @var ArrayCollection|Notification[]
+     *
+     * @ORM\ManyToMany(targetEntity="Notification", mappedBy="readers")
+     */
+    private $readNotifications;
+
+    /**
      * @var \DateTime
      *
      * @Serializer\Exclude()
@@ -244,6 +260,8 @@ class User extends BaseUser
         $this->homework = new ArrayCollection();
         $this->announcements = new ArrayCollection();
         $this->posts = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
+        $this->readNotifications = new ArrayCollection();
     }
 
     /**
@@ -956,5 +974,73 @@ class User extends BaseUser
     public function getSubscribedCourses()
     {
         return $this->subscribedCourses;
+    }
+
+    /**
+     * Add notification
+     *
+     * @param Notification $notification
+     *
+     * @return User
+     */
+    public function addNotification(Notification $notification)
+    {
+        $this->notifications[] = $notification;
+
+        return $this;
+    }
+
+    /**
+     * Remove notification
+     *
+     * @param Notification $notification
+     */
+    public function removeNotification(Notification $notification)
+    {
+        $this->notifications->removeElement($notification);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return ArrayCollection|Notification[]
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
+    }
+
+    /**
+     * Add readNotification
+     *
+     * @param Notification $readNotification
+     *
+     * @return User
+     */
+    public function addReadNotification(Notification $readNotification)
+    {
+        $this->readNotifications[] = $readNotification;
+
+        return $this;
+    }
+
+    /**
+     * Remove readNotification
+     *
+     * @param Notification $readNotification
+     */
+    public function removeReadNotification(Notification $readNotification)
+    {
+        $this->readNotifications->removeElement($readNotification);
+    }
+
+    /**
+     * Get readNotifications
+     *
+     * @return ArrayCollection|Notification[]
+     */
+    public function getReadNotifications()
+    {
+        return $this->readNotifications;
     }
 }

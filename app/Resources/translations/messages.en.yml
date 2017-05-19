@@ -28,6 +28,8 @@ message:
     associate_courses: After association with a course you will find here your associated courses.
     removed_homework: Removed homework cannot be restored!
     no_files: No files for this module.
+    no_notifications: You will find here all notifications.
+    removed_announcement: Removed announcement cannot be restored!
 
 title:
     homepage_admin: CManager Admin
@@ -87,6 +89,13 @@ heading:
     comments: Comments
     deadline: Deadline
     comments: Comments
+    no_notifications: No notifications found.
+    notifications: Notifications
+    new_announcement: New announcement
+    edit_announcement: Edit announcement
+    remove_announcement: Remove announcement
+    list_course_announcements: List of course announcements
+    list_seminar_announcements: Announcements list
 
 paragraph:
     new_course: Create your course by filling out the inputs from the form
@@ -103,6 +112,9 @@ paragraph:
     edit_homework: Update your homework infos by filling out the inputs from the form
     remove_homework: Removing homework will delete all related resources
     upload_files_course: You will be able to upload file on the show page after you create course module
+    new_announcement: Create new announcements by filling out the inputs from the form
+    edit_announcement: Update your announcement infos by filling out the inputs from the form
+    remove_announcement: Removing announcement will delete all related resources
 
 small:
     no_associate: No professor associated to your course.
@@ -111,6 +123,8 @@ small:
     no_professors: No professor found.
     no_homework: No homework found for this course.
     no_deadline: No deadline until now.
+    no_announcements: No announcements found for this course.
+    no_seminar_announcements: No announcements found for this course seminar.
 
 label:
     email: Email address
@@ -179,6 +193,9 @@ label:
         deadline: Homework deadline
     upload_file:
         name: Name
+    announcement:
+        title: Announcement title
+        content: Announcement content
 
 help_block:
     course:
@@ -220,6 +237,9 @@ help_block:
         deadline: Select homework deadline.
     upload_file:
         name: Enter name if you want to save file with different name.
+    announcement:
+        title: Enter title, so people know type and topic of your announcement.
+        content: Enter homework content.
 
 table_header_cell:
     id: Id
@@ -278,6 +298,10 @@ button:
     remove_homework: Remove homework
     save_attachment: Save attachment
     close: Close
+    add_announcement: Add announcement
+    create_announcement: Create announcement
+    edit_announcement: Edit announcement
+    remove_announcement: Remove announcement
 
 add:
     announcement: Add new announcement
@@ -304,6 +328,8 @@ link:
     contact: Contact
     account: Account
     help: Help
+    view_course_module: View course modules
+    view_course_announcements: View course announcements
 
 type:
     optional: Optional
@@ -315,7 +341,7 @@ evaluation:
 
 navigation:
     my_courses: My courses
-    starred_courses: Starred courses
+    associated_courses: Associated courses
     explore_courses: Explore courses
     infos: Infos
     courses: Courses
@@ -326,6 +352,8 @@ navigation:
     settings: Settings
     professors: Professors
     profile: Profile
+    seminar_homework: Seminar Homework
+    seminar_announcements: Seminar Announcements
 
 tooltip:
     edit: Edit
@@ -359,5 +387,9 @@ year_of_study:
 
 remove:
     avatar: Remove avatar
+
+notification:
+    new_course_module: New course module has been posted.
+    new_announcement: New announcement has been posted.
 
 copyright: Copyright &copy; 2015 Material Admin

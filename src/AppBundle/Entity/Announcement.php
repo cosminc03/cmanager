@@ -57,6 +57,13 @@ class Announcement
     private $course;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_course_announcement", type="boolean", nullable=false, options={"default"=0})
+     */
+    private $isCourseAnnouncement = false;
+
+    /**
      * @var \DateTime
      *
      * @Serializer\Exclude()
@@ -310,5 +317,29 @@ class Announcement
     public function getCourseTitle()
     {
         return $this->course ? $this->course->getTitle() : null;
+    }
+
+    /**
+     * Set isCourseAnnouncement
+     *
+     * @param boolean $isCourseAnnouncement
+     *
+     * @return Announcement
+     */
+    public function setIsCourseAnnouncement($isCourseAnnouncement)
+    {
+        $this->isCourseAnnouncement = $isCourseAnnouncement;
+
+        return $this;
+    }
+
+    /**
+     * Get isCourseAnnouncement
+     *
+     * @return boolean 
+     */
+    public function getIsCourseAnnouncement()
+    {
+        return $this->isCourseAnnouncement;
     }
 }
