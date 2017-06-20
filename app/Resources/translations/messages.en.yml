@@ -127,6 +127,7 @@ small:
     no_seminar_announcements: No announcements found for this course seminar.
 
 label:
+    author: Author
     email: Email address
     password:
         first: Password
@@ -264,6 +265,7 @@ table_header_cell:
     options: Options
 
 button:
+    logout: Logout
     register: Register
     forgot_password: Forgot password
     reset_password: Reset password

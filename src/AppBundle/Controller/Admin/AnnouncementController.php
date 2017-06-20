@@ -80,7 +80,11 @@ class AnnouncementController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $announcement->setCreatedBy($this->getUser());
+            $announcement
+                ->setCreatedBy($this->getUser())
+                ->setIsCourseAnnouncement(true)
+                ->setCreatedByAdmin(true)
+            ;
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($announcement);

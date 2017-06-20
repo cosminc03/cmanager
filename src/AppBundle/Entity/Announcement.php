@@ -64,6 +64,13 @@ class Announcement
     private $isCourseAnnouncement = false;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="created_by_admin", type="boolean", nullable=false, options={"default"=0})
+     */
+    private $createdByAdmin = false;
+
+    /**
      * @var \DateTime
      *
      * @Serializer\Exclude()
@@ -341,5 +348,29 @@ class Announcement
     public function getIsCourseAnnouncement()
     {
         return $this->isCourseAnnouncement;
+    }
+
+    /**
+     * Set createdByAdmin
+     *
+     * @param boolean $createdByAdmin
+     *
+     * @return Announcement
+     */
+    public function setCreatedByAdmin($createdByAdmin)
+    {
+        $this->createdByAdmin = $createdByAdmin;
+
+        return $this;
+    }
+
+    /**
+     * Get createdByAdmin
+     *
+     * @return boolean
+     */
+    public function getCreatedByAdmin()
+    {
+        return $this->createdByAdmin;
     }
 }
