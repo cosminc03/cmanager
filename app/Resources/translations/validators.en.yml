@@ -5,6 +5,7 @@ not_blank:
     first_name: First name should not be blank
     last_name: Last name should not be blank
     email: The email field should not be blank
+    xml: The xml field should not be blank
     abbreviation: The abbreviation field should not be blank
     description: The description field should not be blank
     user: The user field should not be blank
@@ -17,6 +18,7 @@ not_blank:
     citizenship: The citizenship field should not be blank
     username: The username field should not be blank
     date_of_birth: The date of birth field shoul not be blank
+    password: Password fields should not be blank
 
 invalid:
     email: Invalid email provided
@@ -30,3 +32,4 @@ unique:
 regex:
     course_hours: Cours hours should contain positive numbers.
     seminar_hours: Seminar hours should contain positive numbers.
+    password: Password must contain 1 upper case letter, 1 lower case letter, and 1 number

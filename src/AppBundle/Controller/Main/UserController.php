@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Main;
 use AppBundle\Controller\BaseController;
 use AppBundle\Entity\Notification;
 use AppBundle\Entity\User;
+use AppBundle\Form\User\Main\ChangePasswordType;
 use AppBundle\Form\User\Main\CreateType;
 use AppBundle\Security\UserVoter;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -57,39 +58,70 @@ class UserController extends BaseController
     {
         $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
 
+        $formResetPassword = $this->createForm(ChangePasswordType::class);
         $form = $this->createForm(CreateType::class, $user);
         $form->handleRequest($request);
+        $formResetPassword->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->setUpdatedAt(new \DateTime());
+        if ("POST" === $request->getMethod()) {
+            if ($request->request->has('change_password')) {
+                if ($formResetPassword->isSubmitted() && $formResetPassword->isValid()) {
+                    $userManager = $this->container->get('fos_user.user_manager');
+                    $user->setPlainPassword($formResetPassword->get('plainPassword')->getData());
+                    $userManager->updateUser($user, true);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
-            $this
-                ->get('session')
-                ->getFlashBag()
-                ->set(
-                    'success',
                     $this
-                        ->get('translator')
-                        ->trans('success.user.edit', [], 'flashes')
-                )
-            ;
+                        ->get('session')
+                        ->getFlashBag()
+                        ->set(
+                            'success',
+                            $this
+                                ->get('translator')
+                                ->trans('success.user.edit_password', [], 'flashes')
+                        )
+                    ;
 
-            return $this->redirectToRoute(
-                'app_main_users_show',
-                [
-                    'id' => $user->getId(),
-                ])
-                ;
+                    return $this->redirectToRoute(
+                        'app_main_users_show',
+                        [
+                            'id' => $user->getId(),
+                        ])
+                    ;
+                }
+            } else {
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $user->setUpdatedAt(new \DateTime());
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($user);
+                    $em->flush();
+
+                    $this
+                        ->get('session')
+                        ->getFlashBag()
+                        ->set(
+                            'success',
+                            $this
+                                ->get('translator')
+                                ->trans('success.user.edit', [], 'flashes')
+                        )
+                    ;
+
+                    return $this->redirectToRoute(
+                        'app_main_users_show',
+                        [
+                            'id' => $user->getId(),
+                        ])
+                    ;
+                }
+            }
         }
 
         return $this->render(
             'AppBundle:Main/User:edit.html.twig',
             [
                 'form' => $form->createView(),
+                'formResetPassword' => $formResetPassword->createView(),
                 'user' => $user,
             ]
         );

@@ -79,7 +79,8 @@ class CreateType extends AbstractType
                     'ROLE_ADMIN' => 'ROLE_ADMIN',
                     'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
                     'ROLE_STUDENT' => 'ROLE_STUDENT',
-                    'ROLE_TEACHER' => 'ROLE_TEACHER',
+                    'ROLE_PROFESSOR' => 'ROLE_PROFESSOR',
+                    'ROLE_ASSOCIATE' => 'ROLE_ASSOCIATE',
                 ],
                 'translation_domain' => 'messages',
             ))
