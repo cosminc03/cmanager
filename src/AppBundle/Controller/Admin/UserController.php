@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Entity\User;
 use AppBundle\Form\User\CreateType;
 use AppBundle\Controller\BaseController;
+use AppBundle\Form\User\UploadXMLType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,6 +30,7 @@ class UserController extends BaseController
      */
     public function listAction()
     {
+        $form = $this->createForm(UploadXMLType::class);
         $em = $this->getDoctrine()->getManager();
 
         $users = $em
@@ -40,6 +42,7 @@ class UserController extends BaseController
             'AppBundle:Admin/User:list.html.twig',
             [
                 'users' => $users,
+                'form_xml' => $form->createView(),
             ]
         );
     }
@@ -86,10 +89,24 @@ class UserController extends BaseController
 
             $user->setUsername($username);
             $user->setPlainPassword($password);
+            $user->setConfirmationToken(substr(md5(microtime()), rand(0, 26), 6));
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
+
+            $mailerService = $this->get('app.service.mailer');
+            $mailerService->sendEmail(
+                'AppBundle:Admin/Email:create_user_account.html.twig',
+                'info',
+                $user->getEmail(),
+                [
+                    'token' => $user->getConfirmationToken(),
+                    'username' => $user->getUsername(),
+                    'email' => $user->getEmail(),
+                    'password' => $password,
+                ]
+            );
 
             $this
                 ->get('session')
@@ -224,5 +241,28 @@ class UserController extends BaseController
         ;
 
         return $this->redirectToRoute('app_admin_user_list');
+    }
+
+    /**
+     * Uploads an XML file.
+     *
+     * @Route("/upload-xml", options={"expose"=true}, name="app_admin_user_upload_xml")
+     * @Method({"GET", "POST"})
+     *
+     * @param Request  $request
+     *
+     * @return RedirectResponse|JsonResponse
+     */
+    public function uploadXmlAction(Request $request)
+    {
+        $form = $this->createForm(UploadXMLType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            dump("cucu");die;
+        }
+
+        dump("nu este valid");die;
+        return new JsonResponse();
     }
 }

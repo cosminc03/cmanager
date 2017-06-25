@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle(),
             new \Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new TSS\AutomailerBundle\TSSAutomailerBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

@@ -27,6 +27,47 @@
                     {{ 'success.delete_common'|trans({}, 'flashes') }}
                 </strong>
             </div>
+            <a data-toggle="modal" href="#modalDefault" class="btn btn-sm btn-default m-t-10 m-l-25 text-transform-intial   ">Add many users</a>
+            <div class="modal fade" id="modalDefault" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add many users</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>In order to add many users in the system, please upload an XML file.
+                                Any valid user added in the system will receive an email to validate the account.
+                            </p>
+                        </div>
+                        <div>
+                            {{ form_start(
+                                form_xml,
+                                {
+                                    'method': 'POST',
+                                    'action': path('app_admin_user_upload_xml'),
+                                    'attr': {
+                                        'id': 'create-form',
+                                        'class': 'form-horizontal',
+                                        'novalidate': 'novalidate',
+                                    },
+                                }
+                            ) }}
+                                {{ form_row(form_xml.xml) }}
+                                <div class="form-group m-t-15">
+                                    <div class="col-sm-offset-5 col-sm-10">
+                                        <button class="btn bgm-blue btn-sm" type="submit">{{ 'button.create'|trans }}</button>
+                                    </div>
+                                </div>
+                            {{ form_end(form_xml) }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link">Save changes</button>
+                            <button type="button" class="btn btn-link" data-dismiss="modal">Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table
                         id="data-table-command"

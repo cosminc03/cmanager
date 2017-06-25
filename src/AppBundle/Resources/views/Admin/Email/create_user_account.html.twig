@@ -1,0 +1,16 @@
+{% extends 'AppBundle:Admin/Email:base.html.twig' %}
+
+{% trans_default_domain 'messages' %}
+
+{% block subject %}
+    {{ 'email.subject.user.create'|trans }}
+{% endblock %}
+
+{% block message %}
+    <p>{{ 'email.general.hello'|trans }} {{ username }},
+    <p>{{ 'email.general.account_created'|trans }}</p>
+    <p>{{ 'email.message.user.credential'|trans }}:</p>
+    <p>{{ 'email.general.email'|trans }}: {{ email }}</p>
+    <p>{{ 'email.general.password'|trans }}: {{ password }}</p>
+    <p>{{ 'email.message.user.register'|trans }} <a href="{{ url('app_default_activate_account', {'token': token}) }}">{{ 'email.general.link'|trans }}</a></p>
+{% endblock %}

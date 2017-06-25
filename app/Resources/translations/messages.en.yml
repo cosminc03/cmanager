@@ -7,7 +7,9 @@ message:
         title: Open source platform for faculty
         description: InfoBucket is an online platform made for faculties offering an well structured management for students and teachers where they can add courses and provides a various range of other features. Thereby it is desired to establish a simple and fast communication between students and teachers.
     sigin_in: Sign In
+    reset_password: Reset Password
     forgot_password: Forgot your passsword?
+    login_page: Would you like to go to login page?
     already_have_account: Already have account and password?
     removed_course: Removed course cannot be restored!
     removed_course_module: Removed course module cannot be restored!
@@ -22,6 +24,7 @@ message:
     member_since: Member since
     change_avatar: You can change your avatar here or remove the current avatar to revert to
     profile_information: This information will appear on your profile
+    password_information: This operation will change your account password
     explore_courses: When new courses will be added they will be found here.
     subscribe_to_course: Subscribe to one course and you will find here your subscribed courses.
     professor_courses: Add one course and you will find here your personal courses.
@@ -30,6 +33,27 @@ message:
     no_files: No files for this module.
     no_notifications: You will find here all notifications.
     removed_announcement: Removed announcement cannot be restored!
+
+email:
+    subject:
+        user:
+            create: InfoBucket - Account created
+        password:
+            reset: InfoBucket - Reset Password
+    general:
+        hello: Hello
+        account_created: New account was created on InfoBucket application.
+        password_reset: You have requested to reset your password on InfoBucket account.
+        email: Email
+        password: Password
+        link: link
+    message:
+        user:
+            register: To activate your account click the following
+            credential: Your credentials are
+        password:
+            reset: In order to reset your password click the following
+
 
 title:
     homepage_admin: CManager Admin
@@ -78,6 +102,7 @@ heading:
     public_avatar: Public Avatar
     upload_avatar: Upload new avatar
     main_setting: Main Settings
+    password_settings: Password Settings
     no_courses: No courses found
     not_subscribed: You are not subscribed to any course yet.
     professor_no_courses: You don't have courses yet.
@@ -229,6 +254,8 @@ help_block:
         year_of_study: Select your year of study.
         date_of_birth: Select your date of birth.
         description: Enter your description.
+        password: Enter your password.
+        password_repeat: Repeat your password.
     form:
         errors: Form data is invalid. Check every field.
     homework:
@@ -294,6 +321,8 @@ button:
     remove_seminar_module: Remove seminar module
     add_comment: Add comment
     update_profile_settings: Update profile settings
+    update_password: Update password
+    save_password: Save password
     add_homework: Add homework
     create_homework: Create homework
     edit_homework: Edit homework

@@ -9,6 +9,14 @@
 
 {% block body_content %}
     <div id="login-page" class="content">
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="row">
+                <div id="general-alert" class="alert alert-success m-t-15">
+                    <strong>{{ flash_message }}</strong>
+                </div>
+            </div>
+        {% endfor %}
+
         <div class="row">
             <div class="col-sm-6 col-sm-offset-1">
                 <h1>
@@ -68,7 +76,7 @@
                     </div>
                 </div>
                 <div>
-                    <a href="">
+                    <a href="{{ path('app_main_security_forgot_password') }}">
                         {{ 'message.forgot_password'|trans }}
                     </a>
                 </div>

@@ -138,6 +138,13 @@ class User extends BaseUser
     private $gplus;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="reset_token", type="string", nullable=true)
+     */
+    private $resetToken;
+
+    /**
      * @var ArrayCollection|Course[]
      *
      * @ORM\OneToMany(targetEntity="Course", mappedBy="author")
@@ -262,6 +269,9 @@ class User extends BaseUser
         $this->posts = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->readNotifications = new ArrayCollection();
+        $this->nationality = "nationality";
+        $this->gender = "gender";
+        $this->citizenship = "citizenship";
     }
 
     /**
@@ -1042,5 +1052,29 @@ class User extends BaseUser
     public function getReadNotifications()
     {
         return $this->readNotifications;
+    }
+
+    /**
+     * Set resetToken
+     *
+     * @param string $resetToken
+     *
+     * @return User
+     */
+    public function setResetToken($resetToken)
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
+    }
+
+    /**
+     * Get resetToken
+     *
+     * @return string 
+     */
+    public function getResetToken()
+    {
+        return $this->resetToken;
     }
 }

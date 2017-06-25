@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Main;
 
+use AppBundle\Form\User\Main\ForgotPasswordType;
 use FOS\UserBundle\Controller\SecurityController as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,6 +53,66 @@ class SecurityController extends BaseController
             'error' => $error,
             'csrf_token' => $csrfToken,
         ));
+    }
+
+    /**
+     * @Route("/forgot-password", name="app_main_security_forgot_password")
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function forgotPasswordAction(Request $request)
+    {
+        $form = $this->createForm(ForgotPasswordType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $email = $form->get('email')->getData();
+            $em = $this->getDoctrine()->getManager();
+            $user = $em
+                ->getRepository('AppBundle:User')
+                ->findOneBy([
+                    "email" => $email
+                ])
+            ;
+
+            if ($user) {
+                $user->setResetToken(substr(md5(microtime()), rand(0, 26), 6));
+
+                $em->persist($user);
+                $em->flush();
+
+                $mailerService = $this->get('app.service.mailer');
+                $mailerService->sendEmail(
+                    'AppBundle:Admin/Email:forgot_password.html.twig',
+                    'info',
+                    $user->getEmail(),
+                    [
+                        'token' => $user->getResetToken(),
+                        'username' => $user->getUsername(),
+                    ]
+                );
+            }
+
+            $this
+                ->get('session')
+                ->getFlashBag()
+                ->set(
+                    'success',
+                    $this
+                        ->get('translator')
+                        ->trans('success.user.forgot_password', [], 'flashes')
+                )
+            ;
+        }
+
+        return $this->render(
+            'AppBundle:Main/Security:forgot_password.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**

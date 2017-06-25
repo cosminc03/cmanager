@@ -15,6 +15,9 @@ success:
     user:
         create: User successfully created!
         edit: User successfully edited!
+        edit_password: Password successfully changed!
+        reset_password: You have successfully reseted your password!
+        forgot_password: New email has been sent to your email address!
         delete:
             from_edit: User successfully deleted!
             from_data_table: User with ID
